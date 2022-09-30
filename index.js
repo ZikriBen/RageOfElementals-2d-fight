@@ -14,6 +14,8 @@ class Sprite {
         this.height = 150
         this.isAttcking
         this.color = color
+        this.health = 100
+        this.facing
 
         this.attackBox = {
             position: this.position,
@@ -36,7 +38,7 @@ class Sprite {
         // AttckBox
         if (this.isAttcking) {
             c.fillStyle = 'green'
-            if (this.lastKey === 'a') {
+            if (this.facing === 'left') {
                 this.attackBox.offset = -this.width
             }
             else {
@@ -101,6 +103,14 @@ const keys = {
     }
 }
 
+function rectCollision(rect1, rect2) {
+    return (
+        rect1.attackBox.position.x + rect1.attackBox.offset < rect2.position.x + rect2.width && 
+        rect1.attackBox.position.x + rect1.attackBox.offset + rect1.attackBox.width > rect2.position.x &&
+        rect1.attackBox.position.y < rect2.position.y + rect2.height &&
+        rect1.attackBox.position.y + rect1.attackBox.height > rect2.position.y
+    )
+}
 
 function animate() {
     window.requestAnimationFrame(animate);
@@ -129,19 +139,21 @@ function animate() {
 
     // Detect Colision attackBox
     if (
-        // (player.attackBox.position.x + player.attackBox.width >= enemy.position.x) && 
-        // (player.attackBox.position.x <= enemy.position.x + enemy.width) &&
-        // (player.attackBox.position.y + player.attackBox.height >= enemy.position.y ) && 
-        // (player.attackBox.position.y <= enemy.position.y + enemy.height) &&
-        
-        (player.attackBox.position.x + player.attackBox.offset < enemy.position.x + enemy.width) && 
-        (player.attackBox.position.x + player.attackBox.offset + player.attackBox.width > enemy.position.x) &&
-        (player.attackBox.position.y < enemy.position.y + enemy.height) &&
-        (player.attackBox.position.y + player.attackBox.height > enemy.position.y) &&
-        (player.isAttcking)
+        rectCollision(player, enemy) && player.isAttcking
     ) {
         player.isAttcking = false
         console.log('col')
+        enemy.health -= 20
+        document.querySelector('#enemyHealth').style.width = enemy.health + '%'
+    }
+
+    if (
+        rectCollision(enemy, player) && enemy.isAttcking
+    ) {
+        enemy.isAttcking = false
+        console.log('col')
+        player.health -= 20
+        document.querySelector('#playerHealth').style.width = player.health + '%'
     }
 }
 
@@ -154,10 +166,12 @@ window.addEventListener('keydown', (event) => {
         case 'd':
             keys.d.pressed = true
             player.lastKey = 'd'
+            player.facing = 'right'
             break
         case 'a':
             player.lastKey = 'a'
             keys.a.pressed = true
+            player.facing = 'left'
             break
         case 'w':
             player.velocity.y = -18
@@ -168,13 +182,18 @@ window.addEventListener('keydown', (event) => {
         case 'ArrowRight':
             keys.ArrowRight.pressed = true
             enemy.lastKey = 'ArrowRight'
+            enemy.facing = 'right'
             break
         case 'ArrowLeft':
             keys.ArrowLeft.pressed = true
             enemy.lastKey = 'ArrowLeft'
+            enemy.facing = 'left'
             break
         case 'ArrowUp':
             enemy.velocity.y = -18
+            break
+        case '0':
+            enemy.attack()
             break
     }
 })
