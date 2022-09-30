@@ -103,6 +103,38 @@ const keys = {
     }
 }
 
+function determineWinner({player, enemy, timerId}) {
+    document.querySelector('#timer').innerHTML = '00'
+    clearTimeout(timerId)
+    document.querySelector('#displayText').style.display = 'flex'
+
+    if (player.health === enemy.health) {
+        document.querySelector('#displayText').innerHTML = 'Tie'
+    }
+    else if(player.health > enemy.health) {
+        document.querySelector('#displayText').innerHTML = 'Player 1 Wins'
+        
+    }
+    else if(player.health < enemy.health) {
+        document.querySelector('#displayText').innerHTML = 'Player 2 Wins'
+    }
+}
+
+let timer = 60
+let timerId
+function decreaseTimer() {
+    if (timer > 0) {
+        timerId = setTimeout(decreaseTimer, 1000)
+        timer--
+        document.querySelector('#timer').innerHTML = timer
+    }
+    if (timer === 0) {
+        determineWinner({player, enemy, timerId})
+    }
+}
+
+decreaseTimer()
+
 function rectCollision(rect1, rect2) {
     return (
         rect1.attackBox.position.x + rect1.attackBox.offset < rect2.position.x + rect2.width && 
@@ -138,23 +170,24 @@ function animate() {
     }
 
     // Detect Colision attackBox
-    if (
-        rectCollision(player, enemy) && player.isAttcking
-    ) {
+    if (rectCollision(player, enemy) && player.isAttcking) {
         player.isAttcking = false
         console.log('col')
         enemy.health -= 20
         document.querySelector('#enemyHealth').style.width = enemy.health + '%'
     }
 
-    if (
-        rectCollision(enemy, player) && enemy.isAttcking
-    ) {
+    if (rectCollision(enemy, player) && enemy.isAttcking) {
         enemy.isAttcking = false
         console.log('col')
         player.health -= 20
         document.querySelector('#playerHealth').style.width = player.health + '%'
     }
+
+    if (enemy.health <= 0 || player.health <= 0) {
+        determineWinner({player, enemy, timerId})
+    }
+
 }
 
 animate()
