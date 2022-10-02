@@ -37,3 +37,18 @@ function rectCollision(rect1, rect2) {
         rect1.attackBox.position.y + rect1.attackBox.height > rect2.position.y
     )
 }
+
+let isSoundOn = false
+var music = new Audio('./music/Guile_Theme.mp3');
+
+function playMusic(){
+    if (!isSoundOn) {
+        music.play();
+        document.querySelector('#sound_btn').value = 'sound off'
+    }
+    else {
+        document.querySelector('#sound_btn').value = 'sound on'
+        music.pause()
+    }
+    isSoundOn = !isSoundOn
+}

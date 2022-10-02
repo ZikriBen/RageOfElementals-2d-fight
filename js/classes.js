@@ -28,6 +28,7 @@ class Sprite {
     }
 
     animateFrames() {
+        
         this.framsTotal++
         if (this.framsTotal % this.framsHold === 0) {
             this.currentFrame = (this.currentFrame + 1) % this.framesMax
@@ -36,7 +37,7 @@ class Sprite {
 
     update() {
         this.draw()
-        this.animateFrames()
+        if (!this.isDead) this.animateFrames()
     }
 }
 
@@ -71,6 +72,7 @@ class Fighter extends Sprite {
         this.framsHold = 5
         this.facing = facing
         this.sprites = sprites
+        this.isDead = false
 
         for (const sprite in this.sprites) {
             this.sprites[sprite].image = new Image()
@@ -95,9 +97,18 @@ class Fighter extends Sprite {
         this.isAttcking = true
     }
 
+    takeHit() {
+        this.health -= 20
+        if (this.health <= 0) {
+            this.switchSprite('death' + '_' + this.facing)
+        }
+        else {
+            this.switchSprite('take_hit' + '_' + this.facing)
+        }
+    }
     update() {
         this.draw()
-        this.animateFrames()
+        if (!this.isDead) this.animateFrames()
         
         if (this.facing === 'left') {
             this.facingOffset = -(this.attackBox.offset.x + this.attackBox.width - this.width)
@@ -136,8 +147,20 @@ class Fighter extends Sprite {
     }
 
     switchSprite(sprite) {
+        if (this.image === this.sprites['death' + '_' + this.facing].image) {
+            if (this.currentFrame === this.sprites['death' + '_' + this.facing].framesMax - 1) 
+                this.isDead = true
+            return
+        }
+
         if (this.image === this.sprites['attack1' + '_' + this.facing].image) {
             if (this.currentFrame < this.sprites['attack1' + '_' + this.facing].framesMax - 1) {
+                return
+            }
+        }
+
+        if (this.image === this.sprites['take_hit' + '_' + this.facing].image) {
+            if (this.currentFrame < this.sprites['take_hit' + '_' + this.facing].framesMax - 1) {
                 return
             }
         }

@@ -66,6 +66,22 @@ const player = new Fighter({
             imagesSrc: './img/Samurai/Attack1_left.png', 
             framesMax: 6,
         },
+        take_hit_right: {
+            imagesSrc: './img/Samurai/TakeHit_right.png', 
+            framesMax: 4,
+        },
+        take_hit_left: {
+            imagesSrc: './img/Samurai/TakeHit_left.png', 
+            framesMax: 4,
+        },
+        death_right: {
+            imagesSrc: './img/Samurai/Death_right.png', 
+            framesMax: 6,
+        },
+        death_left: {
+            imagesSrc: './img/Samurai/Death_right.png', 
+            framesMax: 6,
+        },
     },
     attackBox :{
         offset: {
@@ -132,6 +148,22 @@ const enemy = new Fighter({
         attack1_left: {
             imagesSrc: './img/Kenji/Attack1_left.png', 
             framesMax: 4,
+        },
+        take_hit_right: {
+            imagesSrc: './img/Kenji/TakeHit_right.png', 
+            framesMax: 3,
+        },
+        take_hit_left: {
+            imagesSrc: './img/Kenji/TakeHit_left.png', 
+            framesMax: 3,
+        },
+        death_right: {
+            imagesSrc: './img/Kenji/Death_right.png', 
+            framesMax: 7,
+        },
+        death_left: {
+            imagesSrc: './img/Kenji/Death_right.png', 
+            framesMax: 7,
         }
     },
     attackBox :{
@@ -166,10 +198,13 @@ function animate() {
     window.requestAnimationFrame(animate);
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
+    c.fillStyle = 'rgba(255, 255, 255, 0.15)'
     background.update()
     shop.update()
+    c.fillRect(0, 0, canvas.width, canvas.height)
     player.update();
     enemy.update();
+    
     
     // Player Movement
     player.velocity.x = 0
@@ -215,9 +250,9 @@ function animate() {
 
     // Detect Colision attackBox
     if (rectCollision(player, enemy) && player.isAttcking && player.currentFrame === 4) {
+        enemy.takeHit()
         player.isAttcking = false
         console.log('col')
-        enemy.health -= 20
         document.querySelector('#enemyHealth').style.width = enemy.health + '%'
     }
 
@@ -226,9 +261,9 @@ function animate() {
     }
 
     if (rectCollision(enemy, player) && enemy.isAttcking && enemy.currentFrame === 2) {
+        player.takeHit()
         enemy.isAttcking = false
         console.log('col')
-        player.health -= 20
         document.querySelector('#playerHealth').style.width = player.health + '%'
     }
 
@@ -247,39 +282,46 @@ animate()
 
 window.addEventListener('keydown', (event) => {
     // console.log(event)
-    switch (event.key) {
-        case 'd':
-            keys.d.pressed = true
-            player.lastKey = 'd'
-            player.facing = 'right'
-            break
-        case 'a':
-            player.lastKey = 'a'
-            keys.a.pressed = true
-            player.facing = 'left'
-            break
-        case 'w':
-            player.velocity.y = -18
-            break
-        case ' ':
-            player.attack()
-            break
-        case 'ArrowRight':
-            keys.ArrowRight.pressed = true
-            enemy.lastKey = 'ArrowRight'
-            enemy.facing = 'right'
-            break
-        case 'ArrowLeft':
-            keys.ArrowLeft.pressed = true
-            enemy.lastKey = 'ArrowLeft'
-            enemy.facing = 'left'
-            break
-        case 'ArrowUp':
-            enemy.velocity.y = -18
-            break
-        case '0':
-            enemy.attack()
-            break
+    if (!player.isDead) {
+
+        switch (event.key) {
+            case 'd':
+                keys.d.pressed = true
+                player.lastKey = 'd'
+                player.facing = 'right'
+                break
+            case 'a':
+                player.lastKey = 'a'
+                keys.a.pressed = true
+                player.facing = 'left'
+                break
+            case 'w':
+                player.velocity.y = -18
+                break
+            case ' ':
+                player.attack()
+                break
+        }
+    }
+    if (!enemy.isDead) {
+        switch (event.key) {
+            case 'ArrowRight':
+                keys.ArrowRight.pressed = true
+                enemy.lastKey = 'ArrowRight'
+                enemy.facing = 'right'
+                break
+            case 'ArrowLeft':
+                keys.ArrowLeft.pressed = true
+                enemy.lastKey = 'ArrowLeft'
+                enemy.facing = 'left'
+                break
+            case 'ArrowUp':
+                enemy.velocity.y = -18
+                break
+            case '0':
+                enemy.attack()
+                break
+        }
     }
 })
 
