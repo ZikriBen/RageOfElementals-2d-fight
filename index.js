@@ -10,6 +10,69 @@ const background = new Sprite({position: {x: 0, y: 0}, imagesSrc: './img/backgro
 
 const shop = new Sprite({position: {x: 625, y: 160}, imagesSrc: './img/shop.png', scale: 2.5, framesMax: 6})
 
+let animationsStates = [
+    {
+        name: 'idle',
+        frames: 7,
+    },
+    {
+        name: 'run',
+        frames: 8,
+    },
+    {
+        name: 'jump',
+        frames: 3,
+    },
+    {
+        name: 'fall',
+        frames: 3,
+    },
+    {
+        name: 'jump_down',
+        frames: 8,
+    },
+    {
+        name: 'air_attack',
+        frames: 8,
+    },
+    {
+        name: 'roll',
+        frames: 8,
+    },
+    {
+        name: 'attack1',
+        frames: 11,
+    },
+    {
+        name: 'attack2',
+        frames: 19,
+    },
+    {
+        name: 'sp_attack1',
+        frames: 28,
+    },
+    {
+        name: 'sp_attack2',
+        frames: 18,
+    },
+    {
+        name: 'defend',
+        frames: 10,
+    },
+    {
+        name: 'take_hit',
+        frames: 6,
+    },
+    {
+        name: 'death',
+        frames: 13,
+    }
+    
+]
+
+const fire = new newFighter({offset: {x:-60, y: 104}, velocity: {x: 0, y: 0}, position: {x: 100, y: 150}, rightImagesSrc: './img/fire_SpriteSheet_288x128_right.png', leftImagesSrc: './img/fire_SpriteSheet_288x128_left_test.png', animationsStates: animationsStates, scale: 2})  
+fire.switchSprite('run')
+
 const player = new Fighter({
     position:{
         x: 250, 
@@ -202,29 +265,43 @@ function animate() {
     background.update()
     shop.update()
     c.fillRect(0, 0, canvas.width, canvas.height)
+    fire.update()
     player.update();
     enemy.update();
     
     
     // Player Movement
     player.velocity.x = 0
+    fire.velocity.x = 0
     if (keys.a.pressed && player.lastKey === 'a') {
         player.switchSprite('run' + '_' + player.facing)
         player.velocity.x = -5
+        fire.switchSprite('run')
+        fire.velocity.x = -5
     }
     else if (keys.d.pressed && player.lastKey === 'd') {
         player.switchSprite('run' + '_' + player.facing)
         player.velocity.x = 5
+        fire.switchSprite('run')
+        fire.velocity.x = 5
     }
     else {
         player.switchSprite('idle' + '_' + player.facing)
+        fire.switchSprite('idle')
+    }
+    
+    if (fire.velocity.y < 0) {
+        fire.switchSprite('jump')
+    }
+    else if (fire.velocity.y > 0) {
+        player.switchSprite('fall' + '_' + player.facing)
     }
     
     if (player.velocity.y < 0) {
         player.switchSprite('jump' + '_' + player.facing)
     }
     else if (player.velocity.y > 0) {
-        player.switchSprite('fall' + '_' + player.facing)
+        fire.switchSprite('fall')
     }
 
     // Enemy Movement
@@ -250,7 +327,7 @@ function animate() {
 
     // Detect Colision attackBox
     if (rectCollision(player, enemy) && player.isAttcking && player.currentFrame === 4) {
-        enemy.takeHit()
+        enemy.takeHit(player)
         player.isAttcking = false
         console.log('col')
         document.querySelector('#enemyHealth').style.width = enemy.health + '%'
@@ -260,8 +337,12 @@ function animate() {
         player.isAttcking = false
     }
 
+    if (fire.isAttcking && fire.currentFrame === 4) {
+        fire.isAttcking = false
+    }
+
     if (rectCollision(enemy, player) && enemy.isAttcking && enemy.currentFrame === 2) {
-        player.takeHit()
+        player.takeHit(enemy)
         enemy.isAttcking = false
         console.log('col')
         document.querySelector('#playerHealth').style.width = player.health + '%'
@@ -289,17 +370,21 @@ window.addEventListener('keydown', (event) => {
                 keys.d.pressed = true
                 player.lastKey = 'd'
                 player.facing = 'right'
+                fire.facing = 'right'
                 break
             case 'a':
                 player.lastKey = 'a'
                 keys.a.pressed = true
                 player.facing = 'left'
+                fire.facing = 'left'
                 break
             case 'w':
                 player.velocity.y = -18
+                fire.velocity.y = -18
                 break
             case ' ':
                 player.attack()
+                fire.attack()
                 break
         }
     }
