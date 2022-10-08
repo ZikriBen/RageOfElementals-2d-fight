@@ -16,25 +16,28 @@
 </head>
 <body>
     <div style="position: relative; display: inline-block;">
-        <div style="position: absolute; display: flex; width: 100%; align-items: center; padding: 20px;">
+        <div id="health_bars" style="position: absolute; display:none; width: 100%; align-items: center; padding: 20px;">
             <!-- Player Health -->    
-            <div style="position: relative; width: 100%; display: flex; justify-content: flex-end; border-top: 4px solid white; border-bottom: 4px solid white; border-left: 4px solid white;">
+            <div id="player_health_bar" style="position: relative; width: 100%; display: none; justify-content: flex-end; border-top: 4px solid white; border-bottom: 4px solid white; border-left: 4px solid white;">
                 <div style="background-color: red; height: 30px; width: 100%;"></div>
                 <div id="playerHealth" style="position: absolute; background: #818CF9; top: 0; bottom: 0; right: 0; left: 0; width: 100%;"></div>
             </div>
             <!-- Timer -->
             <div id="timer" style="background-color: black; height: 50px; width: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: white;border: 4px solid white;">10</div>
             <!-- Enemy Health -->
-            <div style="position: relative; width: 100%; border-top: 4px solid white; border-bottom: 4px solid white; border-right: 4px solid white;">
-                <div style="background-color: red; height: 30px;"></div>
+            <div id="enemy_health_bar" style="position: relative; width: 100%; border-top: 4px solid white; border-bottom: 4px solid white; border-right: 4px solid white;">
+                <div style="background-color: red; height: 30px;width: 100%;"></div>
                 <div id="enemyHealth" style="position: absolute; background: #818CF9; top: 0; bottom: 0; right: 0; left: 0"></div>
             </div>
         </div>
         <div id="displayText" style="position: absolute; color: white; align-items: center; justify-content: center; top: 0; bottom: 0; left: 0; right:0; display: none">Tie</div>
-        <input id="sound_btn" type="button" style="position: absolute;bottom: 0; right: 0;" value="sound on" onclick="playMusic()" />
+        <input id="sound_btn" type="button" style="display:none; position: absolute;bottom: 0; right: 0;" value="sound on" onclick="playMusic()" />
         <canvas></canvas>
+        <input id="start_btn" type="button" style="display:block; position: absolute; top: 460px;left:400px; color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="press ENTER to start" onclick="startGame()" />
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js" integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/classes.js"></script>
+    <script src="js/fighters.js"></script>
     <script src="js/utils.js"></script>
     <script src="index.js"></script>
 </body>
