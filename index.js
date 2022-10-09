@@ -22,12 +22,14 @@ let shop;
 let beepSound;
 let selectSound;
 let errorSound;
-let playerFighter= groundFighter;
+let playerFighter= metalFighter;
 let enemyFighter = waterFighter;
 let playerSelected = false
 let enemySelected = false
 let player;
 let enemy;
+let fighters;
+
 
 const screens = {
     'startScreen': {
@@ -42,6 +44,8 @@ const screens = {
             startBackground3 = new ScrollingSprite(mid, 0, 150, canvas.width, canvas.height, 2, scaleX = 1.005, scaleY = 2)
             startBackground4 = new ScrollingSprite(mid, -canvas.width, 150, canvas.width, canvas.height, 2, scaleX = 1.005, scaleY = 2);
             logo = new Sprite({position: {x: 240, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
+            document.querySelector('#start_btn').style.display = 'block'
+            document.querySelector('#start_btn').value = 'press ENTER/SPACE to start'
     },
         draw: () => {
             startBackground1.scroll();
@@ -56,41 +60,41 @@ const screens = {
         },
         keyFunc: (key) => {
             if (key === "Enter" || key === " ") {
-                // gsap.to(overlay, {opacity: 1, duration: 0.8})
-                // setTimeout(charSelect, 1000);
-                // document.querySelector('#start_btn').style.display = 'none'
-                // setTimeout(gsap.to, 1500, overlay, {opacity: 0, duration: 2})
-                fadeFunc(charSelect)
+                _doFuncNoSpam(fadeFunc, charSelect)
             }
         }
     },
     'charSelectScreen': {
         init: () => {
+            
             document.querySelector('#start_btn').style.display = 'none'
             arrow1Pos = 0
             arrow2Pos = 1
-            arrowStartPos = 135
-            charStartPos = -200
-            charOffset = 220
+            arrowStartPos = 115
+            charStartPos = -220
+            charOffset = 200
             beepSound = new Audio('./music/mixkit-video-game-mystery-alert-234.wav');
             selectSound = new Audio('./music/mixkit-arcade-bonus-alert-767.wav');
+            document.querySelector('#displayText').style.display = 'flex'
+            document.querySelector('#displayText').innerHTML = 'Select Character:'
             // errorSound = new Audio('./music/error-89206.wav');
-            arrow1 = new Sprite({position: {x: arrowStartPos, y: 285}, imagesSrc: './img/arrow_p1p.png', scale: 0.3, framesMax: 5})
-            arrow2 = new Sprite({position: {x: arrowStartPos + charOffset, y: 285}, imagesSrc: './img/arrow_p2p.png', scale: 0.3, framesMax: 5, framsHold: 3})
+            arrow1 = new Sprite({position: {x: arrowStartPos, y: 295}, imagesSrc: './img/arrow_p1p.png', scale: 0.3, framesMax: 5})
+            arrow2 = new Sprite({position: {x: arrowStartPos + charOffset, y: 295}, imagesSrc: './img/arrow_p2p.png', scale: 0.3, framesMax: 5, framsHold: 3})
             
-            fighters = [fireFighter, groundFighter, windFighter, waterFighter]
+            if (!fighters) {
+                fighters = [fireFighter, groundFighter, windFighter, waterFighter, metalFighter]
             
-            for (let i = 0; i < 4; i++){
-                characters.push(new Sprite({position: {x: charStartPos, y: 160}, imagesSrc: fighters[i].idle_bw_png, scale: 2.5, framesMax: fighters[i].idle_frames}))
-                charStartPos += charOffset
+                for (let i = 0; i < fighters.length; i++){
+                    characters.push(new Sprite({position: {x: charStartPos, y: 160}, imagesSrc: fighters[i].idle_bw_png, scale: 2.5, framesMax: fighters[i].idle_frames}))
+                    charStartPos += charOffset
+                }
             }
-            
 
         },
         draw: () => {
             arrow1.update()
             arrow2.update()
-            
+
             for (let i = 0; i < characters.length; i++){
                 characters[i].update()
             }
@@ -133,7 +137,7 @@ const screens = {
                     arrow1.framsHold = 0
                     console.log(playerFighter.name)
                     if (enemySelected)
-                        fadeFunc(startGame)
+                        _doFuncNoSpam(fadeFunc, startGame)
                     break
             }
         }
@@ -147,6 +151,12 @@ const screens = {
             document.querySelector('#health_bars').style.display = 'flex'
             document.querySelector('#player_health_bar').style.display = 'flex'
             document.querySelector('#enemy_health_bar').style.display = 'flex'
+            document.querySelector('#start_btn').style.display = 'none'
+            document.querySelector('#playerName').innerHTML = playerFighter.name
+            document.querySelector('#enemyName').innerHTML = enemyFighter.name
+            document.querySelector('#displayText').style.display = 'none'
+            playerSelected = false
+            enemySelected = false
             player = new newFighter({
                 position: {x: 250, y: 0}, 
                 velocity: {x: 0, y: 0}, 
@@ -188,9 +198,16 @@ const screens = {
                     height: 50
                 }
             })
+
 			decreaseTimer()
             manaRaise()
-			
+            player.health = 100
+            player.mana = 100
+            enemy.health = 100
+            enemy.mana = 100
+            document.querySelector('#playerMana').style.width = player.mana + '%'
+            document.querySelector('#enemyMana').style.width = enemy.mana + '%'
+            document.querySelector('#enemyMana').style.left = Math.abs(100 - enemy.mana) + '%'
         },
         draw: () => {
             gameBackgorund.update()
@@ -205,14 +222,20 @@ const screens = {
                 player.determineCombo(key)
                 switch (key) {
                     case 'd':
-                        player.lastKey = 'd'
-                        keys.d.pressed = true
-                        player.facing = 'right'
+                        turn(player, 'd', 'a', 'right')
+                        // player.lastKey = 'd'
+                        // keys.d.pressed = true
+                        // if (player.animationName !== 'sp_attack2') {
+                        //     player.facing = 'right'
+                        // }
                         break
                     case 'a':
-                        player.lastKey = 'a'
-                        keys.a.pressed = true
-                        player.facing = 'left'
+                        // player.lastKey = 'a'
+                        // keys.a.pressed = true
+                        // if (player.animationName !== 'sp_attack2') {
+                        //     player.facing = 'left'
+                        // }
+                        turn(player, 'a', 'd', 'left')
                         break
                     case 'w':
                         player.velocity.y = -18
@@ -258,14 +281,10 @@ const screens = {
                 enemy.determineCombo(key)
                 switch (key) {
                     case 'ArrowRight':
-                        enemy.facing = 'right'
-                        keys.ArrowRight.pressed = true
-                        enemy.lastKey = 'ArrowRight'
+                        turn(enemy, 'ArrowRight', 'ArrowLeft', 'right')
                         break
                     case 'ArrowLeft':
-                        enemy.facing = 'left'
-                        keys.ArrowLeft.pressed = true
-                        enemy.lastKey = 'ArrowLeft'
+                        turn(enemy, 'ArrowLeft', 'ArrowRight', 'left')
                         break
                     case 'ArrowUp':
                         enemy.velocity.y = -18
@@ -299,10 +318,33 @@ const screens = {
                 }
             }
         }
-	}
+	},
+    'gameOverScreen': {
+        init: () => {
+            // document.querySelector('#start_btn').style.display = 'none'
+            document.querySelector('#displayText').style.display = 'flex'
+            document.querySelector('#displayText').innerHTML = 'Game Over'
+            document.querySelector('#health_bars').style.display = 'none'
+            document.querySelector('#player_health_bar').style.display = 'none'
+            document.querySelector('#enemy_health_bar').style.display = 'none'
+            c.clearRect(0, 0, canvas.width, canvas.height)
+            setTimeout(() => {
+                document.querySelector('#start_btn').style.display = 'block'
+                document.querySelector('#start_btn').value = 'Press any key to continue...'
+            }, 1000);
+        },
+        draw: () => {
+        },
+        keyFunc: (key) => {
+            if (key) {
+                console.log("Any key")
+                document.querySelector('#start_btn').value = ' '
+                document.querySelector('#displayText').style.display = 'none'
+                _doFuncNoSpam(fadeFunc, startScreen)
+            }
+        }
+    }
 }
-
-screens[currentScreen].init()
 
 const keys = {
     a: {
@@ -323,7 +365,7 @@ const keys = {
     }
 }
 
-
+screens[currentScreen].init()
 
 
 function animate() {
@@ -394,6 +436,10 @@ function animate() {
         }
 
         // Detect Colision player attackBox
+        if (player.isAttcking) {
+            console.log(player.currentFrame)
+            console.log(player.attackFrame)
+        }
         if (rectCollision(player, enemy) && player.isAttcking && player.currentFrame === player.attackFrame) {
             enemy.takeHit(player, player.currentForce)
             player.isAttcking = false

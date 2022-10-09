@@ -429,6 +429,118 @@ let waterAttckInfo = {
     }
 }
 
+let metalAnimationsStates = [
+    {
+        name: 'idle',
+        frames: 8,
+    },
+    {
+        name: 'run',
+        frames: 8,
+    },
+    {
+        name: 'jump',
+        frames: 3,
+    },
+    {
+        name: 'fall',
+        frames: 3,
+    },
+    {
+        name: 'jump_down',
+        frames: 20,
+    },
+    {
+        name: 'air_attack',
+        frames: 8,
+    },
+    {
+        name: 'roll',
+        frames: 7,
+    },
+    {
+        name: 'throw',
+        frames: 7,
+    },
+    {
+        name: 'trap',
+        frames: 10,
+    },
+    {
+        name: 'attack1',
+        frames: 6,
+    },
+    {
+        name: 'attack2',
+        frames: 8,
+    },
+    {
+        name: 'sp_attack1',
+        frames: 18,
+    },
+    {
+        name: 'sp_attack2',
+        frames: 11,
+    },
+    {
+        name: 'defend',
+        frames: 12,
+    },
+    {
+        name: 'take_hit',
+        frames: 6,
+    },
+    {
+        name: 'death',
+        frames: 12,
+    }
+]
+
+let metalAttckInfo = {
+    attack: {
+        name: 'attack1',
+        frames: 6,
+        attackFrame: 1,
+        force: 7,
+        attackBox :{offset: {x: 0, y: 50}, width: 80, height: 50}
+    },
+	attack2: {
+        name: 'attack2',
+        frames: 8,
+        attackFrame: 6,
+        force: 5,
+        attackBox :{offset: {x: 0, y: 50}, width: 80, height: 50}
+    },
+    air_attack: {
+        name: 'air_attack',
+        frames: 8,
+        attackFrame: 4,
+        force: 10,
+        attackBox :{offset: {x: 0, y: 50}, width: 120, height: 50}
+    },
+    defend: {
+        name: 'defend',
+        frames: 12,
+    },
+	sp_attack1: {
+        name: 'sp_attack1',
+        frames: 18,
+        combo: ['z', 'x', 'c'],
+        attackFrame: 12,
+        force: 10,
+        attackBox :{offset: {x: 0, y: 0}, width: 120, height: 150}
+    },
+    sp_attack2: {
+        name: 'sp_attack2',
+        frames: 11,
+        mana: 50,
+        combo: ['z', 'x', 'c'],
+        attackFrame: 4,
+        force: 30,
+        attackBox :{offset: {x: -200, y: 40}, width: 400, height: 120}
+    }
+}
+
 fireFighter = {
     name: "Fire",
     AnimationStates: fireAnimationsStates,
@@ -476,6 +588,19 @@ waterFighter = {
     SpriteSheetLeft: "./img/water_SpriteSheet_288x128_left.png",
     idle_png: "./img/water_idle.png",
     idle_bw_png: "./img/water_idle_bw.png",
+    idle_frames: 8,
+    scale: 2.2,
+    offset: {x:290, y: 130}
+}
+
+metalFighter = {
+    name: "Metal",
+    AnimationStates: metalAnimationsStates,
+    AttackInfo: metalAttckInfo,
+    SpriteSheetRight: "./img/metal_SpriteSheet_288x128_right.png",
+    SpriteSheetLeft: "./img/metal_SpriteSheet_288x128_left.png",
+    idle_png: "./img/metal_idle.png",
+    idle_bw_png: "./img/metal_idle_bw.png",
     idle_frames: 8,
     scale: 2.2,
     offset: {x:290, y: 130}

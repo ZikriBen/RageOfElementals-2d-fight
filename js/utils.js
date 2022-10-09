@@ -1,4 +1,6 @@
 function determineWinner({player, enemy, timerId}) {
+    if (isStarted === false)
+        return
     document.querySelector('#timer').innerHTML = '00'
     clearTimeout(timerId)
     document.querySelector('#displayText').style.display = 'flex'
@@ -13,6 +15,9 @@ function determineWinner({player, enemy, timerId}) {
     else if(player.health < enemy.health) {
         document.querySelector('#displayText').innerHTML = 'Player 2 Wins'
     }
+    setTimeout(() => {
+        fadeFunc(gameOver)
+    }, 1000);
 }
 
 let timer = 100
@@ -66,6 +71,11 @@ function fadeFunc(func) {
     setTimeout(gsap.to, 1500, overlay, {opacity: 0, duration: 2})
 }
 
+function startScreen(){
+    currentScreen = 'startScreen'
+    screens[currentScreen].init()
+}
+
 function charSelect(){
     currentScreen = 'charSelectScreen'
     screens[currentScreen].init()
@@ -76,12 +86,30 @@ function startGame(){
     // playMusic()
     currentScreen = 'gameScreen'
     screens[currentScreen].init()
-    
-    document.querySelector('#health_bars').style.display = 'flex'
-    document.querySelector('#player_health_bar').style.display = 'flex'
-    document.querySelector('#enemy_health_bar').style.display = 'flex'
 	timer = 100
 }
+
+function gameOver(){
+    isStarted = false
+    clearTimeout(manaTimer)
+    manaTimer = null
+    currentScreen = 'gameOverScreen'
+    screens[currentScreen].init()
+}
+
+function turn(character, key, oppositKey, side) {
+    keys[key].pressed = true
+    character.lastKey = key
+    if (character.animationName === 'sp_attack2') 
+        return
+    character.facing = side
+    if (keys[oppositKey].pressed === true) {
+        keys[oppositKey].pressed = false
+        character.changeAnimationName('run', character.facing)
+        return
+    }
+}
+let manaTimer;
 
 function manaRaise() {
     if (player.mana < 100) {
@@ -94,7 +122,9 @@ function manaRaise() {
         document.querySelector('#enemyMana').style.left = Math.abs(100 - enemy.mana) + '%'
         console.log(enemy.mana)
     }
-    setTimeout(manaRaise, 1000)
+    if (isStarted === true) {
+        manaTimer = setTimeout(manaRaise, 1000)
+    }
 }
 
 // function manaRaise() {
@@ -138,6 +168,18 @@ function _doActionNoSpam(attacker, type) {
         }
     }, 40); //40ms Timeout
     //Place code that can be spammed here (UI updates, etc)
+};
+
+let timerBlockId2;
+
+function _doFuncNoSpam(func, args) {
+    //Reset Timeout if function is called before it ends
+    if (!(timerBlockId2 == null)) {
+        clearTimeout(timerBlockId2);
+    }
+    timerBlockId2 = setTimeout(function () {
+        func(args)
+    }, 200);
 };
 
 function moveArrow(arrow, arrowPos, direcrtion, characters, fighters) {

@@ -23,6 +23,7 @@
 
                 <div id="playerHealth" style="position: absolute; background: #818CF9; top: 0; bottom: 0; right: 0; left: 0;  width: 100%;"></div>
                 <div id="playerMana" style="position: absolute; background: #292f68; top: 30; bottom: 0; right: 0; left: 0; height : 10px; width: 100%;"></div>
+                <div id="playerName" style="position: absolute; top: 50; left: 0%;">P1</div>
                 
                 <!-- <div style="background-color: blue; position: absolute; height: 30px; width: 100%;top: 30px;"></div> -->
             </div>
@@ -33,13 +34,14 @@
                 <div style="background-color: red; height: 40px;width: 100%;"></div>
                 <div id="enemyHealth" style="position: absolute; background: #818CF9; top: 0; bottom: 0; right: 0; left: 0"></div>
                 <div id="enemyMana" style="position: absolute; background: #292f68; top: 30; bottom: 0; right: 0; left: 0; width: 100%;"></div>
+                <div id="enemyName" style="position: absolute; top: 50; right: 0;">P2</div>
 
             </div>
         </div>
         <div id="displayText" style="position: absolute; color: white; align-items: center; justify-content: center; top: 0; bottom: 0; left: 0; right:0; display: none">Tie</div>
         <input id="sound_btn" type="button" style="display:none; position: absolute;bottom: 0; right: 0;" value="sound on" onclick="playMusic()" />
         <canvas></canvas>
-        <input id="start_btn" type="button" style="display:block; position: absolute; top: 460px;left:375px; color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="press ENTER to start" onclick="startGame()" />
+        <input id="start_btn" type="button" style="display:block; position: absolute; top: 460px;left:330; color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="press ENTER/SPACE to start" onclick="startGame()" />
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js" integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/classes.js"></script>

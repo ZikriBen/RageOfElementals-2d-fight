@@ -159,12 +159,12 @@ class newFighter extends newSprite {
     }
     attack2() {
         console.log("attack2")
-        this.switchSprite(this.attackInfo.attack2.name)
         this.attackBox.width = this.attackInfo.attack2.attackBox.width
         this.attackBox.height = this.attackInfo.attack2.attackBox.height
         this.attackBox.offset = this.attackInfo.attack2.attackBox.offset
         this.attackFrame = this.attackInfo.attack2.attackFrame
         this.currentForce = this.attackInfo.attack2.force
+        this.switchSprite(this.attackInfo.attack2.name)
         this.isAttcking = true
     }
     sp_attack1() {
@@ -183,12 +183,12 @@ class newFighter extends newSprite {
             return
         }
         console.log("sp_attack2")
-        this.switchSprite(this.attackInfo.sp_attack2.name)
         this.attackBox.width = this.attackInfo.sp_attack2.attackBox.width
         this.attackBox.height = this.attackInfo.sp_attack2.attackBox.height
         this.attackBox.offset = this.attackInfo.sp_attack2.attackBox.offset
         this.attackFrame = this.attackInfo.sp_attack2.attackFrame
         this.currentForce = this.attackInfo.sp_attack2.force
+        this.switchSprite(this.attackInfo.sp_attack2.name)
         this.isAttcking = true
         this.mana -= this.attackInfo.sp_attack2.mana
     }
