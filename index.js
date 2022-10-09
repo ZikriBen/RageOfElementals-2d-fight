@@ -1,4 +1,4 @@
-let currentScreen = 'startScreen'
+let currentScreen = 'gameScreen'
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -22,7 +22,7 @@ let shop;
 let beepSound;
 let selectSound;
 let playerFighter= fireFighter;
-let enemyFighter = fireFighter;
+let enemyFighter = waterFighter;
 let playerSelected = false
 let enemySelected = false
 let player;
@@ -40,7 +40,7 @@ const screens = {
             startBackground2 = new ScrollingSprite(back, -canvas.width, 0, canvas.width, canvas.height, 1);
             startBackground3 = new ScrollingSprite(mid, 0, 150, canvas.width, canvas.height, 2, scaleX = 1.005, scaleY = 2)
             startBackground4 = new ScrollingSprite(mid, -canvas.width, 150, canvas.width, canvas.height, 2, scaleX = 1.005, scaleY = 2);
-            logo = new Sprite({position: {x: 200, y: 180}, imagesSrc: './img/logo.png', scale: 2, framesMax: 1})
+            logo = new Sprite({position: {x: 240, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
     },
         draw: () => {
             startBackground1.scroll();
@@ -55,10 +55,11 @@ const screens = {
         },
         keyFunc: (key) => {
             if (key === "Enter" || key === " ") {
-                gsap.to(overlay, {opacity: 1, duration: 0.8})
-                setTimeout(charSelect, 1000);
-                document.querySelector('#start_btn').style.display = 'none'
-                setTimeout(gsap.to, 1500, overlay, {opacity: 0, duration: 2})
+                // gsap.to(overlay, {opacity: 1, duration: 0.8})
+                // setTimeout(charSelect, 1000);
+                // document.querySelector('#start_btn').style.display = 'none'
+                // setTimeout(gsap.to, 1500, overlay, {opacity: 0, duration: 2})
+                fadeFunc(charSelect)
             }
         }
     },
@@ -98,33 +99,39 @@ const screens = {
         keyFunc: (key) => {
             switch (key) {
                 case 'ArrowRight':
-                    arrow2Pos = moveArrow(arrow2, arrow2Pos, 1, characters, fighters)
+                    if (!enemySelected) 
+                        arrow2Pos = moveArrow(arrow2, arrow2Pos, 1, characters, fighters)
                     break
                 case 'ArrowLeft':
-                    arrow2Pos = moveArrow(arrow2, arrow2Pos, -1, characters, fighters)
+                    if (!enemySelected) 
+                        arrow2Pos = moveArrow(arrow2, arrow2Pos, -1, characters, fighters)
                     break
                 case 'Enter':
                     playSound(selectSound)
                     enemyFighter = fighters[arrow2Pos]
                     enemySelected = true
+                    arrow2.framsHold = 0
                     console.log(enemyFighter.name)
                     if (playerSelected)
-                        startGame()
+                        fadeFunc(startGame)
                     break
                 
                 case 'd':
-                    arrow1Pos = moveArrow(arrow1, arrow1Pos, 1, characters, fighters)
+                    if (!playerSelected) 
+                        arrow1Pos = moveArrow(arrow1, arrow1Pos, 1, characters, fighters)
                     break
                 case 'a':
-                    arrow1Pos = moveArrow(arrow1, arrow1Pos, -1, characters, fighters)
+                    if (!playerSelected) 
+                        arrow1Pos = moveArrow(arrow1, arrow1Pos, -1, characters, fighters)
                     break
                 case ' ':
                     playSound(selectSound)
                     playerFighter = fighters[arrow1Pos]
                     playerSelected = true
+                    arrow1.framsHold = 0
                     console.log(playerFighter.name)
                     if (enemySelected)
-                        startGame()
+                        fadeFunc(startGame)
                     break
             }
         }
@@ -211,10 +218,23 @@ const screens = {
                             _doActionNoSpam(player, 'air_attack')
                             break
                         }
-                        _doActionNoSpam(player, 'attack1')
+                        if (player.animationName === 'attack1') {
+                            _doActionNoSpam(player, 'attack2')
+                            break
+                        }
+                        else if (player.animationName === 'attack2') {
+                            _doActionNoSpam(player, 'sp_attack1')
+                            break
+                        }
+                        else {
+                            _doActionNoSpam(player, 'attack1')
+                        }
+                        break
+                    case 'r':
+                        _doActionNoSpam(player, 'attack2')
                         break
                     case 'q':
-                        _doActionNoSpam(player, 'sp_attack1')
+                        _doActionNoSpam(player, 'sp_attack2')
                         break
                     case 'z':
                         player.lastKey = 'z'
@@ -263,7 +283,7 @@ const screens = {
 }
 
 screens[currentScreen].init()
-
+// startGame()
 // const enemy = new Fighter({
 //     position:{
 //         x: 650, 
@@ -418,6 +438,7 @@ function animate() {
         }
 
         // Detect Colision player attackBox
+        console.log(player.attackFrame)
         if (rectCollision(player, enemy) && player.isAttcking && player.currentFrame === player.attackFrame) {
             enemy.takeHit(player, player.currentForce)
             player.isAttcking = false

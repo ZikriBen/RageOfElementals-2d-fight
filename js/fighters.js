@@ -61,8 +61,17 @@ let fireAnimationsStates = [
 let fireAttckInfo = {
     attack: {
         name: 'attack1',
+        next: 'attack2',
         attackFrame: 4,
         frames: 11,
+        force: 10,
+        attackBox :{offset: {x: 0, y: 50}, width: 120, height: 50}
+    },
+    attack2: {
+        name: 'attack2',
+        next: 'sp_attack1',
+        attackFrame: 13,
+        frames: 19,
         force: 10,
         attackBox :{offset: {x: 0, y: 50}, width: 120, height: 50}
     },
@@ -77,7 +86,15 @@ let fireAttckInfo = {
         name: 'defend',
         frames: 10,
     },
-    combo1: {
+    sp_attack1: {
+        name: 'sp_attack1',
+        frames: 28,
+        combo: ['z', 'x', 'c'],
+        attackFrame: 23,
+        force: 50,
+        attackBox :{offset: {x: 20, y: 50}, width: 150, height: 50}
+    },
+    sp_attack2: {
         name: 'sp_attack2',
         frames: 18,
         combo: ['z', 'x', 'c'],
@@ -165,7 +182,7 @@ let groundAttckInfo = {
         name: 'defend',
         frames: 13,
     },
-    combo1: {
+    sp_attack2: {
         name: 'sp_attack2',
         frames: 25,
         combo: ['b', 'n', 'm'],
@@ -249,7 +266,7 @@ let windAttckInfo = {
         name: 'defend',
         frames: 8,
     },
-    combo1: {
+    sp_attack2: {
         name: 'sp_attack2',
         frames: 30,
         combo: ['z', 'x', 'c'],
@@ -341,11 +358,11 @@ let waterAttckInfo = {
         name: 'defend',
         frames: 8,
     },
-    combo1: {
+    sp_attack2: {
         name: 'sp_attack2',
         frames: 30,
         combo: ['z', 'x', 'c'],
-        attackFrame: 18,
+        attackFrame: 13,
         force: 50,
         attackBox :{offset: {x: 60, y: 0}, width: 100, height: 150}
     }

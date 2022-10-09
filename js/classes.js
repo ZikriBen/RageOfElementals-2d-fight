@@ -150,12 +150,44 @@ class newFighter extends newSprite {
     }
 
     attack() {
+        console.log("attack")
         this.switchSprite(this.attackInfo.attack.name)
         this.attackBox.width = this.attackInfo.attack.attackBox.width
         this.attackBox.height = this.attackInfo.attack.attackBox.height
         this.attackBox.offset = this.attackInfo.attack.attackBox.offset
         this.attackFrame = this.attackInfo.attack.attackFrame
         this.currentForce = this.attackInfo.attack.force
+        this.isAttcking = true
+    }
+    attack2() {
+        console.log("attack2")
+        this.switchSprite(this.attackInfo.attack2.name)
+        this.attackBox.width = this.attackInfo.attack2.attackBox.width
+        this.attackBox.height = this.attackInfo.attack2.attackBox.height
+        this.attackBox.offset = this.attackInfo.attack2.attackBox.offset
+        this.attackFrame = this.attackInfo.attack2.attackFrame
+        this.currentForce = this.attackInfo.attack2.force
+        console.log(this.attackFrame)
+        this.isAttcking = true
+    }
+    sp_attack1() {
+        console.log("sp_attack1")
+        this.switchSprite(this.attackInfo.sp_attack1.name)
+        this.attackBox.width = this.attackInfo.sp_attack1.attackBox.width
+        this.attackBox.height = this.attackInfo.sp_attack1.attackBox.height
+        this.attackBox.offset = this.attackInfo.sp_attack1.attackBox.offset
+        this.attackFrame = this.attackInfo.sp_attack1.attackFrame
+        this.currentForce = this.attackInfo.sp_attack1.force
+        this.isAttcking = true
+    }
+    sp_attack2() {
+        console.log("sp_attack2")
+        this.switchSprite(this.attackInfo.sp_attack2.name)
+        this.attackBox.width = this.attackInfo.sp_attack2.attackBox.width
+        this.attackBox.height = this.attackInfo.sp_attack2.attackBox.height
+        this.attackBox.offset = this.attackInfo.sp_attack2.attackBox.offset
+        this.attackFrame = this.attackInfo.sp_attack2.attackFrame
+        this.currentForce = this.attackInfo.sp_attack2.force
         this.isAttcking = true
     }
     air_attack() {
@@ -165,15 +197,6 @@ class newFighter extends newSprite {
         this.attackBox.offset = this.attackInfo.air_attack.attackBox.offset
         this.attackFrame = this.attackInfo.air_attack.attackFrame
         this.currentForce = this.attackInfo.air_attack.force
-        this.isAttcking = true
-    }
-    sp_attack1() {
-        this.switchSprite(this.attackInfo.combo1.name)
-        this.attackBox.width = this.attackInfo.combo1.attackBox.width
-        this.attackBox.height = this.attackInfo.combo1.attackBox.height
-        this.attackBox.offset = this.attackInfo.combo1.attackBox.offset
-        this.attackFrame = this.attackInfo.combo1.attackFrame
-        this.currentForce = this.attackInfo.combo1.force
         this.isAttcking = true
     }
     defend() {
@@ -248,8 +271,14 @@ class newFighter extends newSprite {
             }
             this.isAttcking = false
         }
-        if (this.animationName === 'attack1') {   
+        if (this.animationName === 'attack1') {
             if (this.currentFrame < this.spriteAnimations['attack1'].loc.length - 1) {
+                return
+            }
+            this.isAttcking = false
+        }
+        if (this.animationName === 'attack2') { 
+            if (this.currentFrame < this.spriteAnimations['attack2'].loc.length - 1) {
                 return
             }
             this.isAttcking = false
@@ -284,13 +313,13 @@ class newFighter extends newSprite {
     }
 
     determineCombo(key) {
-        if (this.attackInfo.combo1.combo.length - 1 === this.comboIndex && (Date.now() - this.comboStart) < 800) {
+        if (this.attackInfo.sp_attack2.combo.length - 1 === this.comboIndex && (Date.now() - this.comboStart) < 800) {
             console.log("Combo")
             _doActionNoSpam(this, 'sp_attack1')
             player.comboIndex = 0
         }
     
-        else if (key === this.attackInfo.combo1.combo[this.comboIndex]) {
+        else if (key === this.attackInfo.sp_attack2.combo[this.comboIndex]) {
             this.comboIndex++
             return
         }

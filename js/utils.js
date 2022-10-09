@@ -59,15 +59,16 @@ function playSound(audio) {
     audio.play();
 }
 
-function charSelect(){
+function fadeFunc(func) {
+    gsap.to(overlay, {opacity: 1, duration: 0.8})
+    setTimeout(func, 1000);
+    document.querySelector('#start_btn').style.display = 'none'
+    setTimeout(gsap.to, 1500, overlay, {opacity: 0, duration: 2})
+}
 
-    // playMusic()
+function charSelect(){
     currentScreen = 'charSelectScreen'
     screens[currentScreen].init()
-    
-    // document.querySelector('#health_bars').style.display = 'flex'
-    // document.querySelector('#player_health_bar').style.display = 'flex'
-    // document.querySelector('#enemy_health_bar').style.display = 'flex'
 }
 
 function startGame(){
@@ -93,8 +94,18 @@ function _doActionNoSpam(attacker, type) {
             case "attack1":
                 attacker.attack()
                 break
+            case "attack2":
+                attacker.changeAnimationName("attack2", attacker.facing)
+                attacker.framesMax = attacker.spriteAnimations[attacker.animationName].loc.length
+                attacker.attack2()
+                break
             case "sp_attack1":
+                attacker.changeAnimationName("sp_attack1", attacker.facing)
+                attacker.framesMax = attacker.spriteAnimations[attacker.animationName].loc.length
                 attacker.sp_attack1()
+                break
+            case "sp_attack2":
+                attacker.sp_attack2()
                 break
             case "air_attack":
                 attacker.air_attack()
