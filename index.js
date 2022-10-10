@@ -183,7 +183,8 @@ const screens = {
                     height: 50
                 }
             })
-
+			decreaseTimer()
+			
         },
         draw: () => {
             gameBackgorund.update()
@@ -279,93 +280,10 @@ const screens = {
                 }
             }
         }
-    }
+	}
 }
 
 screens[currentScreen].init()
-// startGame()
-// const enemy = new Fighter({
-//     position:{
-//         x: 650, 
-//         y: 100
-//     },
-//     velocity: {
-//         x: 0,
-//         y: 0,
-//     },
-//     color: 'green',
-//     scale: 2, 
-//     offset: {x:180, y:107},
-//     imagesSrc: './img/Kenji/Idle_right.png',
-//     framesMax: 4,
-//     facing: 'left',
-//     sprites: {
-//         idle_right: {
-//             imagesSrc: './img/Kenji/Idle_right.png', 
-//             framesMax: 4,
-//         },
-//         idle_left: {
-//             imagesSrc: './img/Kenji/Idle_left.png', 
-//             framesMax: 4,
-//         },
-//         run_right: {
-//             imagesSrc: './img/Kenji/Run_right.png', 
-//             framesMax: 8,
-//         },
-//         run_left: {
-//             imagesSrc: './img/Kenji/Run_left.png', 
-//             framesMax: 8,
-//         },
-//         jump_right: {
-//             imagesSrc: './img/Kenji/Jump_right.png', 
-//             framesMax: 2,
-//         },
-//         jump_left: {
-//             imagesSrc: './img/Kenji/Jump_left.png', 
-//             framesMax: 2,
-//         },
-//         fall_right: {
-//             imagesSrc: './img/Kenji/Fall_right.png', 
-//             framesMax: 2,
-//         },
-//         fall_left: {
-//             imagesSrc: './img/Kenji/Fall_left.png', 
-//             framesMax: 2,
-//         },
-//         attack1_right: {
-//             imagesSrc: './img/Kenji/Attack1_right.png', 
-//             framesMax: 4,
-//         },
-//         attack1_left: {
-//             imagesSrc: './img/Kenji/Attack1_left.png', 
-//             framesMax: 4,
-//         },
-//         take_hit_right: {
-//             imagesSrc: './img/Kenji/TakeHit_right.png', 
-//             framesMax: 3,
-//         },
-//         take_hit_left: {
-//             imagesSrc: './img/Kenji/TakeHit_left.png', 
-//             framesMax: 3,
-//         },
-//         death_right: {
-//             imagesSrc: './img/Kenji/Death_right.png', 
-//             framesMax: 7,
-//         },
-//         death_left: {
-//             imagesSrc: './img/Kenji/Death_right.png', 
-//             framesMax: 7,
-//         }
-//     },
-//     attackBox :{
-//         offset: {
-//             x: 0,
-//             y: 50
-//         },
-//         width: 200,
-//         height: 50
-//     }
-// });
 
 const keys = {
     a: {
@@ -382,7 +300,7 @@ const keys = {
     }
 }
 
-decreaseTimer()
+
 
 
 function animate() {

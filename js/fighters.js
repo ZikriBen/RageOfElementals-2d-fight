@@ -80,7 +80,7 @@ let fireAttckInfo = {
         frames: 8,
         attackFrame: 5,
         force: 10,
-        attackBox :{offset: {x: 0, y: 50}, width: 80, height: 50}
+        attackBox :{offset: {x: 0, y: 50}, width: 120, height: 50}
     },
     defend: {
         name: 'defend',
@@ -91,7 +91,7 @@ let fireAttckInfo = {
         frames: 28,
         combo: ['z', 'x', 'c'],
         attackFrame: 23,
-        force: 50,
+        force: 10,
         attackBox :{offset: {x: 20, y: 50}, width: 150, height: 50}
     },
     sp_attack2: {
@@ -100,7 +100,7 @@ let fireAttckInfo = {
         combo: ['z', 'x', 'c'],
         attackFrame: 12,
         force: 50,
-        attackBox :{offset: {x: 20, y: 50}, width: 150, height: 50}
+        attackBox :{offset: {x: 0, y: 0}, width: 170, height: 150}
     }
 }
 
@@ -171,6 +171,13 @@ let groundAttckInfo = {
         force: 10,
         attackBox :{offset: {x: 0, y: 50}, width: 80, height: 50}
     },
+	attack2: {
+        name: 'attack2',
+        frames: 12,
+        attackFrame: 10,
+        force: 6,
+        attackBox :{offset: {x: 0, y: 50}, width: 80, height: 50}
+    },
     air_attack: {
         name: 'air_attack',
         frames: 7,
@@ -181,6 +188,14 @@ let groundAttckInfo = {
     defend: {
         name: 'defend',
         frames: 13,
+    },
+	sp_attack1: {
+        name: 'sp_attack1',
+        frames: 23,
+        combo: ['z', 'x', 'c'],
+        attackFrame: 18,
+        force: 10,
+        attackBox :{offset: {x: 75, y: 0}, width: 80, height: 150}
     },
     sp_attack2: {
         name: 'sp_attack2',
@@ -255,6 +270,13 @@ let windAttckInfo = {
         force: 10,
         attackBox :{offset: {x: 0, y: 50}, width: 80, height: 50}
     },
+	attack2: {
+        name: 'attack2',
+        frames: 17,
+        attackFrame: 11,
+        force: 10,
+        attackBox :{offset: {x: 0, y: 50}, width: 80, height: 50}
+    },
     air_attack: {
         name: 'air_attack',
         frames: 7,
@@ -266,13 +288,21 @@ let windAttckInfo = {
         name: 'defend',
         frames: 8,
     },
+	sp_attack1: {
+        name: 'sp_attack1',
+        frames: 26,
+        combo: ['z', 'x', 'c'],
+        attackFrame: 18,
+        force: 10,
+        attackBox :{offset: {x: 0, y: 60}, width: 200, height: 90}
+    },
     sp_attack2: {
         name: 'sp_attack2',
         frames: 30,
         combo: ['z', 'x', 'c'],
         attackFrame: 18,
         force: 50,
-        attackBox :{offset: {x: -50, y: 0}, width: 50, height: 150}
+        attackBox :{offset: {x: -75, y: 60}, width: 100, height: 90}
     }
 }
 
@@ -342,10 +372,17 @@ let waterAnimationsStates = [
 let waterAttckInfo = {
     attack: {
         name: 'attack1',
-        frames: 8,
+        frames: 7,
         attackFrame: 3,
         force: 10,
-        attackBox :{offset: {x: 0, y: 50}, width: 80, height: 50}
+        attackBox :{offset: {x: 0, y: 50}, width: 100, height: 50}
+    },
+	attack2: {
+        name: 'attack2',
+        frames: 8,
+        attackFrame: 16,
+        force: 10,
+        attackBox :{offset: {x: 0, y: 50}, width: 100, height: 50}
     },
     air_attack: {
         name: 'air_attack',
@@ -357,6 +394,14 @@ let waterAttckInfo = {
     defend: {
         name: 'defend',
         frames: 8,
+    },
+	sp_attack1: {
+        name: 'sp_attack1',
+        frames: 27,
+        combo: ['z', 'x', 'c'],
+        attackFrame: 23,
+        force: 10,
+        attackBox :{offset: {x: 0, y: 0}, width: 200, height: 150}
     },
     sp_attack2: {
         name: 'sp_attack2',

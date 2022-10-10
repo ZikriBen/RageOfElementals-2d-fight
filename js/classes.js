@@ -206,7 +206,7 @@ class newFighter extends newSprite {
 
     takeHit(attacker, force) {
         if (this.defending) 
-            console.log("defend")
+            this.health -= Math.round(force / 10)
         else
             this.health -= force
         
@@ -233,10 +233,10 @@ class newFighter extends newSprite {
         this.attackBox.position.y = this.position.y + this.attackBox.offset.y
         
 
-        // c.fillStyle = 'red'
-        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        // c.fillStyle = 'black'
-        // c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
+        c.fillStyle = 'rgba(255, 0, 0, 0.35)'
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        c.fillStyle ='rgba(0, 0, 0, 0.35)'
+        c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y

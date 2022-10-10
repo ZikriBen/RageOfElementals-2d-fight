@@ -80,7 +80,9 @@ function startGame(){
     document.querySelector('#health_bars').style.display = 'flex'
     document.querySelector('#player_health_bar').style.display = 'flex'
     document.querySelector('#enemy_health_bar').style.display = 'flex'
+	timer = 60
 }
+
 
 let timerBlockId;
 
