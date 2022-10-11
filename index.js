@@ -142,6 +142,9 @@ const screens = {
             console.log("Game screen init")
             gameBackgorund = new Sprite({position: {x: 0, y: 0}, imagesSrc: './img/background.png'})
             shop = new Sprite({position: {x: 625, y: 160}, imagesSrc: './img/shop.png', scale: 2.5, framesMax: 6})
+            document.querySelector('#health_bars').style.display = 'flex'
+            document.querySelector('#player_health_bar').style.display = 'flex'
+            document.querySelector('#enemy_health_bar').style.display = 'flex'
             player = new newFighter({
                 position: {x: 250, y: 0}, 
                 velocity: {x: 0, y: 0}, 
@@ -184,6 +187,7 @@ const screens = {
                 }
             })
 			decreaseTimer()
+            manaRaise()
 			
         },
         draw: () => {
@@ -272,7 +276,7 @@ const screens = {
                         _doActionNoSpam(enemy, 'attack1')
                         break
                     case '1':
-                        _doActionNoSpam(enemy, 'sp_attack1')
+                        _doActionNoSpam(enemy, 'sp_attack2')
                         break
                     case '9':
                         enemy.defend()

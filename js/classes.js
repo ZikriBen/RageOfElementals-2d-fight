@@ -120,6 +120,7 @@ class newFighter extends newSprite {
         this.isAttcking
         this.color = color
         this.health = 100
+        this.mana = 100
         this.currentFrame = 0
         this.framsTotal = 0
         this.framsHold = 5
@@ -181,6 +182,10 @@ class newFighter extends newSprite {
         this.isAttcking = true
     }
     sp_attack2() {
+        if (this.mana < this.attackInfo.sp_attack2.mana) {
+            // playSound?
+            return
+        }
         console.log("sp_attack2")
         this.switchSprite(this.attackInfo.sp_attack2.name)
         this.attackBox.width = this.attackInfo.sp_attack2.attackBox.width
@@ -189,6 +194,7 @@ class newFighter extends newSprite {
         this.attackFrame = this.attackInfo.sp_attack2.attackFrame
         this.currentForce = this.attackInfo.sp_attack2.force
         this.isAttcking = true
+        this.mana -= 50
     }
     air_attack() {
         this.switchSprite(this.attackInfo.air_attack.name)

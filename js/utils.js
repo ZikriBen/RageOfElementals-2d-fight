@@ -15,7 +15,7 @@ function determineWinner({player, enemy, timerId}) {
     }
 }
 
-let timer = 60
+let timer = 100
 let timerId
 
 function decreaseTimer() {
@@ -80,9 +80,29 @@ function startGame(){
     document.querySelector('#health_bars').style.display = 'flex'
     document.querySelector('#player_health_bar').style.display = 'flex'
     document.querySelector('#enemy_health_bar').style.display = 'flex'
-	timer = 60
+	timer = 100
 }
 
+function manaRaise() {
+    if (player.mana < 100) {
+        player.mana += 2
+        document.querySelector('#playerMana').style.width = player.mana + '%'
+    }
+    if (enemy.mana < 100) {
+        enemy.mana += 2
+        document.querySelector('#enemyMana').style.width = enemy.mana + '%'
+        document.querySelector('#enemyMana').style.left = Math.abs(100 - enemy.mana) + '%'
+        console.log(enemy.mana)
+    }
+    setTimeout(manaRaise, 1000)
+}
+
+// function manaRaise() {
+//     newPlayerMana = player.mana + 10
+//     document.querySelector('#playerMana').style.width = player.mana + '%'
+//     document.querySelector('#enemyMana').style.width = enemy.mana + '%'
+//     document.querySelector('#enemyMana').style.left = 100 - enemy.mana + '%'
+// }
 
 let timerBlockId;
 

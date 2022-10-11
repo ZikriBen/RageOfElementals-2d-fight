@@ -96,6 +96,7 @@ let fireAttckInfo = {
     },
     sp_attack2: {
         name: 'sp_attack2',
+        mana: 50,
         frames: 18,
         combo: ['z', 'x', 'c'],
         attackFrame: 12,
@@ -199,6 +200,7 @@ let groundAttckInfo = {
     },
     sp_attack2: {
         name: 'sp_attack2',
+        mana: 50,
         frames: 25,
         combo: ['b', 'n', 'm'],
         attackFrame: 18,
@@ -298,6 +300,7 @@ let windAttckInfo = {
     },
     sp_attack2: {
         name: 'sp_attack2',
+        mana: 50,
         frames: 30,
         combo: ['z', 'x', 'c'],
         attackFrame: 18,
@@ -406,6 +409,7 @@ let waterAttckInfo = {
     sp_attack2: {
         name: 'sp_attack2',
         frames: 30,
+        mana: 50,
         combo: ['z', 'x', 'c'],
         attackFrame: 13,
         force: 50,
