@@ -291,16 +291,20 @@ screens[currentScreen].init()
 
 const keys = {
     a: {
-        pressed : false
+        pressed : false,
+        double: 0
     },
     d: {
-        pressed: false
+        pressed: false,
+        double: 0
     },
     ArrowRight: {
-        pressed: false
+        pressed: false,
+        double: 0
     },
     ArrowLeft: {
-        pressed: false
+        pressed: false,
+        double: 0
     }
 }
 
@@ -315,6 +319,7 @@ function animate() {
     
     screens[currentScreen].draw()
 
+    // remove condition?
     if (player && enemy) {
 
         // Player Movement
@@ -326,6 +331,14 @@ function animate() {
         else if (keys.d.pressed && player.lastKey === 'd') {
             player.switchSprite('run')
             player.velocity.x = 5
+        }
+        else if (keys.d.double >= 2) {
+            player.velocity.x += 7
+            player.roll()
+        }
+        else if (keys.a.double >= 2) {
+            player.velocity.x -= 7
+            player.roll()
         }
         else {
             player.switchSprite('idle')
@@ -347,6 +360,14 @@ function animate() {
         else if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
             enemy.switchSprite('run')
             enemy.velocity.x = -5
+        }
+        else if (keys.ArrowRight.double >= 2) {
+            enemy.velocity.x += 7
+            enemy.roll()
+        }
+        else if (keys.ArrowLeft.double >= 2) {
+            enemy.velocity.x -= 7
+            enemy.roll()
         }
         else {
             enemy.switchSprite('idle')
@@ -403,19 +424,29 @@ window.addEventListener('keydown', (event) => {
     screens[currentScreen].keyFunc(event.key)
 })
 
+
 window.addEventListener('keyup', (event) => {
     switch (event.key) {
         case 'd':
             keys.d.pressed = false
+            keys.d.double++
+            setTimeout(() => (keys.d.double = 0), 450)
             break
         case 'a':
             keys.a.pressed = false
+            keys.a.double++
+
+            setTimeout(() => (keys.a.double = 0), 450)
             break
         case 'ArrowRight':
             keys.ArrowRight.pressed = false
+            keys.ArrowRight.double++
+            setTimeout(() => (keys.ArrowRight.double = 0), 450)
             break
         case 'ArrowLeft':
             keys.ArrowLeft.pressed = false
+            keys.ArrowLeft.double++
+            setTimeout(() => (keys.ArrowLeft.double = 0), 450)
             break
     }
 })

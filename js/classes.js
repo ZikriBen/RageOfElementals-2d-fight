@@ -205,6 +205,12 @@ class newFighter extends newSprite {
         this.currentForce = this.attackInfo.air_attack.force
         this.isAttcking = true
     }
+
+    roll() {
+        this.switchSprite('roll')
+        this.defending = true
+    }
+
     defend() {
         this.switchSprite('defend')
         this.defending = true
@@ -302,6 +308,12 @@ class newFighter extends newSprite {
         }
         if (this.animationName === 'defend') {    
             if (this.currentFrame < this.spriteAnimations['defend'].loc.length - 1) {
+                return
+            }
+            this.defending = false
+        }
+        if (this.animationName === 'roll') {    
+            if (this.currentFrame < this.spriteAnimations['roll'].loc.length - 1) {
                 return
             }
             this.defending = false
