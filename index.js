@@ -21,7 +21,7 @@ let gameBackgorund;
 let shop;
 let beepSound;
 let selectSound;
-let playerFighter= fireFighter;
+let playerFighter= groundFighter;
 let enemyFighter = waterFighter;
 let playerSelected = false
 let enemySelected = false
@@ -236,7 +236,7 @@ const screens = {
                         }
                         break
                     case 'r':
-                        _doActionNoSpam(player, 'attack2')
+                        _doActionNoSpam(player, 'meditate')
                         break
                     case 'q':
                         _doActionNoSpam(player, 'sp_attack2')
@@ -281,6 +281,9 @@ const screens = {
                     case '9':
                         enemy.defend()
                         break
+                    case '7':
+                        _doActionNoSpam(enemy, 'meditate')
+                        break
                 }
             }
         }
@@ -319,94 +322,94 @@ function animate() {
     
     screens[currentScreen].draw()
 
-    // remove condition?
-    if (player && enemy) {
 
-        // Player Movement
-        player.velocity.x = 0
-        if (keys.a.pressed && player.lastKey === 'a') {
-            player.switchSprite('run')
-            player.velocity.x = -5
-        }
-        else if (keys.d.pressed && player.lastKey === 'd') {
-            player.switchSprite('run')
-            player.velocity.x = 5
-        }
-        else if (keys.d.double >= 2) {
-            player.velocity.x += 7
-            player.roll()
-        }
-        else if (keys.a.double >= 2) {
-            player.velocity.x -= 7
-            player.roll()
-        }
-        else {
-            player.switchSprite('idle')
-        }
-        
-        if (player.velocity.y < 0) {
-            player.switchSprite('jump')
-        }
-        else if (player.velocity.y > 0) {
-            player.switchSprite('fall')
-        }
+    // Player Movement
+    player.velocity.x = 0
+    if (keys.a.pressed && player.lastKey === 'a') {
+        player.switchSprite('run')
+        player.velocity.x = -5
+    }
+    else if (keys.d.pressed && player.lastKey === 'd') {
+        player.switchSprite('run')
+        player.velocity.x = 5
+    }
+    else if (keys.d.double >= 2) {
+        player.velocity.x += 7
+        player.roll()
+    }
+    else if (keys.a.double >= 2) {
+        player.velocity.x -= 7
+        player.roll()
+    }
+    else {
+        player.switchSprite('idle')
+    }
+    
+    if (player.velocity.y < 0) {
+        player.switchSprite('jump')
+    }
+    else if (player.velocity.y > 0) {
+        player.switchSprite('fall')
+    }
 
-        // Enemy Movement
-        enemy.velocity.x = 0
-        if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-            enemy.switchSprite('run')
-            enemy.velocity.x = 5
-        }
-        else if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-            enemy.switchSprite('run')
-            enemy.velocity.x = -5
-        }
-        else if (keys.ArrowRight.double >= 2) {
-            enemy.velocity.x += 7
-            enemy.roll()
-        }
-        else if (keys.ArrowLeft.double >= 2) {
-            enemy.velocity.x -= 7
-            enemy.roll()
-        }
-        else {
-            enemy.switchSprite('idle')
-        }
-        
-        if (enemy.velocity.y < 0) {
-            enemy.switchSprite('jump')
-        }
-        else if (enemy.velocity.y > 0) {
-            enemy.switchSprite('fall')
-        }
+    // Enemy Movement
+    enemy.velocity.x = 0
+    if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
+        enemy.switchSprite('run')
+        enemy.velocity.x = 5
+    }
+    else if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
+        enemy.switchSprite('run')
+        enemy.velocity.x = -5
+    }
+    else if (keys.ArrowRight.double >= 2) {
+        enemy.velocity.x += 7
+        enemy.roll()
+    }
+    else if (keys.ArrowLeft.double >= 2) {
+        enemy.velocity.x -= 7
+        enemy.roll()
+    }
+    else {
+        enemy.switchSprite('idle')
+    }
+    
+    if (enemy.velocity.y < 0) {
+        enemy.switchSprite('jump')
+    }
+    else if (enemy.velocity.y > 0) {
+        enemy.switchSprite('fall')
+    }
 
-        // Detect Colision player attackBox
-        console.log(player.attackFrame)
-        if (rectCollision(player, enemy) && player.isAttcking && player.currentFrame === player.attackFrame) {
-            enemy.takeHit(player, player.currentForce)
-            player.isAttcking = false
-            console.log('col')
-            console.log(enemy.health)
-            if (enemy.health < 0) {
-                enemy.health = 0
-            }
-            document.querySelector('#enemyHealth').style.width = enemy.health + '%'
+    // Detect Colision player attackBox
+    console.log(player.attackFrame)
+    if (rectCollision(player, enemy) && player.isAttcking && player.currentFrame === player.attackFrame) {
+        enemy.takeHit(player, player.currentForce)
+        player.isAttcking = false
+        console.log('col')
+        console.log(enemy.health)
+        if (enemy.health < 0) {
+            enemy.health = 0
         }
+    }
 
-        // Detect Colision enemy attackBox
-        if (rectCollision(enemy, player) && enemy.isAttcking && enemy.currentFrame === enemy.attackFrame) {
-            player.takeHit(enemy, enemy.currentForce)
-            enemy.isAttcking = false
-            console.log('col')
-            if (player.health < 0) {
-                player.health = 0
-            }
-            document.querySelector('#playerHealth').style.width = player.health + '%'
-        }
+    document.querySelector('#enemyHealth').style.width = enemy.health + '%'
 
-        if (enemy.health <= 0 || player.health <= 0) {
-            determineWinner({player, enemy, timerId})
+    // Detect Colision enemy attackBox
+    if (rectCollision(enemy, player) && enemy.isAttcking && enemy.currentFrame === enemy.attackFrame) {
+        player.takeHit(enemy, enemy.currentForce)
+        enemy.isAttcking = false
+        console.log('col')
+        if (player.health < 0) {
+            player.health = 0
         }
+    }
+
+    document.querySelector('#playerHealth').style.width = player.health + '%'
+
+    if (enemy.health <= 0 || player.health <= 0) {
+        determineWinner({player, enemy, timerId})
+    
     }
 
     // Fade effect between screens

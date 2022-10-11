@@ -132,6 +132,9 @@ function _doActionNoSpam(attacker, type) {
             case "air_attack":
                 attacker.air_attack()
                 break
+            case "meditate":
+                attacker.meditate()
+                break
         }
     }, 40); //40ms Timeout
     //Place code that can be spammed here (UI updates, etc)

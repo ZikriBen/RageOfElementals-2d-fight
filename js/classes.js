@@ -182,7 +182,7 @@ class newFighter extends newSprite {
         this.isAttcking = true
     }
     sp_attack2() {
-        if (this.mana < this.attackInfo.sp_attack2.mana) {
+        if (this.animationName === "sp_attack2" || this.mana < this.attackInfo.sp_attack2.mana) {
             // playSound?
             return
         }
@@ -194,7 +194,7 @@ class newFighter extends newSprite {
         this.attackFrame = this.attackInfo.sp_attack2.attackFrame
         this.currentForce = this.attackInfo.sp_attack2.force
         this.isAttcking = true
-        this.mana -= 50
+        this.mana -= this.attackInfo.sp_attack2.mana
     }
     air_attack() {
         this.switchSprite(this.attackInfo.air_attack.name)
@@ -211,9 +211,30 @@ class newFighter extends newSprite {
         this.defending = true
     }
 
+    meditate() {
+        if (!this.attackInfo.hasOwnProperty('meditate'))
+            return
+        else
+            if (this.animationName === "meditate" || this.mana < this.attackInfo.meditate.mana) {
+                // playSound?
+                return
+            }
+            this.switchSprite('meditate')
+            this.mana -= this.attackInfo.meditate.mana
+    }
+
     defend() {
         this.switchSprite('defend')
         this.defending = true
+    }
+
+    heal(hp) {
+        if (this.health >= 100) 
+            return
+        else if (hp + this.health > 100)
+            this.health == 100
+        else
+            this.health += hp
     }
 
     takeHit(attacker, force) {
@@ -234,13 +255,11 @@ class newFighter extends newSprite {
         if (!this.isDead) this.animateFrames()
         let x;
         if (this.facing === 'left') {
-            // this.facingOffset = this.attackBox.width + this.attackBox.offset.x - this.width // 50 + 50 - 50
             x = this.position.x - this.attackBox.offset.x - this.attackBox.width
         }
         else {
             x = this.position.x + this.width + this.attackBox.offset.x
         }
-        // this.attackBox.position.x = this.position.x - this.attackBox.offset.x - this.attackBox.width
         this.attackBox.position.x = x
         this.attackBox.position.y = this.position.y + this.attackBox.offset.y
         
@@ -311,6 +330,12 @@ class newFighter extends newSprite {
                 return
             }
             this.defending = false
+        }
+        if (this.animationName === 'meditate') {    
+            if (this.currentFrame < this.spriteAnimations['meditate'].loc.length - 1) {
+                return
+            }
+            this.heal(this.attackInfo.meditate.force)
         }
         if (this.animationName === 'roll') {    
             if (this.currentFrame < this.spriteAnimations['roll'].loc.length - 1) {

@@ -190,6 +190,12 @@ let groundAttckInfo = {
         name: 'defend',
         frames: 13,
     },
+    meditate: {
+        name: 'meditate',
+        force: 5,
+        mana: 15,
+        frames: 16,
+    },
 	sp_attack1: {
         name: 'sp_attack1',
         frames: 23,
@@ -397,6 +403,12 @@ let waterAttckInfo = {
     defend: {
         name: 'defend',
         frames: 8,
+    },
+    meditate: {
+        name: 'meditate',
+        force: 5,
+        mana: 15,
+        frames: 12,
     },
 	sp_attack1: {
         name: 'sp_attack1',
