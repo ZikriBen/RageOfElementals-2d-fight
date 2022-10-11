@@ -59,12 +59,6 @@ class newSprite {
     }
 
     animateFrames() {
-        // this.currentFrame = Math.floor(this.gameFrame/this.staggerFrames) % this.spriteAnimations[this.animationName].loc.length
-        // this.frameX = this.spriteWidth * this.currentFrame
-        // this.frameY = this.spriteAnimations[this.animationName].loc[this.currentFrame].y
-        // console.log(this.currentFrame)
-        // this.gameFrame++
-        
         this.gameFrame++
         if (this.gameFrame % this.staggerFrames === 0) {
             this.currentFrame = (this.currentFrame + 1) % this.framesMax
@@ -151,6 +145,9 @@ class newFighter extends newSprite {
     }
 
     attack() {
+        if (this.animationName === "sp_attack1") {
+            return
+        }
         console.log("attack")
         this.switchSprite(this.attackInfo.attack.name)
         this.attackBox.width = this.attackInfo.attack.attackBox.width
@@ -168,7 +165,6 @@ class newFighter extends newSprite {
         this.attackBox.offset = this.attackInfo.attack2.attackBox.offset
         this.attackFrame = this.attackInfo.attack2.attackFrame
         this.currentForce = this.attackInfo.attack2.force
-        console.log(this.attackFrame)
         this.isAttcking = true
     }
     sp_attack1() {
@@ -183,7 +179,7 @@ class newFighter extends newSprite {
     }
     sp_attack2() {
         if (this.animationName === "sp_attack2" || this.mana < this.attackInfo.sp_attack2.mana) {
-            // playSound?
+            // playSound(errorSound)
             return
         }
         console.log("sp_attack2")
@@ -216,7 +212,7 @@ class newFighter extends newSprite {
             return
         else
             if (this.animationName === "meditate" || this.mana < this.attackInfo.meditate.mana) {
-                // playSound?
+                // playSound(errorSound)
                 return
             }
             this.switchSprite('meditate')
@@ -314,7 +310,7 @@ class newFighter extends newSprite {
             }
             this.isAttcking = false
         }
-        if (this.animationName === 'sp_attack1') {    
+        if (this.animationName === 'sp_attack1') {   
             if (this.currentFrame < this.spriteAnimations['sp_attack1'].loc.length - 1) {
                 return
             }

@@ -1,4 +1,4 @@
-let currentScreen = 'gameScreen'
+let currentScreen = 'startScreen'
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -21,6 +21,7 @@ let gameBackgorund;
 let shop;
 let beepSound;
 let selectSound;
+let errorSound;
 let playerFighter= groundFighter;
 let enemyFighter = waterFighter;
 let playerSelected = false
@@ -73,6 +74,7 @@ const screens = {
             charOffset = 220
             beepSound = new Audio('./music/mixkit-video-game-mystery-alert-234.wav');
             selectSound = new Audio('./music/mixkit-arcade-bonus-alert-767.wav');
+            // errorSound = new Audio('./music/error-89206.wav');
             arrow1 = new Sprite({position: {x: arrowStartPos, y: 285}, imagesSrc: './img/arrow_p1p.png', scale: 0.3, framesMax: 5})
             arrow2 = new Sprite({position: {x: arrowStartPos + charOffset, y: 285}, imagesSrc: './img/arrow_p2p.png', scale: 0.3, framesMax: 5, framsHold: 3})
             
@@ -273,7 +275,17 @@ const screens = {
                             _doActionNoSpam(enemy, 'air_attack')
                             break
                         }
-                        _doActionNoSpam(enemy, 'attack1')
+                        if (enemy.animationName === 'attack1') {
+                            _doActionNoSpam(enemy, 'attack2')
+                            break
+                        }
+                        else if (enemy.animationName === 'attack2') {
+                            _doActionNoSpam(enemy, 'sp_attack1')
+                            break
+                        }
+                        else {
+                            _doActionNoSpam(enemy, 'attack1')
+                        }
                         break
                     case '1':
                         _doActionNoSpam(enemy, 'sp_attack2')
@@ -322,94 +334,95 @@ function animate() {
     
     screens[currentScreen].draw()
 
-
-    // Player Movement
-    player.velocity.x = 0
-    if (keys.a.pressed && player.lastKey === 'a') {
-        player.switchSprite('run')
-        player.velocity.x = -5
-    }
-    else if (keys.d.pressed && player.lastKey === 'd') {
-        player.switchSprite('run')
-        player.velocity.x = 5
-    }
-    else if (keys.d.double >= 2) {
-        player.velocity.x += 7
-        player.roll()
-    }
-    else if (keys.a.double >= 2) {
-        player.velocity.x -= 7
-        player.roll()
-    }
-    else {
-        player.switchSprite('idle')
-    }
-    
-    if (player.velocity.y < 0) {
-        player.switchSprite('jump')
-    }
-    else if (player.velocity.y > 0) {
-        player.switchSprite('fall')
-    }
-
-    // Enemy Movement
-    enemy.velocity.x = 0
-    if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-        enemy.switchSprite('run')
-        enemy.velocity.x = 5
-    }
-    else if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-        enemy.switchSprite('run')
-        enemy.velocity.x = -5
-    }
-    else if (keys.ArrowRight.double >= 2) {
-        enemy.velocity.x += 7
-        enemy.roll()
-    }
-    else if (keys.ArrowLeft.double >= 2) {
-        enemy.velocity.x -= 7
-        enemy.roll()
-    }
-    else {
-        enemy.switchSprite('idle')
-    }
-    
-    if (enemy.velocity.y < 0) {
-        enemy.switchSprite('jump')
-    }
-    else if (enemy.velocity.y > 0) {
-        enemy.switchSprite('fall')
-    }
-
-    // Detect Colision player attackBox
-    console.log(player.attackFrame)
-    if (rectCollision(player, enemy) && player.isAttcking && player.currentFrame === player.attackFrame) {
-        enemy.takeHit(player, player.currentForce)
-        player.isAttcking = false
-        console.log('col')
-        console.log(enemy.health)
-        if (enemy.health < 0) {
-            enemy.health = 0
+    if (player && enemy) {
+        // Player Movement
+        player.velocity.x = 0
+        if (keys.a.pressed && player.lastKey === 'a') {
+            player.switchSprite('run')
+            player.velocity.x = -5
         }
-    }
-
-    document.querySelector('#enemyHealth').style.width = enemy.health + '%'
-
-    // Detect Colision enemy attackBox
-    if (rectCollision(enemy, player) && enemy.isAttcking && enemy.currentFrame === enemy.attackFrame) {
-        player.takeHit(enemy, enemy.currentForce)
-        enemy.isAttcking = false
-        console.log('col')
-        if (player.health < 0) {
-            player.health = 0
+        else if (keys.d.pressed && player.lastKey === 'd') {
+            player.switchSprite('run')
+            player.velocity.x = 5
         }
-    }
+        else if (keys.d.double >= 2) {
+            player.velocity.x += 7
+            player.roll()
+        }
+        else if (keys.a.double >= 2) {
+            player.velocity.x -= 7
+            player.roll()
+        }
+        else {
+            player.switchSprite('idle')
+        }
+        
+        if (player.velocity.y < 0) {
+            player.switchSprite('jump')
+        }
+        else if (player.velocity.y > 0) {
+            player.switchSprite('fall')
+        }
 
-    document.querySelector('#playerHealth').style.width = player.health + '%'
+        // Enemy Movement
+        enemy.velocity.x = 0
+        if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
+            enemy.switchSprite('run')
+            enemy.velocity.x = 5
+        }
+        else if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
+            enemy.switchSprite('run')
+            enemy.velocity.x = -5
+        }
+        else if (keys.ArrowRight.double >= 2) {
+            enemy.velocity.x += 7
+            enemy.roll()
+        }
+        else if (keys.ArrowLeft.double >= 2) {
+            enemy.velocity.x -= 7
+            enemy.roll()
+        }
+        else {
+            enemy.switchSprite('idle')
+        }
+        
+        if (enemy.velocity.y < 0) {
+            enemy.switchSprite('jump')
+        }
+        else if (enemy.velocity.y > 0) {
+            enemy.switchSprite('fall')
+        }
 
-    if (enemy.health <= 0 || player.health <= 0) {
-        determineWinner({player, enemy, timerId})
-    
+        // Detect Colision player attackBox
+        if (rectCollision(player, enemy) && player.isAttcking && player.currentFrame === player.attackFrame) {
+            enemy.takeHit(player, player.currentForce)
+            player.isAttcking = false
+            console.log('col')
+            console.log(enemy.health)
+            if (enemy.health < 0) {
+                enemy.health = 0
+            }
+        }
+
+        document.querySelector('#enemyHealth').style.width = enemy.health + '%'
+
+        // Detect Colision enemy attackBox
+        if (rectCollision(enemy, player) && enemy.isAttcking && enemy.currentFrame === enemy.attackFrame) {
+            player.takeHit(enemy, enemy.currentForce)
+            enemy.isAttcking = false
+            console.log('col')
+            console.log(player.health)
+            if (player.health < 0) {
+                player.health = 0
+            }
+        }
+
+        document.querySelector('#playerHealth').style.width = player.health + '%'
+
+        if (enemy.health <= 0 || player.health <= 0) {
+            determineWinner({player, enemy, timerId})
+        
+        }
     }
 
     // Fade effect between screens
