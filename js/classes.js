@@ -292,57 +292,57 @@ class newFighter extends newSprite {
             }
             return
         }
-        if (this.animationName === 'air_attack') {   
+        if (this.animationName === 'air_attack' && sprite !== 'death') {   
             if (this.currentFrame < this.spriteAnimations['air_attack'].loc.length - 1) {
                 return
             }
             this.isAttcking = false
         }
-        if (this.animationName === 'attack1') {
+        if (this.animationName === 'take_hit' && sprite !== 'death') {    
+            if (this.currentFrame < this.spriteAnimations['take_hit'].loc.length - 1) {
+                return
+            }
+        }
+        if (this.animationName === 'attack1' && sprite !== 'death') {
             if (this.currentFrame < this.spriteAnimations['attack1'].loc.length - 1) {
                 return
             }
             this.isAttcking = false
         }
-        if (this.animationName === 'attack2') { 
+        if (this.animationName === 'attack2' && sprite !== 'death') { 
             if (this.currentFrame < this.spriteAnimations['attack2'].loc.length - 1) {
                 return
             }
             this.isAttcking = false
         }
-        if (this.animationName === 'sp_attack1') {   
+        if (this.animationName === 'sp_attack1' && sprite !== 'death') {   
             if (this.currentFrame < this.spriteAnimations['sp_attack1'].loc.length - 1) {
                 return
             }
         }
-        if (this.animationName === 'sp_attack2') {    
+        if (this.animationName === 'sp_attack2' && sprite !== 'death') {    
             if (this.currentFrame < this.spriteAnimations['sp_attack2'].loc.length - 1) {
                 return
             }
             this.isAttcking = false
         }
-        if (this.animationName === 'defend') {    
+        if (this.animationName === 'defend' && sprite !== 'death') {    
             if (this.currentFrame < this.spriteAnimations['defend'].loc.length - 1) {
                 return
             }
             this.defending = false
         }
-        if (this.animationName === 'meditate') {    
+        if (this.animationName === 'meditate' && sprite !== 'death') {    
             if (this.currentFrame < this.spriteAnimations['meditate'].loc.length - 1) {
                 return
             }
             this.heal(this.attackInfo.meditate.force)
         }
-        if (this.animationName === 'roll') {    
+        if (this.animationName === 'roll' && sprite !== 'death') {    
             if (this.currentFrame < this.spriteAnimations['roll'].loc.length - 1) {
                 return
             }
             this.defending = false
-        }
-        if (this.animationName === 'take_hit') {    
-            if (this.currentFrame < this.spriteAnimations['take_hit'].loc.length - 1) {
-                return
-            }
         }
         if (sprite !== this.animationName) {
             this.changeAnimationName(sprite, this.facing)

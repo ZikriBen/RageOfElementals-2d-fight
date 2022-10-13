@@ -70,7 +70,7 @@ let fireAttckInfo = {
     attack2: {
         name: 'attack2',
         next: 'sp_attack1',
-        attackFrame: 13,
+        attackFrame: 12,
         frames: 19,
         force: 10,
         attackBox :{offset: {x: 0, y: 50}, width: 120, height: 50}
@@ -383,14 +383,14 @@ let waterAttckInfo = {
         name: 'attack1',
         frames: 7,
         attackFrame: 3,
-        force: 10,
+        force: 7,
         attackBox :{offset: {x: 0, y: 50}, width: 100, height: 50}
     },
 	attack2: {
         name: 'attack2',
         frames: 8,
         attackFrame: 16,
-        force: 10,
+        force: 8,
         attackBox :{offset: {x: 0, y: 50}, width: 100, height: 50}
     },
     air_attack: {
@@ -415,8 +415,8 @@ let waterAttckInfo = {
         frames: 27,
         combo: ['z', 'x', 'c'],
         attackFrame: 23,
-        force: 10,
-        attackBox :{offset: {x: 0, y: 0}, width: 200, height: 150}
+        force: 7,
+        attackBox :{offset: {x: 60, y: 50}, width: 100, height: 100}
     },
     sp_attack2: {
         name: 'sp_attack2',
@@ -567,7 +567,7 @@ groundFighter = {
     offset: {x:350, y: 152}
 }
 
-windFighter = {
+windFighter = { 
     name: "Wind",
     AnimationStates: windAnimationsStates,
     AttackInfo: windAttckInfo,
@@ -576,8 +576,8 @@ windFighter = {
     idle_png: "./img/wind_idle.png",
     idle_bw_png: "./img/wind_idle_bw.png",
     idle_frames: 8,
-    scale: 2,
-    offset: {x:250, y: 104},
+    scale: 2.4,
+    offset: {x:320, y: 152},
 }
 
 waterFighter = {

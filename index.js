@@ -1,4 +1,4 @@
-let currentScreen = 'startScreen'
+let currentScreen = 'gameScreen'
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -22,8 +22,9 @@ let shop;
 let beepSound;
 let selectSound;
 let errorSound;
-let playerFighter= metalFighter;
+let playerFighter= fireFighter;
 let enemyFighter = waterFighter;
+let isStarted = false
 let playerSelected = false
 let enemySelected = false
 let player;
@@ -155,6 +156,7 @@ const screens = {
             document.querySelector('#playerName').innerHTML = playerFighter.name
             document.querySelector('#enemyName').innerHTML = enemyFighter.name
             document.querySelector('#displayText').style.display = 'none'
+            isStarted = true
             playerSelected = false
             enemySelected = false
             player = new newFighter({
@@ -248,11 +250,11 @@ const screens = {
                             _doActionNoSpam(player, 'air_attack')
                             break
                         }
-                        if (player.animationName === 'attack1') {
+                        if (player.animationName === 'attack1' && player.currentFrame >= player.attackFrame) {
                             _doActionNoSpam(player, 'attack2')
                             break
                         }
-                        else if (player.animationName === 'attack2') {
+                        else if (player.animationName === 'attack2' && player.currentFrame >= player.attackFrame) {
                             _doActionNoSpam(player, 'sp_attack1')
                             break
                         }
@@ -294,11 +296,11 @@ const screens = {
                             _doActionNoSpam(enemy, 'air_attack')
                             break
                         }
-                        if (enemy.animationName === 'attack1') {
+                        if (enemy.animationName === 'attack1' && enemy.currentFrame >= player.attackFrame) {
                             _doActionNoSpam(enemy, 'attack2')
                             break
                         }
-                        else if (enemy.animationName === 'attack2') {
+                        else if (enemy.animationName === 'attack2' && enemy.currentFrame >= player.attackFrame) {
                             _doActionNoSpam(enemy, 'sp_attack1')
                             break
                         }
@@ -330,8 +332,11 @@ const screens = {
             c.clearRect(0, 0, canvas.width, canvas.height)
             setTimeout(() => {
                 document.querySelector('#start_btn').style.display = 'block'
+                if (isSoundOn) {
+                    music.pause()
+                }
                 document.querySelector('#start_btn').value = 'Press any key to continue...'
-            }, 1000);
+            }, 3000);
         },
         draw: () => {
         },
@@ -436,10 +441,6 @@ function animate() {
         }
 
         // Detect Colision player attackBox
-        if (player.isAttcking) {
-            console.log(player.currentFrame)
-            console.log(player.attackFrame)
-        }
         if (rectCollision(player, enemy) && player.isAttcking && player.currentFrame === player.attackFrame) {
             enemy.takeHit(player, player.currentForce)
             player.isAttcking = false
