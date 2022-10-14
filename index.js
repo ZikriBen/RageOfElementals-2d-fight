@@ -1,4 +1,4 @@
-let currentScreen = 'gameScreen'
+let currentScreen = 'startScreen'
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -36,26 +36,31 @@ const screens = {
     'startScreen': {
         init: () => {
             console.log("start screen init")
-            const back = new Image()
-            back.src = './img/back.png'
-            const mid = new Image()
-            mid.src = './img/middle.png'
-            startBackground1 = new ScrollingSprite(back, 0, 0, canvas.width, canvas.height, 1)
-            startBackground2 = new ScrollingSprite(back, -canvas.width, 0, canvas.width, canvas.height, 1);
-            startBackground3 = new ScrollingSprite(mid, 0, 150, canvas.width, canvas.height, 2, scaleX = 1.005, scaleY = 2)
-            startBackground4 = new ScrollingSprite(mid, -canvas.width, 150, canvas.width, canvas.height, 2, scaleX = 1.005, scaleY = 2);
+            
+            // SunnyLand
+            // startBackground1 = new FullScrollingSprite('./img/back.png', 0, 0, canvas.width, canvas.height, 1)
+            // startBackground2 = new FullScrollingSprite('./img/middle.png', 0, 150, canvas.width, canvas.height, 2, scaleX = 1.005, scaleY = 2)
+            
+            // RTB
+            startBackground1 = new FullScrollingSprite('./img/rtb/background.png', 0, 0, canvas.width, canvas.height, 1)
+            startBackground2 = new FullScrollingSprite('./img/rtb/background2.png', 0, 0, canvas.width, canvas.height, 1.5, scaleX = 1.005)
+            startBackground3 = new FullScrollingSprite('./img/rtb/background3.png', 0, 0, canvas.width, canvas.height, 2, scaleX = 1.005)
+            startBackground4 = new FullScrollingSprite('./img/rtb/background4.png', 0, 0, canvas.width, canvas.height, 2.5, scaleX = 1.005)
+
+            // MagicCliffs
+            startBackground1 = new FullScrollingSprite('./img/MagicCliffs/sky.png', 0, 0, canvas.width, canvas.height, 1)
+            startBackground2 = new FullScrollingSprite('./img/MagicCliffs/clouds.png', 0, 150, canvas.width, canvas.height, 1.5, scaleX = 1.005)
+            startBackground3 = new FullScrollingSprite('./img/MagicCliffs/sea.png', 0, 420, canvas.width, canvas.height, 2, scaleX = 1.005, scaleY = 0.3)
+            startBackground4 = new FullScrollingSprite('./img/MagicCliffs/far-grounds.png', 0, 480, canvas.width, canvas.height, 2.5, scaleX = 0.5, scaleY = 0.2)
+
             logo = new Sprite({position: {x: 240, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
             document.querySelector('#start_btn').style.display = 'block'
             document.querySelector('#start_btn').value = 'press ENTER/SPACE to start'
     },
         draw: () => {
-            startBackground1.scroll();
             startBackground1.draw(c);
-            startBackground2.scroll();
             startBackground2.draw(c);
-            startBackground3.scroll();
             startBackground3.draw(c);
-            startBackground4.scroll();
             startBackground4.draw(c);
             logo.update()
         },

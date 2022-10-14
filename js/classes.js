@@ -558,7 +558,7 @@ class Fighter extends Sprite {
 
 
 class ScrollingSprite {
-    constructor(image, x, y, width, height, speed,scaleX = 1, scaleY = 1) {
+    constructor(image, x, y, width, height, speed, scaleX = 1, scaleY = 1) {
         this.image = image;
         this.x = x;
         this.y = y;
@@ -579,5 +579,30 @@ class ScrollingSprite {
 
     draw(ctx) {
         ctx.drawImage(this.image, this.x, this.y, this.width * this.scaleX, this.height * this.scaleY);
+    }
+}
+
+class FullScrollingSprite {
+    constructor(imagesSrc, x, y, width, height, speed, scaleX = 1, scaleY = 1) {
+        this.image = new Image()
+        this.image.src = imagesSrc
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.speed = speed;
+        this.scaleX = scaleX
+        this.scaleY = scaleY
+
+        this.bg1 = new ScrollingSprite(this.image, this.x, this.y, canvas.width, canvas.height, this.speed, this.scaleX, this.scaleY)
+        this.bg2 = new ScrollingSprite(this.image, -this.width, this.y, canvas.width, canvas.height, this.speed, this.scaleX, this.scaleY);
+    
+    }
+
+    draw(ctx) {
+        this.bg1.scroll()
+        this.bg1.draw(ctx)
+        this.bg2.scroll()
+        this.bg2.draw(ctx)
     }
 }
