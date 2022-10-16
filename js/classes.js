@@ -83,7 +83,6 @@ class newSprite {
     }
 }
 
-
 class newFighter extends newSprite {
     constructor({
         position, 
@@ -367,17 +366,6 @@ class newFighter extends newSprite {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 class Sprite {
     constructor({position, imagesSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}, framsHold = 5}) {
         this.position = position
@@ -420,142 +408,6 @@ class Sprite {
         if (!this.isDead) this.animateFrames()
     }
 }
-
-class Fighter extends Sprite {
-    constructor({
-        position, 
-        velocity,
-        color,
-        imagesSrc, 
-        scale = 1, 
-        framesMax = 1, 
-        offset = {x: 0, y: 0}, 
-        facing = 'right', 
-        sprites, 
-        attackBox = { offset: {}, width: undefined, height: undefined }
-    }) {
-        super({
-            position,
-            imagesSrc,
-            scale,
-            framesMax,
-            offset
-        })
-        this.velocity = velocity
-        this.width = 50
-        this.height = 150
-        this.isAttcking
-        this.color = color
-        this.health = 100
-        this.currentFrame = 0
-        this.framsTotal = 0
-        this.framsHold = 5
-        this.facing = facing
-        this.sprites = sprites
-        this.isDead = false
-        // this.coolPeriod = false
-
-        for (const sprite in this.sprites) {
-            this.sprites[sprite].image = new Image()
-            this.sprites[sprite].image.src = this.sprites[sprite].imagesSrc
-        }
-
-        this.attackBox = {
-            position: {
-                x: this.position.x,
-                y: this.position.y
-            },
-            offset: attackBox.offset,
-            width: attackBox.width,
-            height: attackBox.height
-        }
-        
-        this.facingOffset = 0
-    }
-
-    attack() {
-        this.switchSprite('attack1' + '_' + this.facing)
-        this.isAttcking = true
-    }
-
-    takeHit(attacker, force) {
-
-        this.health -= force
-        
-        if (this.health <= 0) {
-            this.switchSprite('death' + '_' + this.facing)
-        }
-        else {
-            this.switchSprite('take_hit' + '_' + this.facing)
-        }
-    }
-    update() {
-        this.draw()
-        if (!this.isDead) this.animateFrames()
-        
-        if (this.facing === 'left') {
-            this.facingOffset = -(this.attackBox.offset.x + this.attackBox.width - this.width)
-        }
-        else {
-            this.facingOffset = 0
-        }
-
-        this.attackBox.position.x = this.position.x + this.attackBox.offset.x + this.facingOffset
-        this.attackBox.position.y = this.position.y + this.attackBox.offset.y
-        
-        // c.fillStyle = this.color
-        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        // c.fillStyle = 'black'
-        // c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
-
-        this.position.x += this.velocity.x
-        this.position.y += this.velocity.y
-        this.lastKey
-        
-        if (this.position.x + this.width + this.velocity.x <= 0 + this.width) {
-            this.position.x = 0
-        }
-
-        if (this.position.x + this.width + this.velocity.x >= canvas.width) {
-            this.position.x = canvas.width - this.width
-        }
-
-        if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
-            this.velocity.y = 0
-            this.position.y = 330
-        }
-        else {
-            this.velocity.y += gravity
-        }
-    }
-
-    switchSprite(sprite) {
-        if (this.image === this.sprites['death' + '_' + this.facing].image) {
-            if (this.currentFrame === this.sprites['death' + '_' + this.facing].framesMax - 1) 
-                this.isDead = true
-            return
-        }
-
-        if (this.image === this.sprites['attack1' + '_' + this.facing].image) {
-            if (this.currentFrame < this.sprites['attack1' + '_' + this.facing].framesMax - 1) {
-                return
-            }
-        }
-
-        if (this.image === this.sprites['take_hit' + '_' + this.facing].image) {
-            if (this.currentFrame < this.sprites['take_hit' + '_' + this.facing].framesMax - 1) {
-                return
-            }
-        }
-       
-        if (this.image !== this.sprites[sprite].image) {
-            this.image = this.sprites[sprite].image
-            this.framesMax = this.sprites[sprite].framesMax
-            this.currentFrame = 0
-        }
-    }
-}
-
 
 class ScrollingSprite {
     constructor(image, x, y, width, height, speed, scaleX = 1, scaleY = 1) {
@@ -605,4 +457,564 @@ class FullScrollingSprite {
         this.bg2.scroll()
         this.bg2.draw(ctx)
     }
+}
+
+class BG {
+    constructor(ctx, canvasWidth, canvasHeight) {
+        this.canvasWidth = canvasWidth
+        this.canvasHeight = canvasHeight
+        this.ctx = ctx
+        this.layers = []
+    }
+    
+    drawBG() {
+        for (let i = 0; i < this.layers.length; i++){
+            this.layers[i].draw(this.ctx)
+        }
+    }
+}
+
+
+class RTB extends BG{
+    constructor(ctx, canvasWidth, canvasHeight) {
+        super(ctx, canvasWidth, canvasHeight)
+        this.layers = []
+        this.scaleX=1.005
+        this.layers.push(new FullScrollingSprite('./img/rtb/background.png', 0, 0, canvas.width, canvas.height, 0.2))
+        this.layers.push(new FullScrollingSprite('./img/rtb/background2.png', 0, 0, canvas.width, canvas.height, 0.5, this.scaleX))
+        this.layers.push(new FullScrollingSprite('./img/rtb/background3.png', 0, 0, canvas.width, canvas.height, 1.2, this.scaleX))
+        this.layers.push(new FullScrollingSprite('./img/rtb/background4.png', 0, 0, canvas.width, canvas.height, 1.6, this.scaleX))
+    }
+
+    draw() {
+        this.drawBG()
+    }
+}
+
+class MagicCliffs extends BG{
+    constructor(ctx, canvasWidth, canvasHeight) {
+        super(ctx, canvasWidth, canvasHeight)
+        this.layers = []
+        this.scaleX=1.005
+        this.layers.push(new FullScrollingSprite('./img/MagicCliffs/sky.png', 0, 0, canvas.width, canvas.height, 0.3))
+        this.layers.push(new FullScrollingSprite('./img/MagicCliffs/clouds.png', 0, 150, canvas.width, canvas.height, 0.8, 1.005))
+        this.layers.push(new FullScrollingSprite('./img/MagicCliffs/sea.png', 0, 420, canvas.width, canvas.height, 1.2, 1.005, 0.3))
+        this.layers.push(new FullScrollingSprite('./img/MagicCliffs/far-grounds.png', 0, 480, canvas.width, canvas.height, 1.5, 0.5, 0.2))
+    }
+
+    draw() {
+        this.drawBG()
+    }
+}
+
+class RockyPass extends BG{
+    constructor(ctx, canvasWidth, canvasHeight) {
+        super(ctx, canvasWidth, canvasHeight)
+        this.layers = []
+        this.layers.push(new FullScrollingSprite('./img/RockyPass/back.png', 0, 0, canvas.width, canvas.height, 0.5, 1.005))
+        this.layers.push(new FullScrollingSprite('./img/RockyPass/middle.png', 0, 0, canvas.width, canvas.height, 1, 1.005))
+        this.layers.push(new FullScrollingSprite('./img/RockyPass/near.png', 0, 0, canvas.width, canvas.height, 1.5, 1.005))
+    }
+
+    draw() {
+        this.drawBG()
+    }
+}
+
+class PixelFantasyCaves extends BG{
+    constructor(ctx, canvasWidth, canvasHeight) {
+        super(ctx, canvasWidth, canvasHeight)
+        this.layers = []
+        this.layers.push(new FullScrollingSprite('./img/PixelFantasyCaves/background1.png', 0, 0, canvas.width, canvas.height, 0.2, 1.005))
+        this.layers.push(new FullScrollingSprite('./img/PixelFantasyCaves/background2.png', 0, 0, canvas.width, canvas.height, 0.5, 1.005))
+        this.layers.push(new FullScrollingSprite('./img/PixelFantasyCaves/background3.png', 0, 0, canvas.width, canvas.height, 0.8, 1.005))
+        this.layers.push(new FullScrollingSprite('./img/PixelFantasyCaves/background4a.png', 0, 0, canvas.width, canvas.height, 1.2, 1.005))
+        this.layers.push(new FullScrollingSprite('./img/PixelFantasyCaves/background4b.png', 0, 0, canvas.width, canvas.height, 1.5, 1.005))
+    }
+
+    draw() {
+        this.drawBG()
+    }
+}
+
+class StartScreenCLS {
+    constructor(ctx, canvasWidth, canvasHeight) {
+        this.ctx = ctx
+        this.canvasWidth = canvasWidth
+        this.canvasHeight = canvasHeight
+        this.currentBG = 0
+        this.bgs = []
+        this.bgs.push(new RTB(this.ctx, this.canvasWidth, this.canvasHeight))
+        this.bgs.push(new PixelFantasyCaves(this.ctx, this.canvasWidth, this.canvasHeight))
+        this.bgs.push(new RockyPass(this.ctx, this.canvasWidth, this.canvasHeight))
+        this.bgs.push(new MagicCliffs(this.ctx, this.canvasWidth, this.canvasHeight))
+        this.mainSprite
+        this.switchDuration = 5000
+        this.selections = [' 1P vs 2P ', ' Controls ']
+        this.currentSelection = 0
+        this.interval
+    }
+
+    init() {
+        this.mainSprite = this.logo = new Sprite({position: {x: 240, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
+        this.instructions = new Sprite({position: {x: 150, y: 60}, imagesSrc: './img/instructions.png', scale: 2.5, framesMax: 1})
+        document.querySelector('#start_btn').style.display = 'block'
+        document.querySelector('#start_btn').style.left = '42%'
+        document.querySelector('#info_btn').style.left = '42%'
+        document.querySelector('#start_btn').value = '• 1P vs 2P •'
+        document.querySelector('#info_btn').value = '  Controls  '
+        
+        this.switchBG()
+    }
+
+    delete() {
+        clearInterval(this.interval)
+        this.logo = null
+        this.instructions = null
+        document.querySelector('#start_btn').style.display = 'none'
+        document.querySelector('#info_btn').style.display = 'none'
+        setTimeout(()=> {this.mainSprite = null}, 1500)
+    }
+
+    draw() {
+        this.bgs[this.currentBG].draw(this.ctx)
+        this.mainSprite.update()
+    }
+
+    switchBG() {
+        this.interval = setInterval(() => {
+            console.log("Fading")
+            gsap.to(overlay, {opacity: 1, duration: 0.8})
+            
+            setTimeout( ()=> {this.currentBG = (this.currentBG + 1) % this. bgs.length}, 1500)
+   
+            setTimeout(gsap.to, 1500, overlay, {opacity: 0, duration: 2})
+        }, this.switchDuration)
+    }
+    
+    showInstructions() {
+        this.mainSprite = this.instructions
+    }
+
+    showLogo() {
+        this.mainSprite = this.logo
+    }
+
+    setSelection() {
+        if (this.currentSelection === 0) {
+            document.querySelector('#start_btn').value = "•" + this.selections[0] + "•"
+            document.querySelector('#info_btn').value = " " + this.selections[1] + " "
+        }
+        else if (this.currentSelection === 1) {
+            document.querySelector('#start_btn').value = " " + this.selections[0] + " "
+            document.querySelector('#info_btn').value = "•" + this.selections[1] + "•"
+        }
+    }
+
+    keyFunc(key) {
+        if (key === "Enter" || key === " ") {
+            this.invokeSelection()
+        }
+        else if (key === "y") {
+            startScreenIns.showInstructions()
+        }
+        else if (key === "ArrowUp" || 'w') {
+            this.currentSelection = (this.currentSelection + 1) % this.selections.length
+            startScreenIns.setSelection()
+        }
+        else if (key === "ArrowDown" || 'd') {
+            this.currentSelection = (this.currentSelection - 1) % this.selections.length
+            if (this.currentSelection < 0)
+                this.currentSelection = this.selections.length - 1
+            startScreenIns.setSelection()
+        }
+    }
+
+    invokeSelection() {
+        if (this.currentSelection === 0) {
+            _doFuncNoSpam(fadeFunc, charSelect)
+            this.delete()
+        }
+        else if (this.currentSelection === 1) {
+            this.showInstructions()
+        }
+    }
+}
+
+class CharSelectCLS {
+    constructor() {
+        this.arrow1Pos = 0
+        this.arrow2Pos = 1
+        this.arrowStartPos = 115
+        this.charStartPos = -220
+        this.charOffset = 200
+        this.beepSound = new Audio('./music/mixkit-video-game-mystery-alert-234.wav');
+        this.selectSound = new Audio('./music/mixkit-arcade-bonus-alert-767.wav');
+        this.playerSelected = false
+        this.enemySelected = false
+        this.fighters = []
+        this.characters = []
+    }
+
+    init() {
+        document.querySelector('#start_btn').style.display = 'none'
+        document.querySelector('#displayText').style.display = 'flex'
+        document.querySelector('#displayText').innerHTML = 'Select Character:'
+        
+        this.arrow1 = new Sprite({position: {x: this.arrowStartPos, y: 295}, imagesSrc: './img/arrow_p1p.png', scale: 0.3, framesMax: 5})
+        this.arrow2 = new Sprite({position: {x: this.arrowStartPos + this.charOffset, y: 295}, imagesSrc: './img/arrow_p2p.png', scale: 0.3, framesMax: 5, framsHold: 3})
+        
+        this.fighters = [fireFighter, groundFighter, windFighter, waterFighter, metalFighter]
+    
+        for (let i = 0; i < this.fighters.length; i++){
+            this.characters.push(new Sprite({position: {x: this.charStartPos, y: 160}, imagesSrc: this.fighters[i].idle_bw_png, scale: 2.5, framesMax: this.fighters[i].idle_frames}))
+            this.charStartPos += this.charOffset
+        }
+    }
+
+    delete() {
+        // this.playerSelected = false
+        // this.enemySelected = false
+        // this.arrow1Pos = 0
+        // this.arrow2Pos = 1
+        this.arrowStartPos = 115
+        this.charStartPos = -220
+        document.querySelector('#displayText').style.display = 'none'
+    }
+
+    draw() {
+        this.arrow1.update()
+        this.arrow2.update()
+
+        for (let i = 0; i < this.characters.length; i++){
+            this.characters[i].update()
+        }
+
+        this.characters[this.arrow1Pos].image.src = this.fighters[this.arrow1Pos].idle_png
+        this.characters[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].idle_png
+    }
+
+    keyFunc(key) {
+        switch (key) {
+            case 'ArrowRight':
+                if (!this.enemySelected) 
+                this.arrow2Pos = this.moveArrow(this.arrow2, this.arrow2Pos, 1)
+                if (this.arrow1Pos == this.arrow2Pos)
+                        this.arrow2Pos = this.moveArrow(this.arrow2, this.arrow2Pos, 1)
+                break
+            case 'ArrowLeft':
+                if (!this.enemySelected) 
+                    this.arrow2Pos = this.moveArrow(this.arrow2, this.arrow2Pos, -1)
+                    if (this.arrow1Pos == this.arrow2Pos)
+                        this.arrow2Pos = this.moveArrow(this.arrow2, this.arrow2Pos, -1)
+                break
+            case 'Enter':
+                this.enemyFighter = this.fighters[this.arrow2Pos]
+                this.enemySelected = true
+                this.arrow2.framsHold = 0
+                console.log(this.enemyFighter.name)
+                this.invokeSelection()
+                break
+            
+            case 'd':
+                if (!this.playerSelected) 
+                    this.arrow1Pos = this.moveArrow(this.arrow1, this.arrow1Pos, 1)
+                    if (this.arrow1Pos == this.arrow2Pos)
+                        this.arrow1Pos = this.moveArrow(this.arrow1, this.arrow1Pos, 1)
+                break
+            case 'a':
+                if (!this.playerSelected) 
+                    this.arrow1Pos = this.moveArrow(this.arrow1, this.arrow1Pos, -1)
+                    if (this.arrow1Pos == this.arrow2Pos)
+                        this.arrow1Pos = this.moveArrow(this.arrow1, this.arrow1Pos, -1)
+                break
+            case ' ':
+                this.playerFighter = this.fighters[this.arrow1Pos]
+                this.playerSelected = true
+                this.arrow1.framsHold = 0
+                console.log(this.playerFighter.name)
+                this.invokeSelection()
+                break
+        }
+    }
+    
+    moveArrow(arrow, arrowPos, direcrtion) {
+        playSound(this.beepSound)
+        this.characters[arrowPos].image.src = this.fighters[arrowPos].idle_bw_png
+        arrowPos = (arrowPos + direcrtion) % this.characters.length
+        if (arrowPos < 0)
+            arrowPos = this.characters.length - 1
+            arrow.position.x = this.arrowStartPos + (arrowPos * this.charOffset)
+        return arrowPos
+    }
+
+    invokeSelection() {
+        playSound(this.selectSound)
+        if (this.playerSelected && this.enemySelected) {
+            this.delete()
+            _doFuncNoSpam(fadeFunc, startGame)
+        }
+    }
+
+    getPlayerFighter() {
+        if (this.playerSelected) {
+            console.log(this.arrow1Pos)
+            return this.fighters[this.arrow1Pos]
+        }
+        return fireFighter
+    }
+
+    getEnemyFighter() {
+        if (this.enemySelected) {
+            console.log(this.arrow2Pos)
+            return this.fighters[this.arrow2Pos]
+        }
+        return waterFighter
+    }
+}
+
+class GameScreenCLS {
+    constructor(ctx, canvasWidth, canvasHeight) {
+        this.ctx = ctx
+        this.canvasWidth = canvasWidth
+        this.canvasHeight = canvasHeight
+        this.gameBackgorund
+        this.shop
+        this.gameTime = 100
+        this.player
+        this.enemy
+        this.manaInterval
+        this.timerInterval
+    }
+
+    init(playerFighter, enemyFighter) {
+        console.log("Game screen init")
+        this.gameBackgorund = new Sprite({position: {x: 0, y: 0}, imagesSrc: './img/background.png'})
+        this.shop = new Sprite({position: {x: 625, y: 160}, imagesSrc: './img/shop.png', scale: 2.5, framesMax: 6})
+        this.player = new newFighter({
+            position: {x: 250, y: 0}, 
+            velocity: {x: 0, y: 0}, 
+            offset: playerFighter.offset,
+            rightImagesSrc: playerFighter.SpriteSheetRight, 
+            leftImagesSrc: playerFighter.SpriteSheetLeft, 
+            animationsStates: playerFighter.AnimationStates, 
+            attackInfo: playerFighter.AttackInfo, 
+            scale: playerFighter.scale,
+            animationName: "idle",
+            facing: "right",
+            attackBox :{
+                offset: {
+                    x: 0,
+                    y: 50
+                },
+                width: 100,
+                height: 50
+            }
+        })
+    
+        this.enemy = new newFighter({
+            position: {x: 600, y: 0}, 
+            velocity: {x: 0, y: 0}, 
+            offset: enemyFighter.offset, 
+            rightImagesSrc: enemyFighter.SpriteSheetRight, 
+            leftImagesSrc: enemyFighter.SpriteSheetLeft, 
+            animationsStates: enemyFighter.AnimationStates, 
+            attackInfo: enemyFighter.AttackInfo, 
+            scale: enemyFighter.scale,
+            animationName: "idle",
+            facing: "left",
+            attackBox :{
+                offset: {
+                    x: 0,
+                    y: 50
+                },
+                width: 100,
+                height: 50
+            }
+        })
+        document.querySelector('#health_bars').style.display = 'flex'
+        document.querySelector('#player_health_bar').style.display = 'flex'
+        document.querySelector('#enemy_health_bar').style.display = 'flex'
+        document.querySelector('#start_btn').style.display = 'none'
+        document.querySelector('#playerName').innerHTML = playerFighter.name
+        document.querySelector('#enemyName').innerHTML = enemyFighter.name
+        document.querySelector('#displayText').style.display = 'none'
+        
+        document.querySelector('#playerMana').style.width = '100%'
+        document.querySelector('#enemyMana').style.width = '100%'
+        document.querySelector('#enemyMana').style.left = '0%'
+        this.isStarted = true
+        this.decreaseTimer()
+        this.manaRaise()
+    }
+
+    delete() {
+        this.isStarted = false
+        this.gameTime = 100
+        this.gameBackgorund = null
+        this.shop = null
+        this.player = null
+        this.enemy = null
+        clearInterval(this.manaInterval)
+        clearInterval(this.timerInterval)
+        // clearTimeout(this.timerId)
+    }
+
+    draw() {
+        this.gameBackgorund.update()
+        this.shop.update()
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'
+        this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
+        this.player.update();
+        this.enemy.update();
+    }
+
+    keyFunc(key) {
+        if (!this.player.isDead) {
+            this.player.determineCombo(key)
+            switch (key) {
+                case 'd':
+                    turn(this.player, 'd', 'a', 'right')
+                    break
+                case 'a':
+                    turn(this.player, 'a', 'd', 'left')
+                    break
+                case 'w':
+                    this.player.velocity.y = -18
+                    break
+                case 'e':
+                    this.player.defend()
+                    break
+                case ' ':
+                    if (this.player.velocity.y !== 0) {
+                        _doActionNoSpam(this.player, 'air_attack')
+                        break
+                    }
+                    if (this.player.animationName === 'attack1' && this.player.currentFrame >= this.player.attackFrame) {
+                        _doActionNoSpam(player, 'attack2')
+                        break
+                    }
+                    else if (this.player.animationName === 'attack2' && this.player.currentFrame >= this.player.attackFrame) {
+                        _doActionNoSpam(this.player, 'sp_attack1')
+                        break
+                    }
+                    else {
+                        _doActionNoSpam(this.player, 'attack1')
+                    }
+                    break
+                case 'r':
+                    _doActionNoSpam(this.player, 'meditate')
+                    break
+                case 'q':
+                    _doActionNoSpam(this.player, 'sp_attack2')
+                    break
+                case 'z':
+                    this.player.lastKey = 'z'
+                    break
+                case 'x':
+                    this.player.lastKey = 'x'
+                    break
+                case 'c':
+                    this.player.lastKey = 'c'
+                    break
+            }
+        }
+        if (!this.enemy.isDead) {
+            this.enemy.determineCombo(key)
+            switch (key) {
+                case 'ArrowRight':
+                    turn(this.enemy, 'ArrowRight', 'ArrowLeft', 'right')
+                    break
+                case 'ArrowLeft':
+                    turn(this.enemy, 'ArrowLeft', 'ArrowRight', 'left')
+                    break
+                case 'ArrowUp':
+                    this.enemy.velocity.y = -18
+                    break
+                case '0':
+                    if (this.enemy.velocity.y !== 0) {
+                        _doActionNoSpam(this.enemy, 'air_attack')
+                        break
+                    }
+                    if (this.enemy.animationName === 'attack1' && this.enemy.currentFrame >= this.player.attackFrame) {
+                        _doActionNoSpam(this.enemy, 'attack2')
+                        break
+                    }
+                    else if (this.enemy.animationName === 'attack2' && this.enemy.currentFrame >= this.player.attackFrame) {
+                        _doActionNoSpam(this.enemy, 'sp_attack1')
+                        break
+                    }
+                    else {
+                        _doActionNoSpam(this.enemy, 'attack1')
+                    }
+                    break
+                case '1':
+                    _doActionNoSpam(this.enemy, 'sp_attack2')
+                    break
+                case '9':
+                    this.enemy.defend()
+                    break
+                case '7':
+                    _doActionNoSpam(this.enemy, 'meditate')
+                    break
+            }
+        }
+    }
+    
+    manaRaise() {
+        this.manaInterval = setInterval(() => {
+            if (player.mana < 100) {
+                console.log("ASD")
+                player.mana += 2
+                document.querySelector('#playerMana').style.width = player.mana + '%'
+            }
+            if (enemy.mana < 100) {
+                enemy.mana += 2
+                document.querySelector('#enemyMana').style.width = enemy.mana + '%'
+                document.querySelector('#enemyMana').style.left = Math.abs(100 - enemy.mana) + '%'
+            }
+        }, 1000)
+    }
+
+    decreaseTimer() {
+        this.timerInterval = setInterval(() => {
+            if (this.gameTime > 0) {
+                this.timerId = setTimeout(this.decreaseTimer, 1000)
+                this.gameTime--
+                document.querySelector('#timer').innerHTML = this.gameTime
+            }
+            if (this.gameTime === 0) {
+                // this.delete()
+                this.determineWinner()
+            }
+        }, 1000)
+             
+    }
+
+    determineWinner() {
+        // if (this.isStarted === false)
+        //     return
+        document.querySelector('#timer').innerHTML = '00'
+        // clearTimeout(timerId)
+        document.querySelector('#displayText').style.display = 'flex'
+    
+        if (this.player.health === this.enemy.health) {
+            document.querySelector('#displayText').innerHTML = 'Tie'
+        }
+        else if(this.player.health > this.enemy.health) {
+            document.querySelector('#displayText').innerHTML = 'Player 1 Wins'
+            
+        }
+        else if(this.player.health < this.enemy.health) {
+            document.querySelector('#displayText').innerHTML = 'Player 2 Wins'
+        }
+    }
+
+    getPlayer() {
+        return this.player
+    }
+    getEnemy() {
+        return this.enemy
+    }
+    
 }

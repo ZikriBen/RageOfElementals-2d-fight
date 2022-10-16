@@ -23,17 +23,6 @@ function determineWinner({player, enemy, timerId}) {
 let timer = 100
 let timerId
 
-function decreaseTimer() {
-    if (timer > 0) {
-        timerId = setTimeout(decreaseTimer, 1000)
-        timer--
-        document.querySelector('#timer').innerHTML = timer
-    }
-    if (timer === 0) {
-        determineWinner({player, enemy, timerId})
-    }
-}
-
 function rectCollision(rect1, rect2) {
     return (
         rect1.attackBox.position.x < rect2.position.x + rect2.width && 
@@ -102,30 +91,6 @@ function turn(character, key, oppositKey, side) {
         return
     }
 }
-let manaTimer;
-
-function manaRaise() {
-    if (player.mana < 100) {
-        player.mana += 2
-        document.querySelector('#playerMana').style.width = player.mana + '%'
-    }
-    if (enemy.mana < 100) {
-        enemy.mana += 2
-        document.querySelector('#enemyMana').style.width = enemy.mana + '%'
-        document.querySelector('#enemyMana').style.left = Math.abs(100 - enemy.mana) + '%'
-        console.log(enemy.mana)
-    }
-    if (isStarted === true) {
-        manaTimer = setTimeout(manaRaise, 1000)
-    }
-}
-
-// function manaRaise() {
-//     newPlayerMana = player.mana + 10
-//     document.querySelector('#playerMana').style.width = player.mana + '%'
-//     document.querySelector('#enemyMana').style.width = enemy.mana + '%'
-//     document.querySelector('#enemyMana').style.left = 100 - enemy.mana + '%'
-// }
 
 let timerBlockId;
 
@@ -174,13 +139,3 @@ function _doFuncNoSpam(func, args) {
         func(args)
     }, 200);
 };
-
-function moveArrow(arrow, arrowPos, direcrtion, characters, fighters) {
-    playSound(beepSound)
-    characters[arrowPos].image.src = fighters[arrowPos].idle_bw_png
-    arrowPos = (arrowPos + direcrtion) % characters.length
-    if (arrowPos < 0)
-        arrowPos = characters.length - 1
-    arrow.position.x = arrowStartPos + (arrowPos * charOffset)
-    return arrowPos
-}
