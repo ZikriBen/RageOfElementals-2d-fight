@@ -108,6 +108,7 @@ class newFighter extends newSprite {
             offset
         })
         this.velocity = velocity
+        this.defaulPos = structuredClone(position)
         this.width = 50
         this.height = 150
         this.isAttcking
@@ -284,7 +285,15 @@ class newFighter extends newSprite {
         }
     }
 
-    switchSprite(sprite) {
+    switchSprite(sprite, force) {
+        
+        if (force) {
+            this.changeAnimationName(sprite, this.facing)
+            this.framesMax = this.spriteAnimations[this.animationName].loc.length
+            this.currentFrame = 0
+            return
+        }
+
         if (this.animationName === 'death') {    
             if (this.currentFrame >= this.spriteAnimations['death'].loc.length - 1) {
                 this.isDead = true
@@ -363,6 +372,9 @@ class newFighter extends newSprite {
         }
         this.comboStart = Date.now()
         this.comboIndex = 0
+    }
+    resetPosition() {
+        this.position.x = this.defaulPos.x
     }
 }
 
@@ -549,7 +561,7 @@ class StartScreenCLS {
         this.bgs.push(new RockyPass(this.ctx, this.canvasWidth, this.canvasHeight))
         this.bgs.push(new MagicCliffs(this.ctx, this.canvasWidth, this.canvasHeight))
         this.mainSprite
-        this.switchDuration = 5000
+        this.switchDuration = 8000
         this.selections = [' 1P vs 2P ', ' Controls ']
         this.currentSelection = 0
         this.interval
@@ -559,6 +571,7 @@ class StartScreenCLS {
         this.mainSprite = this.logo = new Sprite({position: {x: 240, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
         this.instructions = new Sprite({position: {x: 150, y: 60}, imagesSrc: './img/instructions.png', scale: 2.5, framesMax: 1})
         document.querySelector('#start_btn').style.display = 'block'
+        document.querySelector('#info_btn').style.display = 'block'
         document.querySelector('#start_btn').style.left = '42%'
         document.querySelector('#info_btn').style.left = '42%'
         document.querySelector('#start_btn').value = '• 1P vs 2P •'
@@ -583,7 +596,6 @@ class StartScreenCLS {
 
     switchBG() {
         this.interval = setInterval(() => {
-            console.log("Fading")
             gsap.to(overlay, {opacity: 1, duration: 0.8})
             
             setTimeout( ()=> {this.currentBG = (this.currentBG + 1) % this. bgs.length}, 1500)
@@ -615,14 +627,11 @@ class StartScreenCLS {
         if (key === "Enter" || key === " ") {
             this.invokeSelection()
         }
-        else if (key === "y") {
-            startScreenIns.showInstructions()
-        }
-        else if (key === "ArrowUp" || 'w') {
+        else if (key === "ArrowUp" || key === "w") {
             this.currentSelection = (this.currentSelection + 1) % this.selections.length
             startScreenIns.setSelection()
         }
-        else if (key === "ArrowDown" || 'd') {
+        else if (key === "ArrowDown" || key === "s") {
             this.currentSelection = (this.currentSelection - 1) % this.selections.length
             if (this.currentSelection < 0)
                 this.currentSelection = this.selections.length - 1
@@ -652,11 +661,17 @@ class CharSelectCLS {
         this.selectSound = new Audio('./music/mixkit-arcade-bonus-alert-767.wav');
         this.playerSelected = false
         this.enemySelected = false
+        this.selectedPlayer
+        this.selectedEnemy
         this.fighters = []
         this.characters = []
     }
 
     init() {
+        this.arrow1Pos = 0
+        this.arrow2Pos = 1
+        this.arrowStartPos = 115
+        this.charStartPos = -220
         document.querySelector('#start_btn').style.display = 'none'
         document.querySelector('#displayText').style.display = 'flex'
         document.querySelector('#displayText').innerHTML = 'Select Character:'
@@ -665,20 +680,22 @@ class CharSelectCLS {
         this.arrow2 = new Sprite({position: {x: this.arrowStartPos + this.charOffset, y: 295}, imagesSrc: './img/arrow_p2p.png', scale: 0.3, framesMax: 5, framsHold: 3})
         
         this.fighters = [fireFighter, groundFighter, windFighter, waterFighter, metalFighter]
-    
-        for (let i = 0; i < this.fighters.length; i++){
-            this.characters.push(new Sprite({position: {x: this.charStartPos, y: 160}, imagesSrc: this.fighters[i].idle_bw_png, scale: 2.5, framesMax: this.fighters[i].idle_frames}))
-            this.charStartPos += this.charOffset
+        
+        if (this.characters.length === 0) {
+            for (let i = 0; i < this.fighters.length; i++){
+                this.characters.push(new Sprite({position: {x: this.charStartPos, y: 160}, imagesSrc: this.fighters[i].idle_bw_png, scale: 2.5, framesMax: this.fighters[i].idle_frames}))
+                this.charStartPos += this.charOffset
+            }
+        }
+        
+        for (let i = 0; i < this.characters.length; i++){
+            this.characters[i].image.src = this.fighters[i].idle_bw_png
         }
     }
 
     delete() {
-        // this.playerSelected = false
-        // this.enemySelected = false
-        // this.arrow1Pos = 0
-        // this.arrow2Pos = 1
-        this.arrowStartPos = 115
-        this.charStartPos = -220
+        this.playerSelected = false
+        this.enemySelected = false
         document.querySelector('#displayText').style.display = 'none'
     }
 
@@ -689,9 +706,10 @@ class CharSelectCLS {
         for (let i = 0; i < this.characters.length; i++){
             this.characters[i].update()
         }
-
+        
         this.characters[this.arrow1Pos].image.src = this.fighters[this.arrow1Pos].idle_png
         this.characters[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].idle_png
+        
     }
 
     keyFunc(key) {
@@ -751,25 +769,24 @@ class CharSelectCLS {
     invokeSelection() {
         playSound(this.selectSound)
         if (this.playerSelected && this.enemySelected) {
+            this.selectedPlayer = this.fighters[this.arrow1Pos]
+            this.selectedEnemy = this.fighters[this.arrow2Pos]
             this.delete()
+            // setTimeout(this.delete, 1500)
             _doFuncNoSpam(fadeFunc, startGame)
         }
     }
 
     getPlayerFighter() {
-        if (this.playerSelected) {
-            console.log(this.arrow1Pos)
-            return this.fighters[this.arrow1Pos]
-        }
-        return fireFighter
+        if (!this.selectedPlayer)
+            return fireFighter
+        return this.selectedPlayer
     }
 
     getEnemyFighter() {
-        if (this.enemySelected) {
-            console.log(this.arrow2Pos)
-            return this.fighters[this.arrow2Pos]
-        }
-        return waterFighter
+        if (!this.selectedEnemy)
+            return waterFighter
+        return this.selectedEnemy
     }
 }
 
@@ -783,6 +800,8 @@ class GameScreenCLS {
         this.gameTime = 100
         this.player
         this.enemy
+        this.playerScore = 0
+        this.enemyScore = 0
         this.manaInterval
         this.timerInterval
     }
@@ -832,6 +851,9 @@ class GameScreenCLS {
                 height: 50
             }
         })
+        this.playerScore = 0
+        this.enemyScore = 0
+
         document.querySelector('#health_bars').style.display = 'flex'
         document.querySelector('#player_health_bar').style.display = 'flex'
         document.querySelector('#enemy_health_bar').style.display = 'flex'
@@ -843,21 +865,26 @@ class GameScreenCLS {
         document.querySelector('#playerMana').style.width = '100%'
         document.querySelector('#enemyMana').style.width = '100%'
         document.querySelector('#enemyMana').style.left = '0%'
+        document.querySelector('#enemyScore1').style.color = '#440000'
+        document.querySelector('#enemyScore2').style.color = '#440000'
+        document.querySelector('#playerScore1').style.color = '#440000'
+        document.querySelector('#playerScore2').style.color = '#440000'
+        
         this.isStarted = true
         this.decreaseTimer()
         this.manaRaise()
     }
 
     delete() {
-        this.isStarted = false
         this.gameTime = 100
+        this.enemyScore = 0
+        this.playerScore = 0
         this.gameBackgorund = null
         this.shop = null
         this.player = null
         this.enemy = null
         clearInterval(this.manaInterval)
         clearInterval(this.timerInterval)
-        // clearTimeout(this.timerId)
     }
 
     draw() {
@@ -964,7 +991,6 @@ class GameScreenCLS {
     manaRaise() {
         this.manaInterval = setInterval(() => {
             if (player.mana < 100) {
-                console.log("ASD")
                 player.mana += 2
                 document.querySelector('#playerMana').style.width = player.mana + '%'
             }
@@ -984,7 +1010,6 @@ class GameScreenCLS {
                 document.querySelector('#timer').innerHTML = this.gameTime
             }
             if (this.gameTime === 0) {
-                // this.delete()
                 this.determineWinner()
             }
         }, 1000)
@@ -992,22 +1017,39 @@ class GameScreenCLS {
     }
 
     determineWinner() {
-        // if (this.isStarted === false)
-        //     return
+        this.isStarted = false
         document.querySelector('#timer').innerHTML = '00'
-        // clearTimeout(timerId)
         document.querySelector('#displayText').style.display = 'flex'
     
         if (this.player.health === this.enemy.health) {
             document.querySelector('#displayText').innerHTML = 'Tie'
+            this.playerScore++
+            this.enemyScore++
         }
         else if(this.player.health > this.enemy.health) {
             document.querySelector('#displayText').innerHTML = 'Player 1 Wins'
+            this.playerScore++
             
         }
         else if(this.player.health < this.enemy.health) {
             document.querySelector('#displayText').innerHTML = 'Player 2 Wins'
+            this.enemyScore++
         }
+        
+        if (this.playerScore >= 2) {
+            document.querySelector('#displayText').innerHTML = 'Player 1 Wins'
+            setTimeout(() => {fadeFunc(gameOver)}, 1500)
+            return
+        }
+        else if (this.enemyScore >= 2) {
+            document.querySelector('#displayText').innerHTML = 'Player 2 Wins'
+            setTimeout(() => {fadeFunc(gameOver)}, 1500)
+            return
+        }
+
+        setTimeout(() => {this.resetRound()}, 2000)
+
+        
     }
 
     getPlayer() {
@@ -1016,5 +1058,78 @@ class GameScreenCLS {
     getEnemy() {
         return this.enemy
     }
+
+    resetRound() {
+        document.querySelector('#displayText').style.display = 'none'
+        this.player.resetPosition()
+        this.enemy.resetPosition()
+        this.player.health = 100
+        this.enemy.health = 100
+        this.player.mana = 98
+        this.enemy.mana = 98
+        this.player.defending = false
+        this.enemy.defending = false
+        
+        if (this.player.isDead) {
+            this.player.isDead = false
+            this.player.switchSprite('idle', true)
+            console.log('#enemyScore' + this.enemyScore)
+            document.querySelector('#enemyScore' + this.enemyScore).style.color = '#ff0000'
+        }
+        
+        if (this.enemy.isDead) {
+            this.enemy.isDead = false
+            this.enemy.switchSprite('idle', true)
+            console.log('#playerScore' + this.playerScore)
+            document.querySelector('#playerScore' + this.playerScore).style.color = '#ff0000'
+        }
+
+        this.gameTime = 100
+        this.isStarted = true
+    }
     
+}
+
+class GameOverScreenCLS {
+    constructor(ctx, canvasWidth, canvasHeight) {
+        this.ctx = ctx
+        this.canvasWidth = canvasWidth
+        this.canvasHeight = canvasHeight
+    }
+
+    init() {
+        document.querySelector('#displayText').style.display = 'flex'
+        document.querySelector('#displayText').innerHTML = 'Game Over'
+        document.querySelector('#health_bars').style.display = 'none'
+        document.querySelector('#player_health_bar').style.display = 'none'
+        document.querySelector('#enemy_health_bar').style.display = 'none'
+        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
+        this.ctx.fillStyle = 'black'
+        this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
+        
+        setTimeout(() => {
+            document.querySelector('#start_btn').style.display = 'block'
+            document.querySelector('#start_btn').style.left = '32%'
+            document.querySelector('#start_btn').value = 'Press any key to continue...'
+            if (isSoundOn) {
+                music.pause()
+            }
+        }, 1000);
+    }
+
+    delete() {
+        document.querySelector('#start_btn').value = ' '
+        document.querySelector('#displayText').style.display = 'none'
+    }
+
+    draw() {
+    }
+
+    keyFunc(key) {
+        if (key) {
+            console.log("Any key")
+            this.delete()
+            _doFuncNoSpam(fadeFunc, startScreen)
+        }
+    }
 }

@@ -388,8 +388,8 @@ let waterAttckInfo = {
     },
 	attack2: {
         name: 'attack2',
-        frames: 8,
-        attackFrame: 16,
+        frames: 21,
+        attackFrame: 14,
         force: 8,
         attackBox :{offset: {x: 0, y: 50}, width: 100, height: 50}
     },

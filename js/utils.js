@@ -54,17 +54,20 @@ function fadeFunc(func) {
 }
 
 function startScreen(){
+    GameOverScreenIns.delete()
     currentScreen = 'startScreen'
     screens[currentScreen].init()
 }
 
 function charSelect(){
+    startScreenIns.delete()
     currentScreen = 'charSelectScreen'
     screens[currentScreen].init()
 }
 
 function startGame(){
     isStarted = true
+    charSelectIns.delete()
     // playMusic()
     currentScreen = 'gameScreen'
     screens[currentScreen].init()
@@ -73,8 +76,7 @@ function startGame(){
 
 function gameOver(){
     isStarted = false
-    clearTimeout(manaTimer)
-    manaTimer = null
+    GameScreenIns.delete()
     currentScreen = 'gameOverScreen'
     screens[currentScreen].init()
 }

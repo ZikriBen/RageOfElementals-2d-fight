@@ -1,4 +1,4 @@
-let currentScreen = 'startScreen'
+let currentScreen = 'charSelectScreen'
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -19,6 +19,7 @@ let enemy;
 startScreenIns = new StartScreenCLS(c, canvas.width, canvas.height)
 charSelectIns = new CharSelectCLS()
 GameScreenIns = new GameScreenCLS(c, canvas.width, canvas.height)
+GameOverScreenIns = new GameOverScreenCLS(c, canvas.width, canvas.height)
 
 const screens = {
     'startScreen': {
@@ -61,30 +62,13 @@ const screens = {
 	},
     'gameOverScreen': {
         init: () => {
-            // document.querySelector('#start_btn').style.display = 'none'
-            document.querySelector('#displayText').style.display = 'flex'
-            document.querySelector('#displayText').innerHTML = 'Game Over'
-            document.querySelector('#health_bars').style.display = 'none'
-            document.querySelector('#player_health_bar').style.display = 'none'
-            document.querySelector('#enemy_health_bar').style.display = 'none'
-            c.clearRect(0, 0, canvas.width, canvas.height)
-            setTimeout(() => {
-                document.querySelector('#start_btn').style.display = 'block'
-                if (isSoundOn) {
-                    music.pause()
-                }
-                document.querySelector('#start_btn').value = 'Press any key to continue...'
-            }, 3000);
+            GameOverScreenIns.init()
         },
         draw: () => {
+            GameOverScreenIns.draw()
         },
         keyFunc: (key) => {
-            if (key) {
-                console.log("Any key")
-                document.querySelector('#start_btn').value = ' '
-                document.querySelector('#displayText').style.display = 'none'
-                _doFuncNoSpam(fadeFunc, startScreen)
-            }
+            GameOverScreenIns.keyFunc(key)
         }
     }
 }
@@ -115,7 +99,6 @@ function animate() {
     window.requestAnimationFrame(animate);
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
-    // c.fillStyle = 'rgba(255, 255, 255, 0.15)'
     
     screens[currentScreen].draw()
 
@@ -204,8 +187,8 @@ function animate() {
 
         document.querySelector('#playerHealth').style.width = player.health + '%'
 
-        if (enemy.health <= 0 || player.health <= 0) {
-            determineWinner({player, enemy, timerId})
+        if (GameScreenIns.isStarted && (enemy.health <= 0 || player.health <= 0)) {
+            GameScreenIns.determineWinner()
         
         }
     }
