@@ -1,4 +1,4 @@
-let currentScreen = 'charSelectScreen'
+let currentScreen = 'gameScreen'
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -189,7 +189,6 @@ function animate() {
 
         if (GameScreenIns.isStarted && (enemy.health <= 0 || player.health <= 0)) {
             GameScreenIns.determineWinner()
-        
         }
     }
 

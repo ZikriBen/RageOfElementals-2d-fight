@@ -260,10 +260,10 @@ class newFighter extends newSprite {
         this.attackBox.position.y = this.position.y + this.attackBox.offset.y
         
 
-        c.fillStyle = 'rgba(255, 0, 0, 0.35)'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        c.fillStyle ='rgba(0, 0, 0, 0.35)'
-        c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
+        // c.fillStyle = 'rgba(255, 0, 0, 0.35)'
+        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // c.fillStyle ='rgba(0, 0, 0, 0.35)'
+        // c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
@@ -295,10 +295,9 @@ class newFighter extends newSprite {
         }
 
         if (this.animationName === 'death') {    
-            if (this.currentFrame >= this.spriteAnimations['death'].loc.length - 1) {
-                this.isDead = true
-            }
-            return
+            if (this.currentFrame < this.spriteAnimations['death'].loc.length - 1) 
+                return
+            this.isDead = true
         }
         if (this.animationName === 'air_attack' && sprite !== 'death') {   
             if (this.currentFrame < this.spriteAnimations['air_attack'].loc.length - 1) {
@@ -804,12 +803,22 @@ class GameScreenCLS {
         this.enemyScore = 0
         this.manaInterval
         this.timerInterval
+        this.bgs = ['./img/background-fire.png', './img/background-metal.png', './img/background-water.png', './img/background-wind.png', './img/background-ground.png',]
+        this.gameBackgorunds = []
     }
 
     init(playerFighter, enemyFighter) {
         console.log("Game screen init")
-        this.gameBackgorund = new Sprite({position: {x: 0, y: 0}, imagesSrc: './img/background.png'})
-        this.shop = new Sprite({position: {x: 625, y: 160}, imagesSrc: './img/shop.png', scale: 2.5, framesMax: 6})
+        
+        if (this.gameBackgorunds.length === 0) {
+            for (let i = 0; i < this.bgs.length; i++){
+                this.gameBackgorunds.push(new Sprite({position: {x: 0, y: 0}, imagesSrc: this.bgs[i]}))
+            }
+        }
+         
+        this.gameBackgorund = this.gameBackgorunds[Math.floor(Math.random() * this.gameBackgorunds.length)]
+        // this.shop = new Sprite({position: {x: 625, y: 160}, imagesSrc: './img/shop.png', scale: 2.5, framesMax: 6})
+        
         this.player = new newFighter({
             position: {x: 250, y: 0}, 
             velocity: {x: 0, y: 0}, 
@@ -889,7 +898,7 @@ class GameScreenCLS {
 
     draw() {
         this.gameBackgorund.update()
-        this.shop.update()
+        // this.shop.update()
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'
         this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
         this.player.update();
@@ -907,12 +916,15 @@ class GameScreenCLS {
                     turn(this.player, 'a', 'd', 'left')
                     break
                 case 'w':
-                    this.player.velocity.y = -18
+                    if (this.player.animationName !== "death") 
+                        this.player.velocity.y = -18
                     break
                 case 'e':
                     this.player.defend()
                     break
                 case ' ':
+                    if (this.player.animationName === "death")
+                        break
                     if (this.player.velocity.y !== 0) {
                         _doActionNoSpam(this.player, 'air_attack')
                         break
@@ -946,45 +958,47 @@ class GameScreenCLS {
                     break
             }
         }
-        if (!this.enemy.isDead) {
-            this.enemy.determineCombo(key)
-            switch (key) {
-                case 'ArrowRight':
-                    turn(this.enemy, 'ArrowRight', 'ArrowLeft', 'right')
-                    break
-                case 'ArrowLeft':
-                    turn(this.enemy, 'ArrowLeft', 'ArrowRight', 'left')
-                    break
-                case 'ArrowUp':
+        
+        this.enemy.determineCombo(key)
+        switch (key) {
+            case 'ArrowRight':
+                turn(this.enemy, 'ArrowRight', 'ArrowLeft', 'right')
+                break
+            case 'ArrowLeft':
+                turn(this.enemy, 'ArrowLeft', 'ArrowRight', 'left')
+                break
+            case 'ArrowUp':
+                if (this.enemy.animationName !== "death")
                     this.enemy.velocity.y = -18
+                break
+            case '0':
+                if (this.enemy.animationName === "death")
                     break
-                case '0':
-                    if (this.enemy.velocity.y !== 0) {
-                        _doActionNoSpam(this.enemy, 'air_attack')
-                        break
-                    }
-                    if (this.enemy.animationName === 'attack1' && this.enemy.currentFrame >= this.player.attackFrame) {
-                        _doActionNoSpam(this.enemy, 'attack2')
-                        break
-                    }
-                    else if (this.enemy.animationName === 'attack2' && this.enemy.currentFrame >= this.player.attackFrame) {
-                        _doActionNoSpam(this.enemy, 'sp_attack1')
-                        break
-                    }
-                    else {
-                        _doActionNoSpam(this.enemy, 'attack1')
-                    }
+                if (this.enemy.velocity.y !== 0) {
+                    _doActionNoSpam(this.enemy, 'air_attack')
                     break
-                case '1':
-                    _doActionNoSpam(this.enemy, 'sp_attack2')
+                }
+                if (this.enemy.animationName === 'attack1' && this.enemy.currentFrame >= this.player.attackFrame) {
+                    _doActionNoSpam(this.enemy, 'attack2')
                     break
-                case '9':
-                    this.enemy.defend()
+                }
+                else if (this.enemy.animationName === 'attack2' && this.enemy.currentFrame >= this.player.attackFrame) {
+                    _doActionNoSpam(this.enemy, 'sp_attack1')
                     break
-                case '7':
-                    _doActionNoSpam(this.enemy, 'meditate')
-                    break
-            }
+                }
+                else {
+                    _doActionNoSpam(this.enemy, 'attack1')
+                }
+                break
+            case '1':
+                _doActionNoSpam(this.enemy, 'sp_attack2')
+                break
+            case '9':
+                this.enemy.defend()
+                break
+            case '7':
+                _doActionNoSpam(this.enemy, 'meditate')
+                break
         }
     }
     
@@ -1048,8 +1062,6 @@ class GameScreenCLS {
         }
 
         setTimeout(() => {this.resetRound()}, 2000)
-
-        
     }
 
     getPlayer() {
@@ -1063,6 +1075,7 @@ class GameScreenCLS {
         document.querySelector('#displayText').style.display = 'none'
         this.player.resetPosition()
         this.enemy.resetPosition()
+        this.gameBackgorund = this.gameBackgorunds[Math.floor(Math.random() * this.gameBackgorunds.length)]
         this.player.health = 100
         this.enemy.health = 100
         this.player.mana = 98
@@ -1071,21 +1084,21 @@ class GameScreenCLS {
         this.enemy.defending = false
         
         if (this.player.isDead) {
-            this.player.isDead = false
             this.player.switchSprite('idle', true)
             console.log('#enemyScore' + this.enemyScore)
             document.querySelector('#enemyScore' + this.enemyScore).style.color = '#ff0000'
         }
         
         if (this.enemy.isDead) {
-            this.enemy.isDead = false
             this.enemy.switchSprite('idle', true)
             console.log('#playerScore' + this.playerScore)
             document.querySelector('#playerScore' + this.playerScore).style.color = '#ff0000'
         }
-
+        
         this.gameTime = 100
         this.isStarted = true
+        this.enemy.isDead = false
+        this.player.isDead = false
     }
     
 }

@@ -82,6 +82,8 @@ function gameOver(){
 }
 
 function turn(character, key, oppositKey, side) {
+    if (character.animationName === 'death') 
+        return
     keys[key].pressed = true
     character.lastKey = key
     if (character.animationName === 'sp_attack2') 
