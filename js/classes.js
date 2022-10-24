@@ -825,7 +825,7 @@ class GameScreenCLS extends Screen{
         this.enemyScore = 0
         this.manaInterval
         this.timerInterval
-        this.bgs = ['./img/background-fire.png', './img/background-metal.png', './img/background-water.png', './img/background-wind.png', './img/background-ground.png',]
+        this.bgs = ['./img/bgs/background-fire.png', './img/bgs/background-metal.png', './img/bgs/background-water.png', './img/bgs/background-wind.png', './img/bgs/background-ground.png',]
         this.gameBackgorunds = []
     }
 
