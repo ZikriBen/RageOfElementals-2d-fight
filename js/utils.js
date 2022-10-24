@@ -1,27 +1,52 @@
-function determineWinner({player, enemy, timerId}) {
-    if (isStarted === false)
-        return
-    document.querySelector('#timer').innerHTML = '00'
-    clearTimeout(timerId)
-    document.querySelector('#displayText').style.display = 'flex'
+let timerBlockId;
+let timerBlockId2;
+let isSoundOn = false
+const music = new Audio('./music/Guile_Theme.mp3');
 
-    if (player.health === enemy.health) {
-        document.querySelector('#displayText').innerHTML = 'Tie'
+const keys = {
+    a: {
+        pressed : false,
+        double: 0
+    },
+    d: {
+        pressed: false,
+        double: 0
+    },
+    ArrowRight: {
+        pressed: false,
+        double: 0
+    },
+    ArrowLeft: {
+        pressed: false,
+        double: 0
     }
-    else if(player.health > enemy.health) {
-        document.querySelector('#displayText').innerHTML = 'Player 1 Wins'
-        
-    }
-    else if(player.health < enemy.health) {
-        document.querySelector('#displayText').innerHTML = 'Player 2 Wins'
-    }
-    setTimeout(() => {
-        fadeFunc(gameOver)
-    }, 1000);
 }
 
-let timer = 100
-let timerId
+function keyUpFunc(key) {
+    switch (key) {
+        case 'd':
+            keys.d.pressed = false
+            keys.d.double++
+            setTimeout(() => (keys.d.double = 0), 450)
+            break
+        case 'a':
+            keys.a.pressed = false
+            keys.a.double++
+
+            setTimeout(() => (keys.a.double = 0), 450)
+            break
+        case 'ArrowRight':
+            keys.ArrowRight.pressed = false
+            keys.ArrowRight.double++
+            setTimeout(() => (keys.ArrowRight.double = 0), 450)
+            break
+        case 'ArrowLeft':
+            keys.ArrowLeft.pressed = false
+            keys.ArrowLeft.double++
+            setTimeout(() => (keys.ArrowLeft.double = 0), 450)
+            break
+    }
+}
 
 function rectCollision(rect1, rect2) {
     return (
@@ -31,9 +56,6 @@ function rectCollision(rect1, rect2) {
         rect1.attackBox.position.y + rect1.attackBox.height > rect2.position.y
     )
 }
-
-let isSoundOn = false
-var music = new Audio('./music/Guile_Theme.mp3');
 
 function playMusic(){
     playSound(music)
@@ -60,14 +82,12 @@ function startScreen(){
 }
 
 function charSelect(){
-    startScreenIns.delete()
     currentScreen = 'charSelectScreen'
     screens[currentScreen].init()
 }
 
 function startGame(){
     isStarted = true
-    charSelectIns.delete()
     // playMusic()
     currentScreen = 'gameScreen'
     screens[currentScreen].init()
@@ -96,7 +116,6 @@ function turn(character, key, oppositKey, side) {
     }
 }
 
-let timerBlockId;
 
 function _doActionNoSpam(attacker, type) {
     //Reset Timeout if function is called before it ends
@@ -129,10 +148,7 @@ function _doActionNoSpam(attacker, type) {
                 break
         }
     }, 40); //40ms Timeout
-    //Place code that can be spammed here (UI updates, etc)
 };
-
-let timerBlockId2;
 
 function _doFuncNoSpam(func, args) {
     //Reset Timeout if function is called before it ends

@@ -1,23 +1,20 @@
-let currentScreen = 'gameScreen'
-
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
-c.textAlign = "center";
 canvas.width  = 1024
 canvas.height = 576
 
-const gravity = 0.7
 const overlay = {
     opacity: 0
 }
-c.fillRect(0, 0, canvas.width, canvas.height)
 
+c.fillRect(0, 0, canvas.width, canvas.height)
 
 let player;
 let enemy;
 
+let currentScreen = 'gameScreen'
 startScreenIns = new StartScreenCLS(c, canvas.width, canvas.height)
-charSelectIns = new CharSelectCLS()
+charSelectIns = new CharSelectCLS(c, canvas.width, canvas.height)
 GameScreenIns = new GameScreenCLS(c, canvas.width, canvas.height)
 GameOverScreenIns = new GameOverScreenCLS(c, canvas.width, canvas.height)
 
@@ -43,7 +40,6 @@ const screens = {
         keyFunc: (key) => {
             charSelectIns.keyFunc(key)
         }
-
     },
     'gameScreen': {
         init: () => {
@@ -58,7 +54,6 @@ const screens = {
         keyFunc: (key) => {
             GameScreenIns.keyFunc(key)
         }
-
 	},
     'gameOverScreen': {
         init: () => {
@@ -73,27 +68,7 @@ const screens = {
     }
 }
 
-const keys = {
-    a: {
-        pressed : false,
-        double: 0
-    },
-    d: {
-        pressed: false,
-        double: 0
-    },
-    ArrowRight: {
-        pressed: false,
-        double: 0
-    },
-    ArrowLeft: {
-        pressed: false,
-        double: 0
-    }
-}
-
 screens[currentScreen].init()
-
 
 function animate() {
     window.requestAnimationFrame(animate);
@@ -124,7 +99,6 @@ function animate() {
         else {
             player.switchSprite('idle')
         }
-        
         if (player.velocity.y < 0) {
             player.switchSprite('jump')
         }
@@ -163,28 +137,24 @@ function animate() {
 
         // Detect Colision player attackBox
         if (rectCollision(player, enemy) && player.isAttcking && player.currentFrame === player.attackFrame) {
-            enemy.takeHit(player, player.currentForce)
+            enemy.takeHit(player.currentForce)
             player.isAttcking = false
-            console.log('col')
-            console.log(enemy.health)
             if (enemy.health < 0) {
                 enemy.health = 0
             }
         }
 
-        document.querySelector('#enemyHealth').style.width = enemy.health + '%'
-
         // Detect Colision enemy attackBox
         if (rectCollision(enemy, player) && enemy.isAttcking && enemy.currentFrame === enemy.attackFrame) {
-            player.takeHit(enemy, enemy.currentForce)
+            player.takeHit(enemy.currentForce)
             enemy.isAttcking = false
-            console.log('col')
-            console.log(player.health)
             if (player.health < 0) {
                 player.health = 0
             }
         }
-
+        
+        // Charcters Health hanlder
+        document.querySelector('#enemyHealth').style.width = enemy.health + '%'
         document.querySelector('#playerHealth').style.width = player.health + '%'
 
         if (GameScreenIns.isStarted && (enemy.health <= 0 || player.health <= 0)) {
@@ -200,36 +170,12 @@ function animate() {
     c.restore()
 }
 
-animate()
-
-
 window.addEventListener('keydown', (event) => {
     screens[currentScreen].keyFunc(event.key)
 })
 
-
 window.addEventListener('keyup', (event) => {
-    switch (event.key) {
-        case 'd':
-            keys.d.pressed = false
-            keys.d.double++
-            setTimeout(() => (keys.d.double = 0), 450)
-            break
-        case 'a':
-            keys.a.pressed = false
-            keys.a.double++
-
-            setTimeout(() => (keys.a.double = 0), 450)
-            break
-        case 'ArrowRight':
-            keys.ArrowRight.pressed = false
-            keys.ArrowRight.double++
-            setTimeout(() => (keys.ArrowRight.double = 0), 450)
-            break
-        case 'ArrowLeft':
-            keys.ArrowLeft.pressed = false
-            keys.ArrowLeft.double++
-            setTimeout(() => (keys.ArrowLeft.double = 0), 450)
-            break
-    }
+    keyUpFunc(event.key)
 })
+
+animate()

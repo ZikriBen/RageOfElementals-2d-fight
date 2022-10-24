@@ -11,11 +11,15 @@
             position: absolute;
             z-index: -9999;
         }
+        body {
+            background: radial-gradient(rgb(206, 206, 206), rgb(235, 235, 235));
+        }
 
     </style>
 </head>
-<body>
-    <div style="position: relative; display: inline-block;">
+<body> 
+    <div style="position: absolute; display: inline-block;width: 1024px;height: 576px;top: 50%;right: 50%;margin-top: -512px;margin-right:-512px;">
+        
         <div id="health_bars" style="position: absolute; display:none; width: 100%; align-items: center; padding: 20px;">
             <!-- Player Health -->    
             <div id="player_health_bar" style="position: relative; width: 100%; display: none; justify-content: flex-end; border-top: 4px solid white; border-bottom: 4px solid white; border-left: 4px solid white;">
@@ -43,10 +47,11 @@
         </div>
         <div id="displayText" style="position: absolute; color: white; align-items: center; justify-content: center; top: 0; bottom: 0; left: 0; right:0; display: none">Tie</div>
         <input id="sound_btn" type="button" style="display:none; position: absolute;bottom: 0; right: 0;" value="sound on" onclick="playMusic()" />
-        <canvas></canvas>
+        <canvas style="border: 10px solid white"></canvas>
         <input id="start_btn" type="button" style="display:none; position: absolute; left: 42%; top: 480px;color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="press ENTER/SPACE to start" onclick="startGame()" disabled/>
         <input id="info_btn" type="button" style="display:none; position: absolute; left: 42%; top: 510px;color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="Controls" onclick="startGame()" disabled/>
     </div>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js" integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/classes.js"></script>
     <!-- <script src="js/backgrounds.js"></script> -->

@@ -1,4 +1,47 @@
-class newSprite {
+class BaseSprite {
+    constructor({position, imagesSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}, framsHold = 5}) {
+        this.position = position
+        this.width = 50
+        this.height = 150
+        this.image = new Image()
+        this.image.src = imagesSrc
+        this.scale = scale
+        this.framesMax = framesMax
+        this.currentFrame = 0
+        this.framsTotal = 0
+        this.framsHold = framsHold
+        this.offset = offset
+    }
+
+    draw() {
+        c.drawImage(
+            this.image, 
+            this.currentFrame * (this.image.width / this.framesMax),
+            0,
+            this.image.width / this.framesMax, 
+            this.image.height,
+            this.position.x - this.offset.x, 
+            this.position.y - this.offset.y, 
+            this.image.width / this.framesMax * this.scale, 
+            this.image.height * this.scale
+        )
+    }
+
+    animateFrames() {
+        
+        this.framsTotal++
+        if (this.framsTotal % this.framsHold === 0) {
+            this.currentFrame = (this.currentFrame + 1) % this.framesMax
+        }
+    }
+
+    update() {
+        this.draw()
+        if (!this.isDead) this.animateFrames()
+    }
+}
+
+class ComplexSprite {
     constructor({position, rightImagesSrc, leftImagesSrc, animationsStates, animationName, staggerFrames = 5, scale = 1, offset = {x: 0, y: 0}}) {
         this.position = position
         this.width = 50
@@ -83,7 +126,7 @@ class newSprite {
     }
 }
 
-class newFighter extends newSprite {
+class Fighter extends ComplexSprite {
     constructor({
         position, 
         velocity,
@@ -108,6 +151,7 @@ class newFighter extends newSprite {
             offset
         })
         this.velocity = velocity
+        this.gravity = 0.7
         this.defaulPos = structuredClone(position)
         this.width = 50
         this.height = 150
@@ -148,7 +192,6 @@ class newFighter extends newSprite {
         if (this.animationName === "sp_attack1") {
             return
         }
-        console.log("attack")
         this.switchSprite(this.attackInfo.attack.name)
         this.attackBox.width = this.attackInfo.attack.attackBox.width
         this.attackBox.height = this.attackInfo.attack.attackBox.height
@@ -158,7 +201,6 @@ class newFighter extends newSprite {
         this.isAttcking = true
     }
     attack2() {
-        console.log("attack2")
         this.attackBox.width = this.attackInfo.attack2.attackBox.width
         this.attackBox.height = this.attackInfo.attack2.attackBox.height
         this.attackBox.offset = this.attackInfo.attack2.attackBox.offset
@@ -168,7 +210,6 @@ class newFighter extends newSprite {
         this.isAttcking = true
     }
     sp_attack1() {
-        console.log("sp_attack1")
         this.switchSprite(this.attackInfo.sp_attack1.name)
         this.attackBox.width = this.attackInfo.sp_attack1.attackBox.width
         this.attackBox.height = this.attackInfo.sp_attack1.attackBox.height
@@ -182,7 +223,6 @@ class newFighter extends newSprite {
             // playSound(errorSound)
             return
         }
-        console.log("sp_attack2")
         this.attackBox.width = this.attackInfo.sp_attack2.attackBox.width
         this.attackBox.height = this.attackInfo.sp_attack2.attackBox.height
         this.attackBox.offset = this.attackInfo.sp_attack2.attackBox.offset
@@ -200,6 +240,22 @@ class newFighter extends newSprite {
         this.attackFrame = this.attackInfo.air_attack.attackFrame
         this.currentForce = this.attackInfo.air_attack.force
         this.isAttcking = true
+    }
+
+    turn(key, oppositKey, side) {
+        if (this.animationName === 'death') 
+            return
+        
+        keys[key].pressed = true
+        this.lastKey = key
+        if (this.animationName === 'sp_attack2') 
+            return
+        this.facing = side
+        if (keys[oppositKey].pressed === true) {
+            keys[oppositKey].pressed = false
+            this.changeAnimationName('run', this.facing)
+            return
+        }
     }
 
     roll() {
@@ -233,7 +289,7 @@ class newFighter extends newSprite {
             this.health += hp
     }
 
-    takeHit(attacker, force) {
+    takeHit(force) {
         if (this.defending) 
             this.health -= Math.round(force / 10)
         else
@@ -281,7 +337,7 @@ class newFighter extends newSprite {
             this.position.y = 330
         }
         else {
-            this.velocity.y += gravity
+            this.velocity.y += this.gravity
         }
     }
 
@@ -377,49 +433,6 @@ class newFighter extends newSprite {
     }
 }
 
-class Sprite {
-    constructor({position, imagesSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}, framsHold = 5}) {
-        this.position = position
-        this.width = 50
-        this.height = 150
-        this.image = new Image()
-        this.image.src = imagesSrc
-        this.scale = scale
-        this.framesMax = framesMax
-        this.currentFrame = 0
-        this.framsTotal = 0
-        this.framsHold = framsHold
-        this.offset = offset
-    }
-
-    draw() {
-        c.drawImage(
-            this.image, 
-            this.currentFrame * (this.image.width / this.framesMax),
-            0,
-            this.image.width / this.framesMax, 
-            this.image.height,
-            this.position.x - this.offset.x, 
-            this.position.y - this.offset.y, 
-            this.image.width / this.framesMax * this.scale, 
-            this.image.height * this.scale
-        )
-    }
-
-    animateFrames() {
-        
-        this.framsTotal++
-        if (this.framsTotal % this.framsHold === 0) {
-            this.currentFrame = (this.currentFrame + 1) % this.framesMax
-        }
-    }
-
-    update() {
-        this.draw()
-        if (!this.isDead) this.animateFrames()
-    }
-}
-
 class ScrollingSprite {
     constructor(image, x, y, width, height, speed, scaleX = 1, scaleY = 1) {
         this.image = image;
@@ -485,7 +498,6 @@ class BG {
     }
 }
 
-
 class RTB extends BG{
     constructor(ctx, canvasWidth, canvasHeight) {
         super(ctx, canvasWidth, canvasHeight)
@@ -548,11 +560,22 @@ class PixelFantasyCaves extends BG{
     }
 }
 
-class StartScreenCLS {
+class Screen {
     constructor(ctx, canvasWidth, canvasHeight) {
         this.ctx = ctx
         this.canvasWidth = canvasWidth
         this.canvasHeight = canvasHeight
+    }
+
+    init() {}
+    delete() {}
+    draw() {}
+    keyFunc(key) {}
+}
+
+class StartScreenCLS extends Screen{
+    constructor(ctx, canvasWidth, canvasHeight) {
+        super(ctx, canvasWidth, canvasHeight)
         this.currentBG = 0
         this.bgs = []
         this.bgs.push(new RTB(this.ctx, this.canvasWidth, this.canvasHeight))
@@ -567,8 +590,8 @@ class StartScreenCLS {
     }
 
     init() {
-        this.mainSprite = this.logo = new Sprite({position: {x: 240, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
-        this.instructions = new Sprite({position: {x: 150, y: 60}, imagesSrc: './img/instructions.png', scale: 2.5, framesMax: 1})
+        this.mainSprite = this.logo = new BaseSprite({position: {x: 240, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
+        this.instructions = new BaseSprite({position: {x: 150, y: 60}, imagesSrc: './img/instructions.png', scale: 2.5, framesMax: 1})
         document.querySelector('#start_btn').style.display = 'block'
         document.querySelector('#info_btn').style.display = 'block'
         document.querySelector('#start_btn').style.left = '42%'
@@ -649,8 +672,9 @@ class StartScreenCLS {
     }
 }
 
-class CharSelectCLS {
-    constructor() {
+class CharSelectCLS extends Screen{
+    constructor(ctx, canvasWidth, canvasHeight) {
+        super(ctx, canvasWidth, canvasHeight)
         this.arrow1Pos = 0
         this.arrow2Pos = 1
         this.arrowStartPos = 115
@@ -675,14 +699,14 @@ class CharSelectCLS {
         document.querySelector('#displayText').style.display = 'flex'
         document.querySelector('#displayText').innerHTML = 'Select Character:'
         
-        this.arrow1 = new Sprite({position: {x: this.arrowStartPos, y: 295}, imagesSrc: './img/arrow_p1p.png', scale: 0.3, framesMax: 5})
-        this.arrow2 = new Sprite({position: {x: this.arrowStartPos + this.charOffset, y: 295}, imagesSrc: './img/arrow_p2p.png', scale: 0.3, framesMax: 5, framsHold: 3})
+        this.arrow1 = new BaseSprite({position: {x: this.arrowStartPos, y: 295}, imagesSrc: './img/arrow_p1p.png', scale: 0.3, framesMax: 5})
+        this.arrow2 = new BaseSprite({position: {x: this.arrowStartPos + this.charOffset, y: 295}, imagesSrc: './img/arrow_p2p.png', scale: 0.3, framesMax: 5, framsHold: 3})
         
         this.fighters = [fireFighter, groundFighter, windFighter, waterFighter, metalFighter]
         
         if (this.characters.length === 0) {
             for (let i = 0; i < this.fighters.length; i++){
-                this.characters.push(new Sprite({position: {x: this.charStartPos, y: 160}, imagesSrc: this.fighters[i].idle_bw_png, scale: 2.5, framesMax: this.fighters[i].idle_frames}))
+                this.characters.push(new BaseSprite({position: {x: this.charStartPos, y: 160}, imagesSrc: this.fighters[i].idle_bw_png, scale: 2.5, framesMax: this.fighters[i].idle_frames}))
                 this.charStartPos += this.charOffset
             }
         }
@@ -789,11 +813,9 @@ class CharSelectCLS {
     }
 }
 
-class GameScreenCLS {
+class GameScreenCLS extends Screen{
     constructor(ctx, canvasWidth, canvasHeight) {
-        this.ctx = ctx
-        this.canvasWidth = canvasWidth
-        this.canvasHeight = canvasHeight
+        super(ctx, canvasWidth, canvasHeight)
         this.gameBackgorund
         this.shop
         this.gameTime = 100
@@ -812,14 +834,14 @@ class GameScreenCLS {
         
         if (this.gameBackgorunds.length === 0) {
             for (let i = 0; i < this.bgs.length; i++){
-                this.gameBackgorunds.push(new Sprite({position: {x: 0, y: 0}, imagesSrc: this.bgs[i]}))
+                this.gameBackgorunds.push(new BaseSprite({position: {x: 0, y: 0}, imagesSrc: this.bgs[i]}))
             }
         }
          
         this.gameBackgorund = this.gameBackgorunds[Math.floor(Math.random() * this.gameBackgorunds.length)]
-        // this.shop = new Sprite({position: {x: 625, y: 160}, imagesSrc: './img/shop.png', scale: 2.5, framesMax: 6})
+        // this.shop = new BaseSprite({position: {x: 625, y: 160}, imagesSrc: './img/shop.png', scale: 2.5, framesMax: 6})
         
-        this.player = new newFighter({
+        this.player = new Fighter({
             position: {x: 250, y: 0}, 
             velocity: {x: 0, y: 0}, 
             offset: playerFighter.offset,
@@ -840,8 +862,8 @@ class GameScreenCLS {
             }
         })
     
-        this.enemy = new newFighter({
-            position: {x: 600, y: 0}, 
+        this.enemy = new Fighter({
+            position: {x: 675, y: 0}, 
             velocity: {x: 0, y: 0}, 
             offset: enemyFighter.offset, 
             rightImagesSrc: enemyFighter.SpriteSheetRight, 
@@ -910,10 +932,10 @@ class GameScreenCLS {
             this.player.determineCombo(key)
             switch (key) {
                 case 'd':
-                    turn(this.player, 'd', 'a', 'right')
+                    this.player.turn('d', 'a', 'right')
                     break
                 case 'a':
-                    turn(this.player, 'a', 'd', 'left')
+                    this.player.turn('a', 'd', 'left')
                     break
                 case 'w':
                     if (this.player.animationName !== "death") 
@@ -958,47 +980,48 @@ class GameScreenCLS {
                     break
             }
         }
-        
-        this.enemy.determineCombo(key)
-        switch (key) {
-            case 'ArrowRight':
-                turn(this.enemy, 'ArrowRight', 'ArrowLeft', 'right')
-                break
-            case 'ArrowLeft':
-                turn(this.enemy, 'ArrowLeft', 'ArrowRight', 'left')
-                break
-            case 'ArrowUp':
-                if (this.enemy.animationName !== "death")
-                    this.enemy.velocity.y = -18
-                break
-            case '0':
-                if (this.enemy.animationName === "death")
+        if (!this.enemy.isDead) {
+            this.enemy.determineCombo(key)
+            switch (key) {
+                case 'ArrowRight':
+                    this.enemy.turn('ArrowRight', 'ArrowLeft', 'right')
                     break
-                if (this.enemy.velocity.y !== 0) {
-                    _doActionNoSpam(this.enemy, 'air_attack')
+                case 'ArrowLeft':
+                    this.enemy.turn('ArrowLeft', 'ArrowRight', 'left')
                     break
-                }
-                if (this.enemy.animationName === 'attack1' && this.enemy.currentFrame >= this.player.attackFrame) {
-                    _doActionNoSpam(this.enemy, 'attack2')
+                case 'ArrowUp':
+                    if (this.enemy.animationName !== "death")
+                        this.enemy.velocity.y = -18
                     break
-                }
-                else if (this.enemy.animationName === 'attack2' && this.enemy.currentFrame >= this.player.attackFrame) {
-                    _doActionNoSpam(this.enemy, 'sp_attack1')
+                case '0':
+                    if (this.enemy.animationName === "death")
+                        break
+                    if (this.enemy.velocity.y !== 0) {
+                        _doActionNoSpam(this.enemy, 'air_attack')
+                        break
+                    }
+                    if (this.enemy.animationName === 'attack1' && this.enemy.currentFrame >= this.player.attackFrame) {
+                        _doActionNoSpam(this.enemy, 'attack2')
+                        break
+                    }
+                    else if (this.enemy.animationName === 'attack2' && this.enemy.currentFrame >= this.player.attackFrame) {
+                        _doActionNoSpam(this.enemy, 'sp_attack1')
+                        break
+                    }
+                    else {
+                        _doActionNoSpam(this.enemy, 'attack1')
+                    }
                     break
-                }
-                else {
-                    _doActionNoSpam(this.enemy, 'attack1')
-                }
-                break
-            case '1':
-                _doActionNoSpam(this.enemy, 'sp_attack2')
-                break
-            case '9':
-                this.enemy.defend()
-                break
-            case '7':
-                _doActionNoSpam(this.enemy, 'meditate')
-                break
+                case '1':
+                    _doActionNoSpam(this.enemy, 'sp_attack2')
+                    break
+                case '9':
+                    this.enemy.defend()
+                    break
+                case '7':
+                    _doActionNoSpam(this.enemy, 'meditate')
+                    break
+            }
         }
     }
     
@@ -1067,6 +1090,7 @@ class GameScreenCLS {
     getPlayer() {
         return this.player
     }
+
     getEnemy() {
         return this.enemy
     }
@@ -1085,13 +1109,11 @@ class GameScreenCLS {
         
         if (this.player.isDead) {
             this.player.switchSprite('idle', true)
-            console.log('#enemyScore' + this.enemyScore)
             document.querySelector('#enemyScore' + this.enemyScore).style.color = '#ff0000'
         }
         
         if (this.enemy.isDead) {
             this.enemy.switchSprite('idle', true)
-            console.log('#playerScore' + this.playerScore)
             document.querySelector('#playerScore' + this.playerScore).style.color = '#ff0000'
         }
         
@@ -1100,14 +1122,11 @@ class GameScreenCLS {
         this.enemy.isDead = false
         this.player.isDead = false
     }
-    
 }
 
-class GameOverScreenCLS {
+class GameOverScreenCLS extends Screen{
     constructor(ctx, canvasWidth, canvasHeight) {
-        this.ctx = ctx
-        this.canvasWidth = canvasWidth
-        this.canvasHeight = canvasHeight
+        super(ctx, canvasWidth, canvasHeight)
     }
 
     init() {
@@ -1140,7 +1159,6 @@ class GameOverScreenCLS {
 
     keyFunc(key) {
         if (key) {
-            console.log("Any key")
             this.delete()
             _doFuncNoSpam(fadeFunc, startScreen)
         }
