@@ -12,7 +12,7 @@ c.fillRect(0, 0, canvas.width, canvas.height)
 let player;
 let enemy;
 
-let currentScreen = 'gameScreen'
+let currentScreen = 'startScreen'
 startScreenIns = new StartScreenCLS(c, canvas.width, canvas.height)
 charSelectIns = new CharSelectCLS(c, canvas.width, canvas.height)
 GameScreenIns = new GameScreenCLS(c, canvas.width, canvas.height)
