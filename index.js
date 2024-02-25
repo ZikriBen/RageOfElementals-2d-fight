@@ -68,7 +68,7 @@ const screens = {
     }
 }
 
-screens['gameScreen'].init()
+screens[currentScreen].init()
 
 function enemyAI() {
     // if (enemy.animationName !== 'death'){
@@ -128,38 +128,39 @@ function animate() {
         else if (player.velocity.y > 0) {
             player.switchSprite('fall')
         }
-
-        enemyAI();
-
-        // Enemy Movement
-        // enemy.velocity.x = 0
-        // if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-        //     enemy.switchSprite('run')
-        //     enemy.velocity.x = 5
-        // }
-        // else if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-        //     enemy.switchSprite('run')
-        //     enemy.velocity.x = -5
-        // }
-        // else if (keys.ArrowRight.double >= 2) {
-        //     enemy.velocity.x += 7
-        //     enemy.roll()
-        // }
-        // else if (keys.ArrowLeft.double >= 2) {
-        //     enemy.velocity.x -= 7
-        //     enemy.roll()
-        // }
-        // else {
-        //     enemy.switchSprite('idle')
-        // }
-        
-        // if (enemy.velocity.y < 0) {
-        //     enemy.switchSprite('jump')
-        // }
-        // else if (enemy.velocity.y > 0) {
-        //     enemy.switchSprite('fall')
-        // }
-
+        if (startScreenIns.gameMode === 'pve') { // can be optimize!
+            enemyAI();
+        }
+        else {
+            // Enemy Movement
+            enemy.velocity.x = 0
+            if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
+                enemy.switchSprite('run')
+                enemy.velocity.x = 5
+            }
+            else if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
+                enemy.switchSprite('run')
+                enemy.velocity.x = -5
+            }
+            else if (keys.ArrowRight.double >= 2) {
+                enemy.velocity.x += 7
+                enemy.roll()
+            }
+            else if (keys.ArrowLeft.double >= 2) {
+                enemy.velocity.x -= 7
+                enemy.roll()
+            }
+            else {
+                enemy.switchSprite('idle')
+            }
+            
+            if (enemy.velocity.y < 0) {
+                enemy.switchSprite('jump')
+            }
+            else if (enemy.velocity.y > 0) {
+                enemy.switchSprite('fall')
+            }
+        }
         // Detect Colision player attackBox
         if (rectCollision(player, enemy) && player.isAttcking && player.currentFrame === player.attackFrame) {
             enemy.takeHit(player.currentForce)

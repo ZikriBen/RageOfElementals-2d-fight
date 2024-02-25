@@ -71,7 +71,8 @@ function playSound(audio) {
 function fadeFunc(func) {
     gsap.to(overlay, {opacity: 1, duration: 0.8})
     setTimeout(func, 1000);
-    document.querySelector('#start_btn').style.display = 'none'
+    document.querySelector('#start_pve_btn').style.display = 'none'
+    document.querySelector('#start_pvp_btn').style.display = 'none'
     setTimeout(gsap.to, 1500, overlay, {opacity: 0, duration: 2})
 }
 
@@ -88,7 +89,7 @@ function charSelect(){
 
 function startGame(){
     isStarted = true
-    // playMusic()
+    playMusic()
     currentScreen = 'gameScreen'
     screens[currentScreen].init()
 	timer = 100
