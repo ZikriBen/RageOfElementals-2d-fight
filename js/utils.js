@@ -119,10 +119,10 @@ function turn(character, key, oppositKey, side) {
 
 function _doActionNoSpam(attacker, type) {
     //Reset Timeout if function is called before it ends
-    if (!(timerBlockId == null)) {
-        clearTimeout(timerBlockId);
+    if (!(attacker.attackTimer == null)) {
+        clearTimeout(attacker.attackTimer);
     }
-    timerBlockId = setTimeout(function () {
+    attacker.attackTimer = setTimeout(function () {
         switch (type) {
             case "attack1":
                 attacker.attack()

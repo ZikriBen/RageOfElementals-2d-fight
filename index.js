@@ -68,7 +68,30 @@ const screens = {
     }
 }
 
-screens[currentScreen].init()
+screens['gameScreen'].init()
+
+function enemyAI() {
+    // if (enemy.animationName !== 'death'){
+        const distanceX = player.position.x - enemy.position.x;
+
+        if (rectCollision(player, enemy)) {
+            enemy.velocity.x = 0;
+            // enemy.switchSprite('idle');
+            _doActionNoSpam(enemy, 'attack1')
+        } else {
+            let direction = 1;
+            if (distanceX > 0) {
+                enemy.facing = "right"
+            }
+            else {
+                direction = -1;
+                enemy.facing = "left"
+            }
+            enemy.velocity.x = direction * 2;
+            enemy.switchSprite('run');
+        }
+    // }
+}
 
 function animate() {
     window.requestAnimationFrame(animate);
@@ -106,34 +129,36 @@ function animate() {
             player.switchSprite('fall')
         }
 
+        enemyAI();
+
         // Enemy Movement
-        enemy.velocity.x = 0
-        if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-            enemy.switchSprite('run')
-            enemy.velocity.x = 5
-        }
-        else if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-            enemy.switchSprite('run')
-            enemy.velocity.x = -5
-        }
-        else if (keys.ArrowRight.double >= 2) {
-            enemy.velocity.x += 7
-            enemy.roll()
-        }
-        else if (keys.ArrowLeft.double >= 2) {
-            enemy.velocity.x -= 7
-            enemy.roll()
-        }
-        else {
-            enemy.switchSprite('idle')
-        }
+        // enemy.velocity.x = 0
+        // if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
+        //     enemy.switchSprite('run')
+        //     enemy.velocity.x = 5
+        // }
+        // else if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
+        //     enemy.switchSprite('run')
+        //     enemy.velocity.x = -5
+        // }
+        // else if (keys.ArrowRight.double >= 2) {
+        //     enemy.velocity.x += 7
+        //     enemy.roll()
+        // }
+        // else if (keys.ArrowLeft.double >= 2) {
+        //     enemy.velocity.x -= 7
+        //     enemy.roll()
+        // }
+        // else {
+        //     enemy.switchSprite('idle')
+        // }
         
-        if (enemy.velocity.y < 0) {
-            enemy.switchSprite('jump')
-        }
-        else if (enemy.velocity.y > 0) {
-            enemy.switchSprite('fall')
-        }
+        // if (enemy.velocity.y < 0) {
+        //     enemy.switchSprite('jump')
+        // }
+        // else if (enemy.velocity.y > 0) {
+        //     enemy.switchSprite('fall')
+        // }
 
         // Detect Colision player attackBox
         if (rectCollision(player, enemy) && player.isAttcking && player.currentFrame === player.attackFrame) {

@@ -174,7 +174,7 @@ class Fighter extends ComplexSprite {
         this.comboIndex = 0
         this.combo = ['z', 'x', 'c']
         this.attackInfo = attackInfo
-
+        this.attackTimer = null
         this.attackBox = {
             position: {
                 x: this.position.x,
