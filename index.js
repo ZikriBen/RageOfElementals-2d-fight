@@ -12,7 +12,9 @@ c.fillRect(0, 0, canvas.width, canvas.height)
 let player;
 let enemy;
 
-let currentScreen = 'startScreen'
+// let currentScreen = 'startScreen' # Original
+let currentScreen = 'gameScreen'
+
 startScreenIns = new StartScreenCLS(c, canvas.width, canvas.height)
 charSelectIns = new CharSelectCLS(c, canvas.width, canvas.height)
 GameScreenIns = new GameScreenCLS(c, canvas.width, canvas.height)
@@ -67,30 +69,38 @@ const screens = {
         }
     }
 }
+// screens[currentScreen].init() # Original
 
-screens[currentScreen].init()
+screens['gameScreen'].init()
 
 function enemyAI() {
-    // if (enemy.animationName !== 'death'){
-        const distanceX = player.position.x - enemy.position.x;
-
-        if (rectCollision(player, enemy)) {
-            enemy.velocity.x = 0;
-            // enemy.switchSprite('idle');
-            _doActionNoSpam(enemy, 'attack1')
-        } else {
-            let direction = 1;
-            if (distanceX > 0) {
-                enemy.facing = "right"
+    const distanceX = player.position.x - enemy.position.x;
+    
+    if (rectCollision(player, enemy)) {
+        if (player.isAttcking) {
+            if (Math.random() < 0.02) {
+                enemy.defend();
+                return;
             }
-            else {
-                direction = -1;
-                enemy.facing = "left"
-            }
-            enemy.velocity.x = direction * 2;
-            enemy.switchSprite('run');
         }
-    // }
+        enemy.velocity.x = 0;
+        if (Math.random() < 0.1){
+            enemy.switchSprite('idle');
+        }
+        else
+            _doActionNoSpam(enemy, 'attack1');
+    } else {
+        let direction = 1;
+        if (distanceX > 0) {
+            enemy.facing = "right"
+        }
+        else {
+            direction = -1;
+            enemy.facing = "left"
+        }
+        enemy.velocity.x = direction * 2;
+        enemy.switchSprite('run');
+    }
 }
 
 function animate() {
@@ -128,7 +138,8 @@ function animate() {
         else if (player.velocity.y > 0) {
             player.switchSprite('fall')
         }
-        if (startScreenIns.gameMode === 'pve') { // can be optimize!
+        // if (startScreenIns.gameMode === 'pve') { // can be optimize! # Original
+        if ('pve' === 'pve') { // can be optimize!
             enemyAI();
         }
         else {
