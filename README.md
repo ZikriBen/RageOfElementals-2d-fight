@@ -1,8 +1,10 @@
 # RageOfElementals-2d-fight
 Rage Of Elementals, is a Pixel Art arcade browser game written only in vanilla JS and utilizes HTML5's canvas.  
 Its a 2 Players game that plays against each other on the same machine.  
-Now featuering new AI mode! :sunglasses:  
 It uses it's own engine, world physics and hitbox mechanism.  
+  
+Now featuering new AI mode! :sunglasses:  
+
 
 ## Browser compatibility
 
