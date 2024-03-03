@@ -58,7 +58,7 @@ function rectCollision(rect1, rect2) {
 }
 
 function playMusic(){
-    playSound(music)
+    // playSound(music)
     isSoundOn = true
 }
 

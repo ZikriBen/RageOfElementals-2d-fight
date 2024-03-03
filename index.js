@@ -82,7 +82,7 @@ function enemyAI() {
     if (enemyAIOn) {
         if (rectCollision(player, enemy)) {
             if (player.isAttcking) {
-                if (Math.random() < 0.02) {
+                if (Math.random() < 0.01) {
                     enemy.defend();
                     return;
                 }
@@ -97,8 +97,11 @@ function enemyAI() {
             else
                 if (enemy.velocity.y != 0)
                     _doActionNoSpam(enemy, 'air_attack');
-                else
+                else {
+
                     _doActionNoSpam(enemy, 'attack1');
+                    console.log('attack')
+                }
         } else {
             if (Math.random() < 0.04) {
                 if (player.velocity.y > 0) {
