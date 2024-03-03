@@ -16,6 +16,8 @@ Should be good in latest Firefox, Edge, Chrome, Opera, and IE.
 ## License
 
 Source code is released under the Mozilla Public License 2.0.  
+  
+
 Fighters sprites were made by [chierit](https://chierit.itch.io/).  
-Some of the UI (bars) were made by [bdragon1727](https://bdragon1727.itch.io/).
+Some of the UI (bars) were made by [bdragon1727](https://bdragon1727.itch.io/).  
 Static Background and Parallax Background were made by [Luis Zuno](https://ansimuz.itch.io/) and [Szadi art](https://szadiart.itch.io/).  
