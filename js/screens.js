@@ -40,7 +40,6 @@ class StartScreenCLS extends Screen{
         document.querySelector('#info_btn').style.left = '42%'
         document.querySelector('#info_btn').style.display = 'block'
         document.querySelector('#info_btn').value = '  Controls  '
-        this.gameMode = 'pve'
         this.switchBG()
     }
 
@@ -114,23 +113,17 @@ class StartScreenCLS extends Screen{
     invokeSelection() {
         if (this.currentSelection === 0) {
             _doFuncNoSpam(fadeFunc, charSelect)
-            this.gameMode = 'pve'
-            console.log(this.gameMode)
+            gameMode = 'pve'
             this.delete()
         }
         else if (this.currentSelection === 1) {
             _doFuncNoSpam(fadeFunc, charSelect)
-            this.gameMode = 'pvp'
-            console.log(this.gameMode)
+            gameMode = 'pvp'
             this.delete()
         }
         else if (this.currentSelection === 2) {
             this.showInstructions()
         }
-    }
-
-    getGameMode() {
-        return this.gameMode
     }
 }
 
@@ -187,15 +180,17 @@ class CharSelectCLS extends Screen{
 
     draw() {
         this.arrow1.update()
-        this.arrow2.update()
+        if (gameMode === 'pvp')
+            this.arrow2.update()
 
         for (let i = 0; i < this.characters.length; i++){
             this.characters[i].update()
         }
         
         this.characters[this.arrow1Pos].image.src = this.fighters[this.arrow1Pos].idle_png
-        this.characters[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].idle_png
-        
+        if (gameMode === 'pvp')
+            this.characters[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].idle_png
+
     }
 
     keyFunc(key) {
@@ -223,16 +218,21 @@ class CharSelectCLS extends Screen{
             case 'd':
                 if (!this.playerSelected) 
                     this.arrow1Pos = this.moveArrow(this.arrow1, this.arrow1Pos, 1)
-                    if (this.arrow1Pos == this.arrow2Pos)
-                        this.arrow1Pos = this.moveArrow(this.arrow1, this.arrow1Pos, 1)
+                    if (gameMode === 'pvp')
+                        if (this.arrow1Pos == this.arrow2Pos)
+                            this.arrow1Pos = this.moveArrow(this.arrow1, this.arrow1Pos, 1)
                 break
             case 'a':
                 if (!this.playerSelected) 
                     this.arrow1Pos = this.moveArrow(this.arrow1, this.arrow1Pos, -1)
-                    if (this.arrow1Pos == this.arrow2Pos)
-                        this.arrow1Pos = this.moveArrow(this.arrow1, this.arrow1Pos, -1)
+                    if (gameMode === 'pvp')
+                        if (this.arrow1Pos == this.arrow2Pos)
+                            this.arrow1Pos = this.moveArrow(this.arrow1, this.arrow1Pos, -1)
                 break
             case ' ':
+                if (gameMode === 'pve') {
+                    this.enemySelected = true
+                }
                 this.playerFighter = this.fighters[this.arrow1Pos]
                 this.playerSelected = true
                 this.arrow1.framsHold = 0
@@ -255,10 +255,12 @@ class CharSelectCLS extends Screen{
     invokeSelection() {
         playSound(this.selectSound)
         if (this.playerSelected && this.enemySelected) {
+            let randomEnemy = Math.floor(Math.random() * (this.characters.length + 1) + 0)
+            if (randomEnemy === this.arrow1Pos)
+                randomEnemy = (randomEnemy + 1) % this.characters.length
             this.selectedPlayer = this.fighters[this.arrow1Pos]
-            this.selectedEnemy = this.fighters[this.arrow2Pos]
+            this.selectedEnemy = this.fighters[randomEnemy]
             this.delete()
-            // setTimeout(this.delete, 1500)
             _doFuncNoSpam(fadeFunc, startGame)
         }
     }
@@ -384,7 +386,6 @@ class GameScreenCLS extends Screen{
 
     draw() {
         this.gameBackgorund.update()
-        // this.shop.update()
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'
         this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
         this.player.update();
@@ -570,7 +571,7 @@ class GameScreenCLS extends Screen{
         this.enemy.mana = 98
         this.player.defending = false
         this.enemy.defending = false
-        
+
         if (this.player.isDead) {
             this.player.switchSprite('idle', true)
             document.querySelector('#enemyScore' + this.enemyScore).style.color = '#ff0000'
@@ -585,6 +586,7 @@ class GameScreenCLS extends Screen{
         this.isStarted = true
         this.enemy.isDead = false
         this.player.isDead = false
+        enemyAIOn = true
     }
 }
 
