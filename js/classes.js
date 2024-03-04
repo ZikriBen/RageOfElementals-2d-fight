@@ -107,6 +107,7 @@ class ComplexSprite {
             this.currentFrame = (this.currentFrame + 1) % this.framesMax
         }
         this.frameX = this.spriteWidth * this.currentFrame
+        // TODO: this Crashes!
         this.frameY = this.spriteAnimations[this.animationName].loc[this.currentFrame].y
     }
 

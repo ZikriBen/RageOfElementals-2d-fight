@@ -166,7 +166,7 @@ class CharSelectCLS extends Screen{
         
         if (this.characters.length === 0) {
             for (let i = 0; i < this.fighters.length; i++){
-                this.names.push(new BaseSprite({position: {x: this.charStartPos+ 280, y: 440}, imagesSrc: this.fighters[i].name, scale: 2, framesMax: 1}))
+                this.names.push(new BaseSprite({position: {x: this.charStartPos+ 280, y: 440}, imagesSrc: this.fighters[i].name_png, scale: 2, framesMax: 1}))
                 this.power.push(new BaseSprite({position: {x: this.charStartPos + 280, y: 460}, imagesSrc: this.fighters[i].pwr_bw_png, scale: 2, framesMax: 1}))
                 this.hp.push(new BaseSprite({position: {x: this.charStartPos + 280, y: 480}, imagesSrc: this.fighters[i].hp_bw_png, scale: 2, framesMax: 1}))
                 this.characters.push(new BaseSprite({position: {x: this.charStartPos, y: 100}, imagesSrc: this.fighters[i].idle_bw_png, scale: 2.5, framesMax: this.fighters[i].idle_frames}))
