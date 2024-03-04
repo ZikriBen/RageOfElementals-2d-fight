@@ -6,6 +6,12 @@ It uses it's own engine, world physics and hitbox mechanism.
 Now featuering new AI mode! :sunglasses:  
 
 
+Move - 1P (WASD) | 2P (Arrow Keys)
+X - Attack / Pick Up Chair
+Z - Block / Throw Chair 
+Space - Special Attack (When Rage meter is full)
+Escape - Pause
+
 ## Browser compatibility
 
 Should be good in latest Firefox, Edge, Chrome, Opera, and IE.
