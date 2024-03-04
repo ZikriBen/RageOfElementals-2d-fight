@@ -41,6 +41,9 @@ class StartScreenCLS extends Screen{
         document.querySelector('#info_btn').style.display = 'block'
         document.querySelector('#info_btn').value = '  Controls  '
         this.switchBG()
+        if (isSoundOn) {
+            playMusic(battleMusic, 'play')
+        }
     }
 
     delete() {
@@ -395,6 +398,9 @@ class GameScreenCLS extends Screen{
         this.isStarted = true
         this.decreaseTimer()
         this.manaRaise()
+        if (isSoundOn) {
+            playMusic(battleMusic, 'play')
+        }
     }
 
     delete() {
@@ -634,9 +640,9 @@ class GameOverScreenCLS extends Screen{
             document.querySelector('#start_pve_btn').style.display = 'block'
             document.querySelector('#start_pve_btn').style.left = '32%'
             document.querySelector('#start_pve_btn').value = 'Press any key to continue...'
-            if (isSoundOn) {
-                music.pause()
-            }
+            // if (isSoundOn) {
+            //     music.pause()
+            // }
         }, 1000);
     }
 

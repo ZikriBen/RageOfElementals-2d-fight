@@ -1,7 +1,14 @@
 let timerBlockId;
 let timerBlockId2;
 let isSoundOn = false
-const music = new Audio('./music/Guile_Theme.mp3');
+
+// const introMusic = new Audio('./music/Guile_Theme.mp3');
+const introMusic = new Audio('./music/PerituneMaterial_RetroRPG_Battle2.mp3');
+const battleMusic = new Audio('./music/KensTheme(SSF2VRC7).wav');
+let currentMusic = introMusic
+
+const svgPathSoundOn = "M11 2h2v20h-2v-2H9v-2h2V6H9V4h2V2zM7 8V6h2v2H7zm0 8H3V8h4v2H5v4h2v2zm0 0v2h2v-2H7zm10-6h-2v4h2v-4zm2-2h2v8h-2V8zm0 8v2h-4v-2h4zm0-10v2h-4V6h4z"
+const svgPathSoundOff = "M13 2h-2v2H9v2H7v2H3v8h4v2h2v2h2v2h2V2zM9 18v-2H7v-2H5v-4h2V8h2V6h2v12H9zm10-6.777h-2v-2h-2v2h2v2h-2v2h2v-2h2v2h2v-2h-2v-2zm0 0h2v-2h-2v2z"
 
 const keys = {
     a: {
@@ -57,15 +64,45 @@ function rectCollision(rect1, rect2) {
     )
 }
 
-function playMusic(){
-    // playSound(music)
-    isSoundOn = true
+function toggleMusic(){
+    isSoundOn = !isSoundOn
+    if (isSoundOn) {
+        playMusic(currentMusic, setOn='resume')
+        document.querySelector('#svgPath').setAttribute('d', svgPathSoundOn)
+    }
+    else {
+        playMusic(currentMusic, action='pause')
+        document.querySelector('#svgPath').setAttribute('d', svgPathSoundOff)
+    }
 }
 
 function playSound(audio) {
     audio.pause();
     audio.currentTime=0;
     audio.play();
+}
+
+
+function playMusic(audio, action='play') {
+    currentMusic.pause();
+    currentMusic = audio
+    currentMusic.volume = 0.2
+
+    if (action === 'play') {
+        audio.pause();
+        audio.currentTime=0;
+        audio.play();
+    }
+    else if (action === 'pause') {
+        audio.pause();
+    }
+    else if (action === 'resume') {
+        audio.play();
+    }
+    else if (action === 'stop') {
+        audio.pause();
+        audio.currentTime=0;
+    }
 }
 
 function fadeFunc(func) {
@@ -89,7 +126,6 @@ function charSelect(){
 
 function startGame(){
     isStarted = true
-    playMusic()
     currentScreen = 'gameScreen'
     screens[currentScreen].init()
 	timer = 100
@@ -118,7 +154,7 @@ function turn(character, key, oppositKey, side) {
 }
 
 
-function _doActionNoSpam(attacker, type) {
+function _doActionNoSpam(attacker, type, timeout=40) {
     //Reset Timeout if function is called before it ends
     if (!(attacker.attackTimer == null)) {
         clearTimeout(attacker.attackTimer);
@@ -148,7 +184,7 @@ function _doActionNoSpam(attacker, type) {
                 attacker.meditate()
                 break
         }
-    }, 40); //40ms Timeout
+    }, timeout); //40ms Timeout
 };
 
 function _doFuncNoSpam(func, args) {

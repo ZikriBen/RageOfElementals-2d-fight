@@ -82,10 +82,10 @@ function enemyAI() {
     if (enemyAIOn) {
         if (rectCollision(player, enemy)) {
             if (player.isAttcking) {
-                if (Math.random() < 0.01) {
-                    enemy.defend();
-                    return;
-                }
+                // if (Math.random() < 0.01) {
+                //     enemy.defend();
+                //     return;
+                // }
             }
             enemy.velocity.x = 0;
             attack_seed = Math.random()
@@ -98,7 +98,8 @@ function enemyAI() {
                 if (enemy.velocity.y != 0)
                     _doActionNoSpam(enemy, 'air_attack');
                 else {
-                    _doActionNoSpam(enemy, 'attack1');
+                    _doActionNoSpam(enemy, 'attack1', 80);
+                    // enemy.attack1()
                 }
         } else {
             if (Math.random() < 0.04) {

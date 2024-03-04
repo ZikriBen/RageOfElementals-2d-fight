@@ -275,7 +275,6 @@ class Fighter extends ComplexSprite {
             return
         else
             if (this.animationName === "meditate" || this.mana < this.attackInfo.meditate.mana) {
-                // playSound(errorSound)
                 return
             }
             this.switchSprite('meditate')
