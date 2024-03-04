@@ -5,6 +5,16 @@ It uses it's own engine, world physics and hitbox mechanism.
   
 Now featuering new AI mode! :sunglasses:  
 
+## Instructions:
+|Action|1P/2P|
+|--------|--------|
+|Movement|WASD/Arrow Keys|
+|Attack|Space/Numpad 0|
+|Combo|Double/Triple click attack|
+|Special Attack|Q/Numpad 1|
+|Roll|Doubleclick left/right|
+|Meditate|R/Numpad 7|
+|Defend|E/Numpad 9|
 
 Move - 1P (WASD) | 2P (Arrow Keys)
 X - Attack / Pick Up Chair
