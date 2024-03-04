@@ -98,9 +98,7 @@ function enemyAI() {
                 if (enemy.velocity.y != 0)
                     _doActionNoSpam(enemy, 'air_attack');
                 else {
-
                     _doActionNoSpam(enemy, 'attack1');
-                    console.log('attack')
                 }
         } else {
             if (Math.random() < 0.04) {
