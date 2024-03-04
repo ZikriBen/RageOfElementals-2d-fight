@@ -208,25 +208,30 @@ class CharSelectCLS extends Screen{
     keyFunc(key) {
         switch (key) {
             case 'ArrowRight':
-                if (!this.enemySelected) 
-                this.arrow2Pos = this.moveArrow(this.arrow2, this.arrow2Pos, 1)
-                if (this.arrow1Pos == this.arrow2Pos)
-                        this.arrow2Pos = this.moveArrow(this.arrow2, this.arrow2Pos, 1)
+                if (gameMode === 'pvp') {
+                    if (!this.enemySelected) 
+                    this.arrow2Pos = this.moveArrow(this.arrow2, this.arrow2Pos, 1)
+                    if (this.arrow1Pos == this.arrow2Pos)
+                            this.arrow2Pos = this.moveArrow(this.arrow2, this.arrow2Pos, 1)
+                }
                 break
             case 'ArrowLeft':
-                if (!this.enemySelected) 
-                    this.arrow2Pos = this.moveArrow(this.arrow2, this.arrow2Pos, -1)
-                    if (this.arrow1Pos == this.arrow2Pos)
+                if (gameMode === 'pvp') {
+                    if (!this.enemySelected) 
                         this.arrow2Pos = this.moveArrow(this.arrow2, this.arrow2Pos, -1)
+                        if (this.arrow1Pos == this.arrow2Pos)
+                            this.arrow2Pos = this.moveArrow(this.arrow2, this.arrow2Pos, -1)
+                }
                 break
             case 'Enter':
-                this.enemyFighter = this.fighters[this.arrow2Pos]
-                this.enemySelected = true
-                this.arrow2.framsHold = 0
-                console.log(this.enemyFighter.name)
-                this.invokeSelection()
+                if (gameMode === 'pvp') {
+                    this.enemyFighter = this.fighters[this.arrow2Pos]
+                    this.enemySelected = true
+                    this.arrow2.framsHold = 0
+                    console.log(this.enemyFighter.name)
+                    this.invokeSelection()
+                }
                 break
-            
             case 'd':
                 if (!this.playerSelected) 
                     this.arrow1Pos = this.moveArrow(this.arrow1, this.arrow1Pos, 1)
@@ -269,11 +274,17 @@ class CharSelectCLS extends Screen{
     invokeSelection() {
         playSound(this.selectSound)
         if (this.playerSelected && this.enemySelected) {
-            let randomEnemy = Math.floor(Math.random() * (this.characters.length + 1) + 0)
-            if (randomEnemy === this.arrow1Pos)
-                randomEnemy = (randomEnemy + 1) % this.characters.length
+            let tempEnemySelection = 0
+            if (gameMode === 'pvp') {
+                tempEnemySelection = this.arrow2Pos
+            }
+            else {
+                tempEnemySelection = Math.floor(Math.random() * (this.characters.length + 1) + 0)
+                if (tempEnemySelection === this.arrow1Pos)
+                tempEnemySelection = (tempEnemySelection + 1) % this.characters.length
+            }
             this.selectedPlayer = this.fighters[this.arrow1Pos]
-            this.selectedEnemy = this.fighters[randomEnemy]
+            this.selectedEnemy = this.fighters[tempEnemySelection]
             this.delete()
             _doFuncNoSpam(fadeFunc, startGame)
         }
