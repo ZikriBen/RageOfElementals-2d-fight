@@ -28,6 +28,8 @@ Should be good in latest Firefox, Edge, Chrome, Opera, and IE.
 
 ## What's next?
  - Network VS Mode - invite a friend to play in a VS mode over the network
+ - Adding mobile support
+ - Add options such as game difficulty, sound vibration etc.
 
 ## License
 
