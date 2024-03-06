@@ -199,7 +199,7 @@ class Fighter extends ComplexSprite {
         if (this.animationName === "sp_attack1") {
             return
         }
-        this.switchSprite(this.attackInfo.attack.name)
+        this.switchSprite(this.attackInfo.attack.name, true)
         this.attackBox.width = this.attackInfo.attack.attackBox.width
         this.attackBox.height = this.attackInfo.attack.attackBox.height
         this.attackBox.offset = this.attackInfo.attack.attackBox.offset
@@ -349,7 +349,7 @@ class Fighter extends ComplexSprite {
 
     switchSprite(sprite, force) {
         
-        if (force) {
+        if (force && this.animationName !== 'death') {
             this.changeAnimationName(sprite, this.facing)
             this.framesMax = this.spriteAnimations[this.animationName].loc.length
             this.currentFrame = 0

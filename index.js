@@ -74,18 +74,22 @@ const screens = {
 }
 screens[currentScreen].init() // # Original
 
+// screens['charSelectScreen'].init()
 // screens['gameScreen'].init()
+// gameMode = 'pve'
+// currentScreen = 'gameScreen'
+
 setTimeout(() => { enemyAIOn= true }, 1500)
 
 function enemyAI() {
     const distanceX = player.position.x - enemy.position.x;
     if (enemyAIOn) {
         if (rectCollision(player, enemy)) {
-            if (player.isAttcking) {
-                // if (Math.random() < 0.01) {
-                //     enemy.defend();
-                //     return;
-                // }
+            if (player.isAttcking && player.currentFrame < 2) {
+                if (Math.random() < 0.015) {
+                    enemy.defend();
+                    return;
+                }
             }
             enemy.velocity.x = 0;
             attack_seed = Math.random()
