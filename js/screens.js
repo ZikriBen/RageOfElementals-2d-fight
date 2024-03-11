@@ -32,8 +32,10 @@ class StartScreenCLS extends Screen{
     }
 
     init() {
-        this.mainSprite = this.logo = new BaseSprite({position: {x: 240, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
+        this.mainSprite = this.logo = new BaseSprite({position: {x: 350, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
         this.instructions = new BaseSprite({position: {x: 150, y: 60}, imagesSrc: './img/instructions.png', scale: 2.5, framesMax: 1})
+        document.querySelector('#baseDiv').style.width = compCanvasWidth
+        document.querySelector('#baseDiv').style.height = compCanvasHeight
         
         this.handleTouch = this.handleTouch.bind(this);
         this.startPveBtn = document.getElementById('start_pve_btn');
@@ -44,7 +46,7 @@ class StartScreenCLS extends Screen{
         this.startPveBtn.addEventListener('touchstart', this.handleTouch);
         this.startPvpBtn.addEventListener('touchstart', this.handleTouch);
         this.infoBtn.addEventListener('touchstart', this.handleTouch);
-
+        
         document.querySelector('#start_pve_btn').style.display = 'block'
         document.querySelector('#start_pve_btn').style.left = '42%'
         document.querySelector('#start_pve_btn').value = '• 1P vs PC •'
@@ -240,9 +242,14 @@ class CharSelectCLS extends Screen{
     delete() {
         this.playerSelected = false
         this.enemySelected = false
+
+        // Arrows
+        this.touchArrowLeft.style.display = 'none'
+        this.touchArrowRight.style.display = 'none'
+        this.touchArrowLeft.removeEventListener('touchstart', this.handleTouchLeft)
+        this.touchArrowRight.removeEventListener('touchstart', this.handleTouchRight)
+        
         this.circleButton.removeEventListener('touchstart', this.handleTouchCircle)
-        // this.touchArrowLeft.removeEventListener('touchstart', this.handleTouchLeft)
-        // this.touchArrowRight.removeEventListener('touchstart', this.handleTouchRight)
         document.querySelector('#displayText').style.display = 'none'
     }
 
@@ -392,43 +399,44 @@ class GameScreenCLS extends Screen{
         this.touchArrowLeft
         this.touchArrowRight
         this.circleButton
-        // this.joystick
+        this.joystick
     }
 
     init(playerFighter, enemyFighter) {
         console.log("Game screen init")
         const canvas = document.getElementById('canvas1'); // replace 'canvas1' with the actual ID of your canvas element
-        const computedStyle = window.getComputedStyle(canvas);
-
-        const canvasWidth = parseFloat(computedStyle.width);
-        const canvasHeight = parseFloat(computedStyle.height);
-        console.log(canvasWidth)
-        console.log(canvasHeight)
-        // this.joystick = new Joystick(80, canvasHeight - 80, 50, 25)
-       
-        this.handleTouchLeft = this.handleTouchLeft.bind(this);
-        this.handleTouchRight = this.handleTouchRight.bind(this);
-        this.touchArrowLeft = document.getElementById('leftArrow');
-        this.touchArrowRight = document.getElementById('rightArrow');
         
-        this.touchArrowLeft.addEventListener('touchstart', this.handleTouchLeft);
-        this.touchArrowRight.addEventListener('touchstart', this.handleTouchRight);
+        document.querySelector('#healthBars').style.width = compCanvasWidth
+        const scaleX = canvas.width / compCanvasWidth
+        const scaleY = canvas.height / compCanvasHeight
+        // Joystick
+        this.joystick = new Joystick(80, compCanvasHeight-50, 50, 25, scaleX, scaleY)
         
-        this.touchArrowLeft.addEventListener('touchend', this.handleTouchEndLeft);
-        this.touchArrowRight.addEventListener('touchend', this.handleTouchEndRight);
+        // Arrows
+        // this.handleTouchLeft = this.handleTouchLeft.bind(this);
+        // this.handleTouchRight = this.handleTouchRight.bind(this);
+        // this.touchArrowLeft = document.getElementById('leftArrow');
+        // this.touchArrowRight = document.getElementById('rightArrow');
+        
+        // this.touchArrowLeft.addEventListener('touchstart', this.handleTouchLeft);
+        // this.touchArrowRight.addEventListener('touchstart', this.handleTouchRight);
+        // this.touchArrowLeft.addEventListener('touchend', this.handleTouchEndLeft);
+        // this.touchArrowRight.addEventListener('touchend', this.handleTouchEndRight);
 
+        
+        // Circle Button
         this.handleTouchCircle = this.handleTouchCircle.bind(this);
         this.circleButton = document.getElementById('circleButton1');
         this.circleButton.addEventListener('touchstart', this.handleTouchCircle);
         
         if (this.gameBackgorunds.length === 0) {
             for (let i = 0; i < this.bgs.length; i++){
-                this.gameBackgorunds.push(new BaseSprite({position: {x: 0, y: 0}, imagesSrc: this.bgs[i]}))
+                this.gameBackgorunds.push(new SingleBG(this.ctx, this.bgs[i], this.canvasWidth, this.canvasHeight))
+                // this.gameBackgorunds.push(new TestBG(this.ctx, this.canvasWidth, this.canvasHeight))
             }
         }
          
         this.gameBackgorund = this.gameBackgorunds[Math.floor(Math.random() * this.gameBackgorunds.length)]
-        // this.shop = new BaseSprite({position: {x: 625, y: 160}, imagesSrc: './img/shop.png', scale: 2.5, framesMax: 6})
         
         this.player = new Fighter({
             position: {x: 250, y: 0}, 
@@ -474,7 +482,7 @@ class GameScreenCLS extends Screen{
         this.playerScore = 0
         this.enemyScore = 0
 
-        document.querySelector('#health_bars').style.display = 'flex'
+        document.querySelector('#healthBars').style.display = 'flex'
         document.querySelector('#player_health_bar').style.display = 'flex'
         document.querySelector('#enemy_health_bar').style.display = 'flex'
         document.querySelector('#start_pve_btn').style.display = 'none'
@@ -510,26 +518,30 @@ class GameScreenCLS extends Screen{
         clearInterval(this.manaInterval)
         clearInterval(this.timerInterval)
         
-        this.touchArrowLeft.removeEventListener('touchstart', this.handleTouchLeft);
-        this.touchArrowRight.removeEventListener('touchstart', this.handleTouchRight);
+        // Arrows
+        // this.touchArrowLeft.style.display = 'none'
+        // this.touchArrowRight.style.display = 'none'
         
-        this.touchArrowLeft.removeEventListener('touchend', this.handleTouchEndLeft);
-        this.touchArrowRight.removeEventListener('touchend', this.handleTouchEndRight);
-
-        this.circleButton.removeEventListener('touchstart', this.handleTouchCircle);
-        this.touchArrowLeft.style.display = 'none'
-        this.touchArrowRight.style.display = 'none'
+        // this.touchArrowLeft.removeEventListener('touchstart', this.handleTouchLeft);
+        // this.touchArrowRight.removeEventListener('touchstart', this.handleTouchRight);
+        
+        // this.touchArrowLeft.removeEventListener('touchend', this.handleTouchEndLeft);
+        // this.touchArrowRight.removeEventListener('touchend', this.handleTouchEndRight);
+        
+        // Circle Button
         this.circleButton.style.display = 'none'
+        this.circleButton.removeEventListener('touchstart', this.handleTouchCircle);
+
     }
 
     draw() {
-        this.gameBackgorund.update()
+        this.gameBackgorund.draw()
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'
         this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
         this.player.update();
         this.enemy.update();
-        // this.joystick.update()
-        // this.keyFunc(this.joystick.lastDirection)
+        this.joystick.update()
+        this.keyFunc(this.joystick.lastDirection)
     }
     handleTouchLeft(event) {
         event.preventDefault();
@@ -757,7 +769,7 @@ class GameOverScreenCLS extends Screen{
     init() {
         document.querySelector('#displayText').style.display = 'flex'
         document.querySelector('#displayText').innerHTML = 'Game Over'
-        document.querySelector('#health_bars').style.display = 'none'
+        document.querySelector('#healthBars').style.display = 'none'
         document.querySelector('#player_health_bar').style.display = 'none'
         document.querySelector('#enemy_health_bar').style.display = 'none'
         this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)

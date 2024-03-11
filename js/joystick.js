@@ -1,13 +1,13 @@
 function circle(pos, radius, color) {
     c.beginPath();
     c.fillStyle = color;
-    c.arc(pos.x, pos.y + 130, radius, 0, Math.PI * 2);
+    c.arc(pos.x * 1.39, pos.y * 1.39, radius, 0, Math.PI * 2);
     c.fill();
     c.closePath();
 }
 
 class Joystick {
-    constructor(x, y, radius, handleRadius) {
+    constructor(x, y, radius, handleRadius, scaleX, scaleY) {
         this.pos = new Vector2(x, y);
         this.origin = new Vector2(x, y);
         this.radius = radius;
@@ -17,6 +17,8 @@ class Joystick {
         this.touchPos = new Vector2(0, 0);
         this.listener();
         this.lastDirection = null;
+        this.scaleX = scaleX;
+        this.scaleY = scaleY
     }
     listener() {
 	// Touch Events
@@ -24,6 +26,7 @@ class Joystick {
             // e.preventDefault();
             
             this.touchPos = new Vector2(e.touches[0].pageX, e.touches[0].pageY);
+            console.log(e.touches)
             console.log(this.touchPos)
             console.log(this.origin)
             console.log(this.touchPos.sub(this.origin).mag())
@@ -40,22 +43,19 @@ class Joystick {
             this.touchPos = new Vector2(e.touches[0].pageX, e.touches[0].pageY);
         });
 	// Mouse Events
-	addEventListener('mousedown', e => {
-        e.preventDefault();
-        this.touchPos = new Vector2(e.layerX, e.layerY);
-        console.log(this.touchPos)
-        console.log(this.origin)
-        console.log(this.touchPos.sub(this.origin).mag())
-        if (this.touchPos.sub(this.origin).mag() <= this.radius) this.ondrag = true;
-        });
-        addEventListener('mouseup', e => {
-            e.preventDefault();
-            this.ondrag = false;
-        });
-        addEventListener('mousemove', e => {
-            e.preventDefault();
-            this.touchPos = new Vector2(e.layerX, e.layerY);
-        });
+	// addEventListener('mousedown', e => {
+    //     e.preventDefault();
+    //     this.touchPos = new Vector2(e.layerX, e.layerY);
+    //     if (this.touchPos.sub(this.origin).mag() <= this.radius) this.ondrag = true;
+    //     });
+    //     addEventListener('mouseup', e => {
+    //         e.preventDefault();
+    //         this.ondrag = false;
+    //     });
+    //     addEventListener('mousemove', e => {
+    //         e.preventDefault();
+    //         this.touchPos = new Vector2(e.layerX, e.layerY);
+    //     });
     }
     reposition() {
         if (this.ondrag == false) {
@@ -96,9 +96,9 @@ class Joystick {
 
     draw() {
         // Draw Joystick
-        circle(this.origin, this.radius, '#707070');
+        circle(this.origin, this.radius, '#707070', this.scaleX, this.scaleY);
         // Draw Handle
-        circle(this.pos, this.handleRadius, '#3d3d3d');
+        circle(this.pos, this.handleRadius, '#3d3d3d', this.scaleX, this.scaleY);
     }
     update() {
         this.getDirection();

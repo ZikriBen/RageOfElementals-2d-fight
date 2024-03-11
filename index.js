@@ -1,7 +1,14 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
-canvas.width  = 1024
+canvas.width  = 1277
 canvas.height = 576
+
+const computedStyle = window.getComputedStyle(canvas);
+
+const compCanvasWidth = parseFloat(computedStyle.width);
+const compCanvasHeight =  parseFloat(computedStyle.height);
+console.log(compCanvasWidth)
+console.log(compCanvasHeight)
 
 const overlay = {
     opacity: 0
