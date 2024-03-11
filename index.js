@@ -134,7 +134,6 @@ function animate() {
     window.requestAnimationFrame(animate);
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
-    
     screens[currentScreen].draw()
 
     if (player && enemy) {
@@ -207,7 +206,7 @@ function animate() {
                 enemy.health = 0
             }
         }
-
+        
         // Detect Colision enemy attackBox
         if (rectCollision(enemy, player) && enemy.isAttcking && enemy.currentFrame === enemy.attackFrame) {
             player.takeHit(enemy.currentForce)
@@ -220,11 +219,12 @@ function animate() {
         // Charcters Health hanlder
         document.querySelector('#enemyHealth').style.width = enemy.health + '%'
         document.querySelector('#playerHealth').style.width = player.health + '%'
-
+        
         if (GameScreenIns.isStarted && (enemy.health <= 0 || player.health <= 0)) {
             enemyAIOn = false
             GameScreenIns.determineWinner()
         }
+        
     }
 
     // Fade effect between screens
@@ -242,5 +242,6 @@ window.addEventListener('keydown', (event) => {
 window.addEventListener('keyup', (event) => {
     keyUpFunc(event.key)
 })
+
 
 animate()

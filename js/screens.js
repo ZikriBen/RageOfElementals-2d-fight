@@ -26,11 +26,25 @@ class StartScreenCLS extends Screen{
         this.selections = [' 1P vs PC ', ' 1P vs 2P ', ' Controls ']
         this.currentSelection = 0
         this.interval
+        this.startPveBtn
+        this.startPvpBtn
+        this.infoBtn
     }
 
     init() {
         this.mainSprite = this.logo = new BaseSprite({position: {x: 240, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
         this.instructions = new BaseSprite({position: {x: 150, y: 60}, imagesSrc: './img/instructions.png', scale: 2.5, framesMax: 1})
+        
+        this.handleTouch = this.handleTouch.bind(this);
+        this.startPveBtn = document.getElementById('start_pve_btn');
+        this.startPvpBtn = document.getElementById('start_pvp_btn');
+        this.infoBtn = document.getElementById('info_btn');
+
+        // Add touchstart event listeners to the buttons
+        this.startPveBtn.addEventListener('touchstart', this.handleTouch);
+        this.startPvpBtn.addEventListener('touchstart', this.handleTouch);
+        this.infoBtn.addEventListener('touchstart', this.handleTouch);
+
         document.querySelector('#start_pve_btn').style.display = 'block'
         document.querySelector('#start_pve_btn').style.left = '42%'
         document.querySelector('#start_pve_btn').value = '• 1P vs PC •'
@@ -128,6 +142,28 @@ class StartScreenCLS extends Screen{
             this.showInstructions()
         }
     }
+
+    // Function to handle touch events
+    handleTouch(event) {
+        // Prevent the default behavior to avoid unwanted interactions
+        event.preventDefault();
+
+        // Your code to handle the touch event goes here
+        console.log('Button touched:', event.target.id);
+        if (event.target.id === 'start_pvp_btn') {
+            _doFuncNoSpam(fadeFunc, charSelect)
+            gameMode = 'pvp'
+            this.delete()
+        }
+        else if (event.target.id === 'start_pve_btn') {
+            _doFuncNoSpam(fadeFunc, charSelect)
+            gameMode = 'pve'
+            this.delete()
+        }
+        else {
+            this.showInstructions()
+        }
+    }
 }
 
 class CharSelectCLS extends Screen{
@@ -149,6 +185,9 @@ class CharSelectCLS extends Screen{
         this.power = []
         this.hp = []
         this.names = []
+        this.touchArrowLeft
+        this.touchArrowRight
+        this.circleButton
     }
 
     init() {
@@ -158,9 +197,25 @@ class CharSelectCLS extends Screen{
         this.charStartPos = -220
         document.querySelector('#start_pve_btn').style.display = 'none'
         document.querySelector('#start_pvp_btn').style.display = 'none'
+        
         document.querySelector('#displayText').style.display = 'flex'
         document.querySelector('#displayText').style.top = '-200'
         document.querySelector('#displayText').innerHTML = 'Select Character:'
+
+        document.querySelector('#leftArrow').style.display = 'inline'
+        document.querySelector('#rightArrow').style.display = 'inline'
+        document.querySelector('#circleButton1').style.display = 'inline'
+        
+        this.handleTouchLeft = this.handleTouchLeft.bind(this);
+        this.handleTouchRight = this.handleTouchRight.bind(this);
+        this.touchArrowLeft = document.getElementById('leftArrow');
+        this.touchArrowRight = document.getElementById('rightArrow');
+        this.touchArrowLeft.addEventListener('touchstart', this.handleTouchLeft);
+        this.touchArrowRight.addEventListener('touchstart', this.handleTouchRight);
+
+        this.handleTouchCircle = this.handleTouchCircle.bind(this);
+        this.circleButton = document.getElementById('circleButton1');
+        this.circleButton.addEventListener('touchstart', this.handleTouchCircle);
         
         this.arrow1 = new BaseSprite({position: {x: this.arrowStartPos, y: 235}, imagesSrc: './img/arrow_p1p.png', scale: 0.3, framesMax: 5})
         this.arrow2 = new BaseSprite({position: {x: this.arrowStartPos + this.charOffset, y: 235}, imagesSrc: './img/arrow_p2p.png', scale: 0.3, framesMax: 5, framsHold: 3})
@@ -185,6 +240,9 @@ class CharSelectCLS extends Screen{
     delete() {
         this.playerSelected = false
         this.enemySelected = false
+        this.circleButton.removeEventListener('touchstart', this.handleTouchCircle)
+        // this.touchArrowLeft.removeEventListener('touchstart', this.handleTouchLeft)
+        // this.touchArrowRight.removeEventListener('touchstart', this.handleTouchRight)
         document.querySelector('#displayText').style.display = 'none'
     }
 
@@ -207,7 +265,18 @@ class CharSelectCLS extends Screen{
             this.characters[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].idle_png
 
     }
-
+    handleTouchLeft(event) {
+        event.preventDefault();
+        this.keyFunc('a')
+    }
+    handleTouchRight(event) {
+        event.preventDefault();
+        this.keyFunc('d')
+    }
+    handleTouchCircle(event) {
+        event.preventDefault();
+        this.keyFunc(' ')
+    }
     keyFunc(key) {
         switch (key) {
             case 'ArrowRight':
@@ -320,10 +389,37 @@ class GameScreenCLS extends Screen{
         this.timerInterval
         this.bgs = ['./img/bgs/background-fire.png', './img/bgs/background-metal.png', './img/bgs/background-water.png', './img/bgs/background-wind.png', './img/bgs/background-ground.png',]
         this.gameBackgorunds = []
+        this.touchArrowLeft
+        this.touchArrowRight
+        this.circleButton
+        // this.joystick
     }
 
     init(playerFighter, enemyFighter) {
         console.log("Game screen init")
+        const canvas = document.getElementById('canvas1'); // replace 'canvas1' with the actual ID of your canvas element
+        const computedStyle = window.getComputedStyle(canvas);
+
+        const canvasWidth = parseFloat(computedStyle.width);
+        const canvasHeight = parseFloat(computedStyle.height);
+        console.log(canvasWidth)
+        console.log(canvasHeight)
+        // this.joystick = new Joystick(80, canvasHeight - 80, 50, 25)
+       
+        this.handleTouchLeft = this.handleTouchLeft.bind(this);
+        this.handleTouchRight = this.handleTouchRight.bind(this);
+        this.touchArrowLeft = document.getElementById('leftArrow');
+        this.touchArrowRight = document.getElementById('rightArrow');
+        
+        this.touchArrowLeft.addEventListener('touchstart', this.handleTouchLeft);
+        this.touchArrowRight.addEventListener('touchstart', this.handleTouchRight);
+        
+        this.touchArrowLeft.addEventListener('touchend', this.handleTouchEndLeft);
+        this.touchArrowRight.addEventListener('touchend', this.handleTouchEndRight);
+
+        this.handleTouchCircle = this.handleTouchCircle.bind(this);
+        this.circleButton = document.getElementById('circleButton1');
+        this.circleButton.addEventListener('touchstart', this.handleTouchCircle);
         
         if (this.gameBackgorunds.length === 0) {
             for (let i = 0; i < this.bgs.length; i++){
@@ -413,6 +509,17 @@ class GameScreenCLS extends Screen{
         this.enemy = null
         clearInterval(this.manaInterval)
         clearInterval(this.timerInterval)
+        
+        this.touchArrowLeft.removeEventListener('touchstart', this.handleTouchLeft);
+        this.touchArrowRight.removeEventListener('touchstart', this.handleTouchRight);
+        
+        this.touchArrowLeft.removeEventListener('touchend', this.handleTouchEndLeft);
+        this.touchArrowRight.removeEventListener('touchend', this.handleTouchEndRight);
+
+        this.circleButton.removeEventListener('touchstart', this.handleTouchCircle);
+        this.touchArrowLeft.style.display = 'none'
+        this.touchArrowRight.style.display = 'none'
+        this.circleButton.style.display = 'none'
     }
 
     draw() {
@@ -421,8 +528,29 @@ class GameScreenCLS extends Screen{
         this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
         this.player.update();
         this.enemy.update();
+        // this.joystick.update()
+        // this.keyFunc(this.joystick.lastDirection)
     }
-
+    handleTouchLeft(event) {
+        event.preventDefault();
+        this.keyFunc('a')
+    }
+    handleTouchRight(event) {
+        event.preventDefault();
+        this.keyFunc('d')
+    }
+    handleTouchEndLeft(event) {
+        event.preventDefault();
+        keyUpFunc('a')
+    }
+    handleTouchEndRight(event) {
+        event.preventDefault();
+        keyUpFunc('d')
+    }
+    handleTouchCircle(event) {
+        event.preventDefault();
+        this.keyFunc(' ')
+    }
     keyFunc(key) {
         if (!this.player.isDead) {
             this.player.determineCombo(key)
@@ -435,7 +563,7 @@ class GameScreenCLS extends Screen{
                     break
                 case 'w':
                     if (this.player.animationName !== "death") 
-                        this.player.velocity.y = -18
+                        this.player.velocity.y = -10
                     break
                 case 'e':
                     this.player.defend()
@@ -635,6 +763,8 @@ class GameOverScreenCLS extends Screen{
         this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
         this.ctx.fillStyle = 'black'
         this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
+        this.handleTouchStart = this.handleTouchStart.bind(this);
+        document.addEventListener('touchstart', this.handleTouchStart);
         
         setTimeout(() => {
             document.querySelector('#start_pve_btn').style.display = 'block'
@@ -649,6 +779,11 @@ class GameOverScreenCLS extends Screen{
     delete() {
         document.querySelector('#start_pve_btn').value = ' '
         document.querySelector('#displayText').style.display = 'none'
+        document.removeEventListener('touchstart', this.handleTouchStart);
+    }
+
+    handleTouchStart() {
+        this.keyFunc(' ')
     }
 
     draw() {

@@ -6,6 +6,8 @@
         * {
             box-sizing: border-box;
             font-family: 'Press Start 2P', cursive;
+            margin: 0;
+            padding: 0;
         }
         audio, embed {
             position: absolute;
@@ -13,6 +15,29 @@
         }
         body {
             background: radial-gradient(rgb(206, 206, 206), rgb(235, 235, 235));
+        }
+        canvas {
+            display: block;
+        }
+        @media (max-width: 1044px) {
+            canvas {
+                display: block;
+                width: 100vw; 
+                height: 100vh;
+                border: 10px solid white; 
+                margin: 0 auto;
+            }
+        }
+        @media (min-width: 1044px) {
+            #baseDiv {
+                position: absolute; 
+                display: inline-block;
+                width: 1024px;
+                height: 576px;top: 50%;
+                right: 50%;
+                margin-top: -512px;
+                margin-right:-512px;
+            }
         }
         footer {
             border-top: 1px solid #e6e6e6;
@@ -37,11 +62,54 @@
         footer p a:hover {
             text-decoration: underline;
         }
+        .arrow-button {
+            position: absolute;
+            bottom: 30px; /* Adjusted to raise the triangles */
+            width: 0;
+            height: 0;
+            cursor: pointer;
+            background-color: transparent;
+            border-style: solid;
+            outline: none;
+        }
+
+        #leftArrow {
+            left: 20px; /* Adjusted to move it righter */
+            border-width: 45px 70px 45px 0; /* Adjusted for a larger triangle */
+            border-color: transparent rgba(255, 255, 255, 0.5) transparent transparent;
+
+        }
+
+        #rightArrow {
+            left: 120px; /* Adjust the spacing between triangles */
+            border-width: 45px 0 45px 70px; /* Adjusted for a larger triangle */
+            border-color: transparent transparent transparent rgba(255, 255, 255, 0.5);
+
+        }
+        .circle-button {
+            position: absolute;
+            bottom: 30px;
+            width: 80px; /* Adjust the size of the circular buttons */
+            height: 80px; /* Adjust the size of the circular buttons */
+            background-color: rgba(255, 255, 255, 0.5); /* Solid white with 50% transparency */    
+            border-radius: 50%; /* Make the button circular */
+        }
+
+        #circleButton1 {
+            right: 20px; /* Adjust the distance from the right side */
+        }
+
+        #circleButton2 {
+            right: 120px; /* Adjust the distance from the right side */
+        }
+        .circle-button:active {
+            outline: none; /* Remove outline on click */
+        }
 
     </style>
 </head>
 <body> 
-    <div style="position: absolute; display: inline-block;width: 1024px;height: 576px;top: 50%;right: 50%;margin-top: -512px;margin-right:-512px;">
+    <div id="baseDiv">
         
         <div id="health_bars" style="position: absolute; display:none; width: 100%; align-items: center; padding: 20px;">
             <!-- Player Health -->    
@@ -69,24 +137,31 @@
             </div>
         </div>
         <div id="displayText" style="position: absolute; color: white; align-items: center; justify-content: center; top: 0; bottom: 0; left: 0; right:0; display: none">Tie</div>
-        <canvas style="border: 10px solid white"></canvas>
-        <input id="start_pve_btn" type="button" style="display:none; position: absolute; left: 42%; top: 450px;color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="press ENTER/SPACE to start" onclick="startGame()" disabled/>
-        <input id="start_pvp_btn" type="button" style="display:none; position: absolute; left: 42%; top: 480px;color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="press ENTER/SPACE to start" onclick="startGame()" disabled/>
-        <input id="info_btn" type="button" style="display:none; position: absolute; left: 42%; top: 510px;color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="Controls" onclick="startGame()" disabled/>
+        <canvas id="canvas1" style="border: 10px solid white"></canvas>
+        <input id="start_pve_btn" type="button" style="display:none; position: absolute; left: 42%; top: 78%;color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="press ENTER/SPACE to start" onclick="startGame()" disabled/>
+        <input id="start_pvp_btn" type="button" style="display:none; position: absolute; left: 42%; top: 83%;color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="press ENTER/SPACE to start" onclick="startGame()" disabled/>
+        <input id="info_btn" type="button" style="display:none; position: absolute; left: 42%; top: 88%;color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="Controls" onclick="startGame()" disabled/>
+        
+        <!-- Add mobile buttons -->
+        <button id="leftArrow" class="arrow-button" style="display: none;""></button>
+        <button id="rightArrow" class="arrow-button" style="display: none;""></button>
+        <button id="circleButton1" class="circle-button" style="display:none; border:none;"></button>
+        <button id="circleButton2" class="circle-button" style="display:none; border:none;"></button>
+
         <a href="#" onclick="toggleMusic()">
-            <svg id="soundSvg" style="width: 2.5%; height: 5%; position: absolute;bottom: 0; right: 0; color: white;">
+            <svg id="soundSvg" style="width: 3%; height: 6%; position: absolute;bottom: 3%; right: 1.2%;">
                 <path id="svgPath" d="M13 2h-2v2H9v2H7v2H3v8h4v2h2v2h2v2h2V2zM9 18v-2H7v-2H5v-4h2V8h2V6h2v12H9zm10-6.777h-2v-2h-2v2h2v2h-2v2h2v-2h2v2h2v-2h-2v-2zm0 0h2v-2h-2v2z" fill="#ffab00"/>
             </svg>
           </a>
-        <footer>
-            <p class="copyright">&copy; by <a href="https://www.linkedin.com/in/ben-zikri-a70633194/" target="_blank" rel="external">Ben Zikri</a> source code at <a href="https://github.com/ZikriBen/RageOfElementals-2d-fight" target="_blank" rel="external">GitHub</a>.</p>
-        </footer>
+        
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js" integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/joystick.js"></script>
+    <script src="js/vector.js"></script>
     <script src="js/classes.js"></script>
     <script src="js/screens.js"></script>
     <script src="js/fighters.js"></script>
-    <script src="js/utils.js"></script>
     <script src="index.js"></script>
 </body>
