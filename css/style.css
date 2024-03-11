@@ -1,0 +1,173 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Press Start 2P', cursive;
+    margin: 0;
+    padding: 0;
+}
+
+audio,
+embed {
+    position: absolute;
+    z-index: -9999;
+}
+
+body {
+    background: radial-gradient(rgb(206, 206, 206), rgb(235, 235, 235));
+}
+#canvas1 {
+    display: block;
+    border: 10px solid white
+}
+@media (max-width: 1044px) {
+    canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+        border: 10px solid white;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 1044px) {
+    #baseDiv {
+        position: absolute;
+        display: inline-block;
+        width: 1024px;
+        height: 576px;
+        top: 50%;
+        right: 50%;
+        margin-top: -512px;
+        margin-right: -512px;
+    }
+}
+#displayText {
+    position: absolute; color: white; align-items: center; justify-content: center; top: 0; bottom: 0; left: 0; right:0; display: none
+}
+footer {
+    border-top: 1px solid #e6e6e6;
+    display: block;
+    padding-top: 10px;
+    margin: 20px auto;
+    width: 400px;
+}
+
+footer p {
+    text-align: center;
+    color: #909090;
+    font-size: 8px;
+}
+
+#health_bars {
+    position: absolute;
+    display: none;
+    width: 100%;
+    align-items: center;
+    padding: 20px;
+}
+
+.missingHealth {
+    background-color: red; height: 40px; width: 100%;
+}
+.health {
+    position: absolute; background: #818CF9; top: 0; bottom: 0; right: 0; left: 0;
+}
+.healthBar {
+    position: relative; width: 100%; border: 4px solid white; 
+}
+.mana {
+    position: absolute; background: #292f68; top: 30; bottom: 0; right: 0; left: 0; width: 100%;
+}
+.name {
+    position: absolute; top: 50; left: 0%; left: 0%;
+}
+
+.score1 {
+    font-size: 25px; color:#440000; position: absolute; top: 110%; right: 5%;
+}
+.score2 {
+    font-size: 25px; color:#440000; position: absolute; top: 110%; right: 0%;
+}
+
+#timer {
+    background-color: black; height: 60px; width: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: white;border: 4px solid white;
+}
+.startBtns {
+    display:none; position: absolute; left: 42%; color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;
+}
+#start_pve_btn {
+    top: 78%;
+}
+#start_pvp_btn {
+    top: 83%;
+}
+#info_btn {
+    top: 88%;
+}
+footer p a {
+    text-decoration: none;
+    color: #909090;
+    font-size: 8px;
+}
+
+footer p a:hover {
+    text-decoration: underline;
+}
+
+.arrow-button {
+    position: absolute;
+    bottom: 30px;
+    width: 0;
+    height: 0;
+    cursor: pointer;
+    background-color: transparent;
+    border-style: solid;
+    outline: none;
+    display: none;
+}
+
+#leftArrow {
+    left: 20px;
+    border-width: 45px 70px 45px 0;
+    border-color: transparent rgba(255, 255, 255, 0.5) transparent transparent;
+
+}
+
+#rightArrow {
+    left: 120px;
+    border-width: 45px 0 45px 70px;
+    border-color: transparent transparent transparent rgba(255, 255, 255, 0.5);
+
+}
+
+.circle-button {
+    position: absolute;
+    display: none;
+    border: none;
+    bottom: 30px;
+    width: 80px;
+    /* Adjust the size of the circular buttons */
+    height: 80px;
+    /* Adjust the size of the circular buttons */
+    background-color: rgba(255, 255, 255, 0.5);
+    /* Solid white with 50% transparency */
+    border-radius: 50%;
+    /* Make the button circular */
+}
+
+#circleButton1 {
+    right: 20px;
+    /* Adjust the distance from the right side */
+}
+
+#circleButton2 {
+    right: 120px;
+    /* Adjust the distance from the right side */
+}
+
+.circle-button:active {
+    outline: none;
+    /* Remove outline on click */
+}
+#soundSvg {
+    width: 3%; height: 6%; position: absolute;bottom: 3%; right: 1.2%;
+}

@@ -2,154 +2,50 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Press Start 2P', cursive;
-            margin: 0;
-            padding: 0;
-        }
-        audio, embed {
-            position: absolute;
-            z-index: -9999;
-        }
-        body {
-            background: radial-gradient(rgb(206, 206, 206), rgb(235, 235, 235));
-        }
-        canvas {
-            display: block;
-        }
-        @media (max-width: 1044px) {
-            canvas {
-                display: block;
-                width: 100vw; 
-                height: 100vh;
-                border: 10px solid white; 
-                margin: 0 auto;
-            }
-        }
-        @media (min-width: 1044px) {
-            #baseDiv {
-                position: absolute; 
-                display: inline-block;
-                width: 1024px;
-                height: 576px;top: 50%;
-                right: 50%;
-                margin-top: -512px;
-                margin-right:-512px;
-            }
-        }
-        footer {
-            border-top: 1px solid #e6e6e6;
-            display: block;
-            padding-top: 10px;
-            margin: 20px auto;
-            width: 400px;
-            }
-
-        footer p {
-            text-align: center;
-            color: #909090;
-            font-size: 8px;
-        }
-
-        footer p a {
-            text-decoration: none;
-            color: #909090;
-            font-size: 8px;
-        }
-
-        footer p a:hover {
-            text-decoration: underline;
-        }
-        .arrow-button {
-            position: absolute;
-            bottom: 30px; /* Adjusted to raise the triangles */
-            width: 0;
-            height: 0;
-            cursor: pointer;
-            background-color: transparent;
-            border-style: solid;
-            outline: none;
-        }
-
-        #leftArrow {
-            left: 20px; /* Adjusted to move it righter */
-            border-width: 45px 70px 45px 0; /* Adjusted for a larger triangle */
-            border-color: transparent rgba(255, 255, 255, 0.5) transparent transparent;
-
-        }
-
-        #rightArrow {
-            left: 120px; /* Adjust the spacing between triangles */
-            border-width: 45px 0 45px 70px; /* Adjusted for a larger triangle */
-            border-color: transparent transparent transparent rgba(255, 255, 255, 0.5);
-
-        }
-        .circle-button {
-            position: absolute;
-            bottom: 30px;
-            width: 80px; /* Adjust the size of the circular buttons */
-            height: 80px; /* Adjust the size of the circular buttons */
-            background-color: rgba(255, 255, 255, 0.5); /* Solid white with 50% transparency */    
-            border-radius: 50%; /* Make the button circular */
-        }
-
-        #circleButton1 {
-            right: 20px; /* Adjust the distance from the right side */
-        }
-
-        #circleButton2 {
-            right: 120px; /* Adjust the distance from the right side */
-        }
-        .circle-button:active {
-            outline: none; /* Remove outline on click */
-        }
-
-    </style>
+    
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body> 
     <div id="baseDiv">
         
-        <div id="health_bars" style="position: absolute; display:none; width: 100%; align-items: center; padding: 20px;">
+        <div id="health_bars">
             <!-- Player Health -->    
-            <div id="player_health_bar" style="position: relative; width: 100%; display: none; justify-content: flex-end; border-top: 4px solid white; border-bottom: 4px solid white; border-left: 4px solid white;">
-                <div style="background-color: red; height: 40px; width: 100%;"></div>
-
-                <div id="playerHealth" style="position: absolute; background: #818CF9; top: 0; bottom: 0; right: 0; left: 0;  width: 100%;"></div>
-                <div id="playerMana" style="position: absolute; background: #292f68; top: 30; bottom: 0; right: 0; left: 0; height : 10px; width: 100%;"></div>
-                <div id="playerName" style="position: absolute; top: 50; left: 0%;">•</div>
-                <div id="playerScore2" style="font-size: 25px; color:#440000; position: absolute; top: 45; right: 0%;">•</div>
-                <div id="playerScore1" style="font-size: 25px; color:#440000; position: absolute; top: 45; right: 5%;">•</div>
+            <div id="player_health_bar" class="healthBar">
+                <div id="playerMissingHealth" class="missingHealth"></div>
+                <div id="playerHealth" class="health"></div>
+                <div id="playerMana" class="mana"></div>
+                <div id="playerName" class="name">•</div>
+                <div id="playerScore2" class="score1">•</div>
+                <div id="playerScore1" class="score2">•</div>
                 
             </div>
             <!-- Timer -->
-            <div id="timer" style="background-color: black; height: 60px; width: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: white;border: 4px solid white;">100</div>
+            <div id="timer">100</div>
             <!-- Enemy Health -->
-            <div id="enemy_health_bar" style="position: relative; width: 100%; border-top: 4px solid white; border-bottom: 4px solid white; border-right: 4px solid white;">
-                <div style="background-color: red; height: 40px;width: 100%;"></div>
-                <div id="enemyHealth" style="position: absolute; background: #818CF9; top: 0; bottom: 0; right: 0; left: 0"></div>
-                <div id="enemyMana" style="position: absolute; background: #292f68; top: 30; bottom: 0; right: 0; left: 0; width: 100%;"></div>
-                <div id="enemyName" style="position: absolute; top: 50; right: 0;">P2</div>
-                <div id="enemyScore1" style="font-size: 25px; color:#440000; position: absolute; top: 45; right: 89%;">•</div>
-                <div id="enemyScore2" style="font-size: 25px; color:#440000; position: absolute; top: 45; right: 84%;">•</div>
+            <div id="enemy_health_bar" class="healthBar">
+                <div id=enemyMissingHealth class="missingHealth"></div>
+                <div id="enemyHealth" class="health"></div>
+                <div id="enemyMana" class="mana"></div>
+                <div id="enemyName" class="name">P2</div>
+                <div id="enemyScore1" class="score1">•</div>
+                <div id="enemyScore2" class="score2">•</div>
 
             </div>
         </div>
-        <div id="displayText" style="position: absolute; color: white; align-items: center; justify-content: center; top: 0; bottom: 0; left: 0; right:0; display: none">Tie</div>
-        <canvas id="canvas1" style="border: 10px solid white"></canvas>
-        <input id="start_pve_btn" type="button" style="display:none; position: absolute; left: 42%; top: 78%;color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="press ENTER/SPACE to start" onclick="startGame()" disabled/>
-        <input id="start_pvp_btn" type="button" style="display:none; position: absolute; left: 42%; top: 83%;color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="press ENTER/SPACE to start" onclick="startGame()" disabled/>
-        <input id="info_btn" type="button" style="display:none; position: absolute; left: 42%; top: 88%;color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;" value="Controls" onclick="startGame()" disabled/>
+        <div id="displayText">Tie</div>
+        <canvas id="canvas1"></canvas>
+        <input id="start_pve_btn" type="button" class="startBtns" value="press ENTER/SPACE to start" onclick="startGame()" disabled/>
+        <input id="start_pvp_btn" type="button" class="startBtns" value="press ENTER/SPACE to start" onclick="startGame()" disabled/>
+        <input id="info_btn" type="button" class="startBtns" value="Controls" onclick="startGame()" disabled/>
         
         <!-- Add mobile buttons -->
-        <button id="leftArrow" class="arrow-button" style="display: none;""></button>
-        <button id="rightArrow" class="arrow-button" style="display: none;""></button>
-        <button id="circleButton1" class="circle-button" style="display:none; border:none;"></button>
-        <button id="circleButton2" class="circle-button" style="display:none; border:none;"></button>
+        <button id="leftArrow" class="arrow-button" ></button>
+        <button id="rightArrow" class="arrow-button"></button>
+        <button id="circleButton1" class="circle-button"></button>
+        <button id="circleButton2" class="circle-button"></button>
 
         <a href="#" onclick="toggleMusic()">
-            <svg id="soundSvg" style="width: 3%; height: 6%; position: absolute;bottom: 3%; right: 1.2%;">
+            <svg id="soundSvg">
                 <path id="svgPath" d="M13 2h-2v2H9v2H7v2H3v8h4v2h2v2h2v2h2V2zM9 18v-2H7v-2H5v-4h2V8h2V6h2v12H9zm10-6.777h-2v-2h-2v2h2v2h-2v2h2v-2h2v2h2v-2h-2v-2zm0 0h2v-2h-2v2z" fill="#ffab00"/>
             </svg>
           </a>
