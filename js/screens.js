@@ -32,8 +32,8 @@ class StartScreenCLS extends Screen{
     }
 
     init() {
-        this.mainSprite = this.logo = new BaseSprite({position: {x: 350, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
-        this.instructions = new BaseSprite({position: {x: 150, y: 60}, imagesSrc: './img/instructions.png', scale: 2.5, framesMax: 1})
+        this.mainSprite = this.logo = new BaseSprite({position: {x: 375, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
+        this.instructions = new BaseSprite({position: {x: 300, y: 60}, imagesSrc: './img/instructions.png', scale: 2.5, framesMax: 1})
         document.querySelector('#baseDiv').style.width = compCanvasWidth
         document.querySelector('#baseDiv').style.height = compCanvasHeight
         
@@ -48,12 +48,9 @@ class StartScreenCLS extends Screen{
         this.infoBtn.addEventListener('touchstart', this.handleTouch);
         
         document.querySelector('#start_pve_btn').style.display = 'block'
-        document.querySelector('#start_pve_btn').style.left = '42%'
         document.querySelector('#start_pve_btn').value = '• 1P vs PC •'
         document.querySelector('#start_pvp_btn').style.display = 'block'
-        document.querySelector('#start_pvp_btn').style.left = '42%'
         document.querySelector('#start_pvp_btn').value = '  1P vs 2P  '
-        document.querySelector('#info_btn').style.left = '42%'
         document.querySelector('#info_btn').style.display = 'block'
         document.querySelector('#info_btn').value = '  Controls  '
         this.switchBG()
@@ -151,7 +148,6 @@ class StartScreenCLS extends Screen{
         event.preventDefault();
 
         // Your code to handle the touch event goes here
-        console.log('Button touched:', event.target.id);
         if (event.target.id === 'start_pvp_btn') {
             _doFuncNoSpam(fadeFunc, charSelect)
             gameMode = 'pvp'
@@ -409,8 +405,9 @@ class GameScreenCLS extends Screen{
         document.querySelector('#healthBars').style.width = compCanvasWidth
         const scaleX = canvas.width / compCanvasWidth
         const scaleY = canvas.height / compCanvasHeight
+
         // Joystick
-        this.joystick = new Joystick(80, compCanvasHeight-50, 50, 25, scaleX, scaleY)
+        this.joystick = new Joystick(80, compCanvasHeight - 90, 70, 35, scaleX * 1.06, scaleY * 1.06)
         
         // Arrows
         // this.handleTouchLeft = this.handleTouchLeft.bind(this);
@@ -432,7 +429,6 @@ class GameScreenCLS extends Screen{
         if (this.gameBackgorunds.length === 0) {
             for (let i = 0; i < this.bgs.length; i++){
                 this.gameBackgorunds.push(new SingleBG(this.ctx, this.bgs[i], this.canvasWidth, this.canvasHeight))
-                // this.gameBackgorunds.push(new TestBG(this.ctx, this.canvasWidth, this.canvasHeight))
             }
         }
          
@@ -780,11 +776,7 @@ class GameOverScreenCLS extends Screen{
         
         setTimeout(() => {
             document.querySelector('#start_pve_btn').style.display = 'block'
-            document.querySelector('#start_pve_btn').style.left = '32%'
             document.querySelector('#start_pve_btn').value = 'Press any key to continue...'
-            // if (isSoundOn) {
-            //     music.pause()
-            // }
         }, 1000);
     }
 

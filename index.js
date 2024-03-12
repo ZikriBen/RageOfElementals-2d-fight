@@ -4,11 +4,8 @@ canvas.width  = 1277
 canvas.height = 576
 
 const computedStyle = window.getComputedStyle(canvas);
-
 const compCanvasWidth = parseFloat(computedStyle.width);
 const compCanvasHeight =  parseFloat(computedStyle.height);
-console.log(compCanvasWidth)
-console.log(compCanvasHeight)
 
 const overlay = {
     opacity: 0

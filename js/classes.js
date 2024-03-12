@@ -112,8 +112,6 @@ class ComplexSprite {
             this.frameY = this.spriteAnimations[this.animationName].loc[this.currentFrame].y
         }
         catch {
-            // console.log(this.spriteAnimations[this.animationName])
-            // console.log(this.currentFrame)
         }
     }
 
@@ -422,7 +420,6 @@ class Fighter extends ComplexSprite {
 
     determineCombo(key) {
         if (this.attackInfo.sp_attack2.combo.length - 1 === this.comboIndex && (Date.now() - this.comboStart) < 800) {
-            console.log("Combo")
             _doActionNoSpam(this, 'sp_attack1')
             player.comboIndex = 0
         }
