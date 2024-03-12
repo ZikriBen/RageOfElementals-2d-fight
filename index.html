@@ -8,12 +8,16 @@
 </head>
 <body> 
     <div id="baseDiv">
+        <div class="life-bar">
+            <div class="actual"></div>
+             <div class="lost"></div>
+        </div>
         <canvas id="canvas1"></canvas>
         <div id="healthBars">
             <!-- Player Health -->    
             <div id="player_health_bar" class="healthBar">
-                <div id="playerMissingHealth" class="missingHealth"></div>
-                <div id="playerHealth" class="health"></div>
+                <!-- <div id="playerMissingHealth" class="missingHealth"></div>
+                <div id="playerHealth" class="health"></div> -->
                 <div id="playerMana" class="mana"></div>
                 <div id="playerName" class="name">•</div>
                 <div id="playerScore2" class="score1">•</div>
@@ -56,6 +60,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js" integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/utils.js"></script>
     <script src="js/joystick.js"></script>
+    <script src="js/healthBar.js"></script>
     <script src="js/vector.js"></script>
     <script src="js/classes.js"></script>
     <script src="js/screens.js"></script>
