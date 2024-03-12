@@ -4,11 +4,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body> 
     <div id="baseDiv">
-        
-        <div id="health_bars">
+        <canvas id="canvas1"></canvas>
+        <div id="healthBars">
             <!-- Player Health -->    
             <div id="player_health_bar" class="healthBar">
                 <div id="playerMissingHealth" class="missingHealth"></div>
@@ -33,7 +34,7 @@
             </div>
         </div>
         <div id="displayText">Tie</div>
-        <canvas id="canvas1"></canvas>
+        
         <input id="start_pve_btn" type="button" class="startBtns" value="press ENTER/SPACE to start" onclick="startGame()" disabled/>
         <input id="start_pvp_btn" type="button" class="startBtns" value="press ENTER/SPACE to start" onclick="startGame()" disabled/>
         <input id="info_btn" type="button" class="startBtns" value="Controls" onclick="startGame()" disabled/>
