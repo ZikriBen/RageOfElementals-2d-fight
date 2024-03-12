@@ -169,9 +169,9 @@ class CharSelectCLS extends Screen{
         super(ctx, canvasWidth, canvasHeight)
         this.arrow1Pos = 0
         this.arrow2Pos = 1
-        this.arrowStartPos = 115
-        this.charStartPos = -220
-        this.charOffset = 200
+        this.arrowStartPos = 145
+        this.charStartPos = -190
+        this.charOffset = 230
         this.beepSound = new Audio('./music/mixkit-video-game-mystery-alert-234.wav');
         this.selectSound = new Audio('./music/mixkit-arcade-bonus-alert-767.wav');
         this.playerSelected = false
@@ -191,8 +191,6 @@ class CharSelectCLS extends Screen{
     init() {
         this.arrow1Pos = 0
         this.arrow2Pos = 1
-        this.arrowStartPos = 115
-        this.charStartPos = -220
         document.querySelector('#start_pve_btn').style.display = 'none'
         document.querySelector('#start_pvp_btn').style.display = 'none'
         

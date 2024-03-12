@@ -7,8 +7,6 @@ const computedStyle = window.getComputedStyle(canvas);
 const compCanvasWidth = parseFloat(computedStyle.width);
 const compCanvasHeight =  parseFloat(computedStyle.height);
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-console.log(isMobile)
-
 
 const overlay = {
     opacity: 0
@@ -19,8 +17,7 @@ c.fillRect(0, 0, canvas.width, canvas.height)
 let player;
 let enemy;
 
-let currentScreen = 'startScreen' // # Original
-// let currentScreen = 'gameScreen'
+let currentScreen = 'startScreen' 
 
 startScreenIns = new StartScreenCLS(c, canvas.width, canvas.height)
 charSelectIns = new CharSelectCLS(c, canvas.width, canvas.height)
@@ -79,12 +76,7 @@ const screens = {
         }
     }
 }
-screens[currentScreen].init() // # Original
-
-// screens['charSelectScreen'].init()
-// screens['gameScreen'].init()
-// gameMode = 'pve'
-// currentScreen = 'gameScreen'
+screens[currentScreen].init()
 
 setTimeout(() => { enemyAIOn= true }, 1500)
 
