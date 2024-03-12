@@ -200,20 +200,22 @@ class CharSelectCLS extends Screen{
         document.querySelector('#displayText').style.top = '-200'
         document.querySelector('#displayText').innerHTML = 'Select Character:'
 
-        document.querySelector('#leftArrow').style.display = 'inline'
-        document.querySelector('#rightArrow').style.display = 'inline'
-        document.querySelector('#circleButton1').style.display = 'inline'
         
-        this.handleTouchLeft = this.handleTouchLeft.bind(this);
-        this.handleTouchRight = this.handleTouchRight.bind(this);
-        this.touchArrowLeft = document.getElementById('leftArrow');
-        this.touchArrowRight = document.getElementById('rightArrow');
-        this.touchArrowLeft.addEventListener('touchstart', this.handleTouchLeft);
-        this.touchArrowRight.addEventListener('touchstart', this.handleTouchRight);
-
-        this.handleTouchCircle = this.handleTouchCircle.bind(this);
-        this.circleButton = document.getElementById('circleButton1');
-        this.circleButton.addEventListener('touchstart', this.handleTouchCircle);
+        if (isMobile) {
+            document.querySelector('#leftArrow').style.display = 'inline'
+            document.querySelector('#rightArrow').style.display = 'inline'
+            document.querySelector('#circleButton1').style.display = 'inline'
+            this.handleTouchLeft = this.handleTouchLeft.bind(this);
+            this.handleTouchRight = this.handleTouchRight.bind(this);
+            this.touchArrowLeft = document.getElementById('leftArrow');
+            this.touchArrowRight = document.getElementById('rightArrow');
+            this.touchArrowLeft.addEventListener('touchstart', this.handleTouchLeft);
+            this.touchArrowRight.addEventListener('touchstart', this.handleTouchRight);
+    
+            this.handleTouchCircle = this.handleTouchCircle.bind(this);
+            this.circleButton = document.getElementById('circleButton1');
+            this.circleButton.addEventListener('touchstart', this.handleTouchCircle);
+        }
         
         this.arrow1 = new BaseSprite({position: {x: this.arrowStartPos, y: 235}, imagesSrc: './img/arrow_p1p.png', scale: 0.3, framesMax: 5})
         this.arrow2 = new BaseSprite({position: {x: this.arrowStartPos + this.charOffset, y: 235}, imagesSrc: './img/arrow_p2p.png', scale: 0.3, framesMax: 5, framsHold: 3})
@@ -239,13 +241,14 @@ class CharSelectCLS extends Screen{
         this.playerSelected = false
         this.enemySelected = false
 
-        // Arrows
-        this.touchArrowLeft.style.display = 'none'
-        this.touchArrowRight.style.display = 'none'
-        this.touchArrowLeft.removeEventListener('touchstart', this.handleTouchLeft)
-        this.touchArrowRight.removeEventListener('touchstart', this.handleTouchRight)
-        
-        this.circleButton.removeEventListener('touchstart', this.handleTouchCircle)
+        if (isMobile) {
+            this.touchArrowLeft.style.display = 'none'
+            this.touchArrowRight.style.display = 'none'
+            this.touchArrowLeft.removeEventListener('touchstart', this.handleTouchLeft)
+            this.touchArrowRight.removeEventListener('touchstart', this.handleTouchRight)
+            
+            this.circleButton.removeEventListener('touchstart', this.handleTouchCircle)
+        }
         document.querySelector('#displayText').style.display = 'none'
     }
 
@@ -406,25 +409,27 @@ class GameScreenCLS extends Screen{
         const scaleX = canvas.width / compCanvasWidth
         const scaleY = canvas.height / compCanvasHeight
 
-        // Joystick
-        this.joystick = new Joystick(80, compCanvasHeight - 90, 70, 35, scaleX * 1.06, scaleY * 1.06)
-        
-        // Arrows
-        // this.handleTouchLeft = this.handleTouchLeft.bind(this);
-        // this.handleTouchRight = this.handleTouchRight.bind(this);
-        // this.touchArrowLeft = document.getElementById('leftArrow');
-        // this.touchArrowRight = document.getElementById('rightArrow');
-        
-        // this.touchArrowLeft.addEventListener('touchstart', this.handleTouchLeft);
-        // this.touchArrowRight.addEventListener('touchstart', this.handleTouchRight);
-        // this.touchArrowLeft.addEventListener('touchend', this.handleTouchEndLeft);
-        // this.touchArrowRight.addEventListener('touchend', this.handleTouchEndRight);
-
-        
-        // Circle Button
-        this.handleTouchCircle = this.handleTouchCircle.bind(this);
-        this.circleButton = document.getElementById('circleButton1');
-        this.circleButton.addEventListener('touchstart', this.handleTouchCircle);
+        if (isMobile) {
+            // Joystick
+            this.joystick = new Joystick(80, compCanvasHeight - 90, 70, 35, scaleX * 1.06, scaleY * 1.06)
+            
+            // Arrows
+            // this.handleTouchLeft = this.handleTouchLeft.bind(this);
+            // this.handleTouchRight = this.handleTouchRight.bind(this);
+            // this.touchArrowLeft = document.getElementById('leftArrow');
+            // this.touchArrowRight = document.getElementById('rightArrow');
+            
+            // this.touchArrowLeft.addEventListener('touchstart', this.handleTouchLeft);
+            // this.touchArrowRight.addEventListener('touchstart', this.handleTouchRight);
+            // this.touchArrowLeft.addEventListener('touchend', this.handleTouchEndLeft);
+            // this.touchArrowRight.addEventListener('touchend', this.handleTouchEndRight);
+    
+            
+            // Circle Button
+            this.handleTouchCircle = this.handleTouchCircle.bind(this);
+            this.circleButton = document.getElementById('circleButton1');
+            this.circleButton.addEventListener('touchstart', this.handleTouchCircle);
+        }
         
         if (this.gameBackgorunds.length === 0) {
             for (let i = 0; i < this.bgs.length; i++){
@@ -514,19 +519,21 @@ class GameScreenCLS extends Screen{
         clearInterval(this.manaInterval)
         clearInterval(this.timerInterval)
         
-        // Arrows
-        // this.touchArrowLeft.style.display = 'none'
-        // this.touchArrowRight.style.display = 'none'
-        
-        // this.touchArrowLeft.removeEventListener('touchstart', this.handleTouchLeft);
-        // this.touchArrowRight.removeEventListener('touchstart', this.handleTouchRight);
-        
-        // this.touchArrowLeft.removeEventListener('touchend', this.handleTouchEndLeft);
-        // this.touchArrowRight.removeEventListener('touchend', this.handleTouchEndRight);
-        
-        // Circle Button
-        this.circleButton.style.display = 'none'
-        this.circleButton.removeEventListener('touchstart', this.handleTouchCircle);
+        if (isMobile) {
+            // Arrows
+            // this.touchArrowLeft.style.display = 'none'
+            // this.touchArrowRight.style.display = 'none'
+            
+            // this.touchArrowLeft.removeEventListener('touchstart', this.handleTouchLeft);
+            // this.touchArrowRight.removeEventListener('touchstart', this.handleTouchRight);
+            
+            // this.touchArrowLeft.removeEventListener('touchend', this.handleTouchEndLeft);
+            // this.touchArrowRight.removeEventListener('touchend', this.handleTouchEndRight);
+            
+            // Circle Button
+            this.circleButton.style.display = 'none'
+            this.circleButton.removeEventListener('touchstart', this.handleTouchCircle);
+        }
 
     }
 
@@ -536,8 +543,10 @@ class GameScreenCLS extends Screen{
         this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
         this.player.update();
         this.enemy.update();
-        this.joystick.update()
-        this.keyFunc(this.joystick.lastDirection)
+        if (isMobile) {
+            this.joystick.update()
+            this.keyFunc(this.joystick.lastDirection)
+        }
     }
     handleTouchLeft(event) {
         event.preventDefault();
@@ -682,7 +691,6 @@ class GameScreenCLS extends Screen{
                 this.determineWinner()
             }
         }, 1000)
-             
     }
 
     determineWinner() {

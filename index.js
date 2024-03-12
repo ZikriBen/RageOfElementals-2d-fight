@@ -6,6 +6,9 @@ canvas.height = 576
 const computedStyle = window.getComputedStyle(canvas);
 const compCanvasWidth = parseFloat(computedStyle.width);
 const compCanvasHeight =  parseFloat(computedStyle.height);
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+console.log(isMobile)
+
 
 const overlay = {
     opacity: 0
