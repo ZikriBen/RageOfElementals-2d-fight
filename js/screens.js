@@ -402,10 +402,12 @@ class GameScreenCLS extends Screen{
     init(playerFighter, enemyFighter) {
         console.log("Game screen init")
         const canvas = document.getElementById('canvas1'); // replace 'canvas1' with the actual ID of your canvas element
-        
         document.querySelector('#healthBars').style.width = compCanvasWidth
         const scaleX = canvas.width / compCanvasWidth
         const scaleY = canvas.height / compCanvasHeight
+        
+        
+        
 
         if (isMobile) {
             // Joystick
@@ -448,6 +450,7 @@ class GameScreenCLS extends Screen{
             scale: playerFighter.scale,
             animationName: "idle",
             facing: "right",
+            type:'player',
             attackBox :{
                 offset: {
                     x: 0,
@@ -469,6 +472,7 @@ class GameScreenCLS extends Screen{
             scale: enemyFighter.scale,
             animationName: "idle",
             facing: "left",
+            type:'enemy',
             attackBox :{
                 offset: {
                     x: 0,
@@ -499,6 +503,7 @@ class GameScreenCLS extends Screen{
         document.querySelector('#playerScore2').style.color = '#440000'
         
         this.isStarted = true
+        resetHealth()
         this.decreaseTimer()
         this.manaRaise()
         if (isSoundOn) {
@@ -740,6 +745,7 @@ class GameScreenCLS extends Screen{
         this.gameBackgorund = this.gameBackgorunds[Math.floor(Math.random() * this.gameBackgorunds.length)]
         this.player.health = 100
         this.enemy.health = 100
+        resetHealth()
         this.player.mana = 98
         this.enemy.mana = 98
         this.player.defending = false
