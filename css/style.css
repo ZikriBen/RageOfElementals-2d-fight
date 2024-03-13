@@ -8,11 +8,13 @@
 body {
     background: radial-gradient(rgb(206, 206, 206), rgb(235, 235, 235));
 }
+
 audio,
 embed {
     position: absolute;
     z-index: -9999;
 }
+
 #baseDiv {
     position: relative;
     top: 50%;
@@ -20,8 +22,8 @@ embed {
     transform: translate(-50%, -50%);
     width: 100vw;
     height: 100vh;
-    max-width: 1277px; 
-    max-height: 576; 
+    max-width: 1277px;
+    max-height: 576;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -29,16 +31,123 @@ embed {
 }
 
 #canvas1 {
-    width: 100%; 
-    height: 100%; 
+    width: 100%;
+    height: 100%;
     border: 5px solid white;
     max-width: 100%;
     max-height: 100%;
 }
 
 #displayText {
-    position: absolute; color: white; align-items: center; justify-content: center; top: 0; bottom: 0; left: 0; right:0; display: none
+    position: absolute;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none
 }
+
+#healthBars {
+    position: absolute;
+    display: none;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    padding: 20px;
+}
+
+.missingHealth {
+    background-color: red;
+    height: 40px;
+    width: 100%;
+}
+
+.health {
+    position: absolute;
+    background: #818CF9;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.healthBar {
+    position: relative;
+    width: 100%;
+    border: 4px solid #ffab00;
+}
+
+.mana {
+    position: absolute;
+    background: rgba(0, 0, 139, 0.5);
+    top: 30;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    z-index: 15;
+}
+
+.name {
+    position: absolute;
+    top: 50;
+    left: 0%;
+    left: 0%;
+}
+
+.score1 {
+    font-size: 25px;
+    color: #440000;
+    position: absolute;
+    top: 110%;
+    right: 5%;
+}
+
+.score2 {
+    font-size: 25px;
+    color: #440000;
+    position: absolute;
+    top: 110%;
+    right: 0%;
+}
+
+#timer {
+    height: 60px;
+    width: 60px;
+    flex-shrink: 0;
+    display: flex;
+    font-size: x-large;
+    align-items: center;
+    justify-content: center;
+    color: #ffab00;
+    text-shadow: 2px 2px 0px #30263d;
+}
+
+.startBtns {
+    display: none;
+    position: absolute;
+    color: #ffab00;
+    text-shadow: 2px 2px 0px #30263d;
+    background-color: transparent;
+    border-style: none;
+}
+
+#start_pve_btn {
+    top: 78%;
+}
+
+#start_pvp_btn {
+    top: 83%;
+}
+
+#info_btn {
+    top: 88%;
+}
+
 footer {
     border-top: 1px solid #e6e6e6;
     display: block;
@@ -53,37 +162,6 @@ footer p {
     font-size: 8px;
 }
 
-.mana {
-    position: absolute; background: #292f68; top: 30; bottom: 0; right: 0; left: 0; width: 100%;
-}
-.name {
-    position: absolute; top: 50; left: 0%; left: 0%;
-}
-
-.score1 {
-    font-size: 25px; color:#440000; position: absolute; top: 110%; right: 5%;
-}
-.score2 {
-    font-size: 25px; color:#440000; position: absolute; top: 110%; right: 0%;
-}
-
-#timer {
-    background-color: black; height: 60px; width: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: white;border: 4px solid white;
-}
-
-
-.startBtns {
-    display:none; position: absolute; color: #ffab00; text-shadow: 2px 2px 0px #30263d; background-color: transparent; border-style: none;
-}
-#start_pve_btn {
-    top: 78%;
-}
-#start_pvp_btn {
-    top: 83%;
-}
-#info_btn {
-    top: 88%;
-}
 footer p a {
     text-decoration: none;
     color: #909090;
@@ -151,71 +229,61 @@ footer p a:hover {
     outline: none;
     /* Remove outline on click */
 }
+
 #soundSvg {
-    width: 3%; height: 6%; position: absolute;bottom: 3%; right: 1.2%;
+    width: 3%;
+    height: 6%;
+    position: absolute;
+    bottom: 3%;
+    right: 1.2%;
 }
 
-#healthBars {
-    position: absolute;
-    display: flex;
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    align-items: center;
-    padding: 20px;
+#enemy_health_bar {
+    transform: scaleX(-1);
 }
 
-.missingHealth {
-    background-color: red; height: 40px; width: 100%;
-}
-.health {
-    position: absolute; background: #818CF9; top: 0; bottom: 0; right: 0; left: 0;
-}
-.healthBar {
-    position: relative; width: 100%; border: 4px solid white; 
+#enemyName {
+    transform: scaleX(-1);
 }
 
 .life-bar {
-    display:flex;
-    top: 10%;
-    left: 50%;
-    height: 40px; width: 100%;
-    transform: translate(-50%, -50%);
-    height: 50px;
-    background-color:#eee;
-    position:absolute;
+    display: flex;
+    width: 100%;
+    height: 40px;
+    background-color: rgba(56, 56, 56, 0.5);
+    position: relative;
     overflow: hidden;
-    display:flex;
-    align-items:center;
+    display: flex;
+    align-items: center;
     justify-content: flex-start;
 
-    
-  .actual {
-    content : '';
-    height:100%;
-    width:100%;
-    background-color: #b71c1c;
-    z-index:10;
-    transform-origin: center left;
-    transition: all 0s ease;
-  }
-  
-  .lost {
-    content : '';
-    height:100%;
-    position:absolute;
-    left:0;
-    top:0;
-    background-color: #d32f2f;
-    transform-origin: center left;
-    width:0;
-  }    
-    
-    .lost.active {
-      animation-duration: 2s;
-      animation-name: loseLife;    
-      animation-iteration-count: 1;
+
+    .actual {
+        content: '';
+        height: 100%;
+        width: 100%;
+        background-color: #b71c1c;
+        z-index: 10;
+        transform-origin: center left;
+        transition: all 0s ease;
     }
-    
+
+    .lost {
+        content: '';
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-color: #d32f2f;
+        transform-origin: center left;
+        width: 0;
+    }
+
+    .lost.active {
+        animation-duration: 2s;
+        animation-name: loseLife;
+        animation-iteration-count: 1;
+    }
+
+
 }

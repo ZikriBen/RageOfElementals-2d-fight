@@ -8,28 +8,29 @@
 </head>
 <body> 
     <div id="baseDiv">
-        <div class="life-bar">
-            <div class="actual"></div>
-             <div class="lost"></div>
-        </div>
         <canvas id="canvas1"></canvas>
         <div id="healthBars">
             <!-- Player Health -->    
             <div id="player_health_bar" class="healthBar">
-                <!-- <div id="playerMissingHealth" class="missingHealth"></div>
-                <div id="playerHealth" class="health"></div> -->
+                <div class="life-bar">
+                    <div id="playerActual" class="actual"></div>
+                    <div id="playerLost" class="lost"></div>
+                </div>
                 <div id="playerMana" class="mana"></div>
                 <div id="playerName" class="name">•</div>
                 <div id="playerScore2" class="score1">•</div>
                 <div id="playerScore1" class="score2">•</div>
                 
+                
             </div>
             <!-- Timer -->
-            <div id="timer">100</div>
+            <div id="timer">99</div>
             <!-- Enemy Health -->
             <div id="enemy_health_bar" class="healthBar">
-                <div id=enemyMissingHealth class="missingHealth"></div>
-                <div id="enemyHealth" class="health"></div>
+                <div class="life-bar">
+                    <div id="enemyActual" class="actual"></div>
+                     <div id="enemyLost" class="lost"></div>
+                </div>
                 <div id="enemyMana" class="mana"></div>
                 <div id="enemyName" class="name">P2</div>
                 <div id="enemyScore1" class="score1">•</div>
