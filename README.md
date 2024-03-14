@@ -1,11 +1,19 @@
 # RageOfElementals-2d-fight
-Rage Of Elementals, is a Pixel Art arcade browser game written only in vanilla JS and utilizes HTML5's canvas.  
+Rage Of Elementals, is a Pixel Art arcade browser game written only in vanilla JS CSS and utilizes HTML5's canvas.  
+Designed solely for personal educational purposes, the project serves as a platform for self-learning and exploration of game development concepts.  
+
 It is currently has 2 modes: `1P vs PC` or `1P vs 2P`on the same machine.  
 It uses it's own engine, world physics and hitbox mechanism.  
-  
-Now featuering new AI mode! :sunglasses:  
 
-## Instructions:
+Key Features:
+
+ - Minimalist design focused on core gameplay mechanics.
+ - Developed exclusively with vanilla JavaScript, CSS, and HTML.
+ - Intended for personal educational use to enhance understanding of game development.
+ - Mobile/Desktop Support.
+ - Now featuering new AI mode! :sunglasses:  
+
+## Desktop Instructions:
 |Action|1P/2P|
 |--------|--------|
 |Movement|WASD/Arrow Keys|
@@ -16,20 +24,13 @@ Now featuering new AI mode! :sunglasses:
 |Meditate|R/Numpad 7|
 |Defend|E/Numpad 9|
 
-Move - 1P (WASD) | 2P (Arrow Keys)
-X - Attack / Pick Up Chair
-Z - Block / Throw Chair 
-Space - Special Attack (When Rage meter is full)
-Escape - Pause
-
 ## Browser compatibility
 
 Should be good in latest Firefox, Edge, Chrome, Opera, and IE.
 
 ## What's next?
  - Network VS Mode - invite a friend to play in a VS mode over the network
- - Adding mobile support
- - Add options such as game difficulty, sound vibration etc.
+ - Add options such as game difficulty, sound, vibration etc.
 
 ## License
 
