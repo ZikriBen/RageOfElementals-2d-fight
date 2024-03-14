@@ -85,10 +85,10 @@ function enemyAI() {
     if (enemyAIOn) {
         if (rectCollision(player, enemy)) {
             if (player.isAttcking && player.currentFrame < 2) {
-                if (Math.random() < 0.015) {
-                    enemy.defend();
-                    return;
-                }
+            if (Math.random() < 0.015) {
+            enemy.defend();
+            return;
+            }
             }
             enemy.velocity.x = 0;
             attack_seed = Math.random()
@@ -216,9 +216,7 @@ function animate() {
         }
         
         // Charcters Health hanlder
-        document.querySelector('#enemyHealth').style.width = enemy.health + '%'
-        document.querySelector('#playerHealth').style.width = player.health + '%'
-        
+
         if (GameScreenIns.isStarted && (enemy.health <= 0 || player.health <= 0)) {
             enemyAIOn = false
             GameScreenIns.determineWinner()
@@ -236,11 +234,11 @@ function animate() {
 
 window.addEventListener('keydown', (event) => {
     screens[currentScreen].keyFunc(event.key)
-})
+});
 
 window.addEventListener('keyup', (event) => {
     keyUpFunc(event.key)
-})
+});
 
 
 animate()

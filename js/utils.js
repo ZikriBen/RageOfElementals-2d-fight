@@ -196,3 +196,69 @@ function _doFuncNoSpam(func, args) {
         func(args)
     }, 200);
 };
+
+function resetHealth() {
+    playerHealthBar = document.getElementById('player_health_bar');
+    enemyHealthBar = document.getElementById('enemy_health_bar');
+    
+    const playerLostElement = document.getElementById('playerLost');
+    const playerActualElement = document.getElementById('playerActual');
+    const enemyLostElement = document.getElementById('enemyLost');
+    const enemyActualElement = document.getElementById('enemyActual');
+    
+    playerLostElement.style.width = Math.floor(100)+"%";
+    playerLostElement.style.left = Math.floor(0)+"%"; 
+    playerActualElement.style.transform = "scaleX(1)";
+    
+    enemyLostElement.style.width = Math.floor(100)+"%";
+    enemyLostElement.style.left = Math.floor(0)+"%"; 
+    enemyActualElement.style.transform = "scaleX(1)";
+}
+
+function changeLife(attacker, life, lifeLost) {
+    let lostElement;
+    let actualElement;
+
+    if (attacker === "player") {
+        lostElement = document.getElementById('playerLost');
+        actualElement = document.getElementById('playerActual');
+    }
+    else {
+        lostElement = document.getElementById('enemyLost');
+        actualElement = document.getElementById('enemyActual');
+    }
+
+    let webAnim; // Create a separate animation variable for each health bar
+
+    if(lifeLost > life) {
+        lifeLost = life
+    }
+    life -= lifeLost;
+    
+    if (life < 0) {
+        life = 0;
+    }
+      
+    lostElement.style.width = Math.floor(lifeLost)+"%";
+    lostElement.style.left = Math.floor(life)+"%";
+      
+    if(webAnim) {
+        webAnim.cancel();
+    }
+      
+    webAnim = lostElement.animate([
+      // keyframes
+      { transform: 'scaleX(1)' }, 
+      { transform: 'scaleX(0)' }
+  
+    ], { 
+      // timing options
+      duration: 300,
+      iterations: 1,
+      fill: 'both',
+      delay: 100
+    });
+
+    actualElement.style.transform = "scaleX("+life/100+")";
+    console.log(" " + attacker + ": " + life)
+}

@@ -141,7 +141,8 @@ class Fighter extends ComplexSprite {
         animationsStates,
         animationName,
         attackInfo,
-        scale = 1, 
+        scale = 1,
+        type,
         offset = {x: 0, y: 0}, 
         facing = 'right',
         attackBox = { offset: {}, width: undefined, height: undefined }
@@ -162,6 +163,7 @@ class Fighter extends ComplexSprite {
         this.height = 150
         this.isAttcking
         this.color = color
+        this.type = type
         this.health = 100
         this.mana = 100
         this.currentFrame = 0
@@ -294,11 +296,14 @@ class Fighter extends ComplexSprite {
     }
 
     takeHit(force) {
+        let hit;
         if (this.defending) 
-            this.health -= Math.round(force / 10)
+            hit = Math.round(force / 10)
         else
-            this.health -= force
-        
+            hit = force
+
+        changeLife(this.type, this.health, hit)
+        this.health -= hit
         if (this.health <= 0) {
             this.switchSprite('death')
         }
@@ -306,6 +311,7 @@ class Fighter extends ComplexSprite {
             this.switchSprite('take_hit')
         }
     }
+
     update() {
         this.draw()
         if (!this.isDead) this.animateFrames()
