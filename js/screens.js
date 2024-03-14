@@ -678,7 +678,6 @@ class GameScreenCLS extends Screen{
             if (enemy.mana < 100) {
                 enemy.mana += 2
                 document.querySelector('#enemyMana').style.width = enemy.mana + '%'
-                document.querySelector('#enemyMana').style.left = Math.abs(100 - enemy.mana) + '%'
             }
         }, 1000)
     }
