@@ -46,14 +46,19 @@ class StartScreenCLS extends Screen{
         this.startPveBtn.addEventListener('touchstart', this.handleTouch);
         this.startPvpBtn.addEventListener('touchstart', this.handleTouch);
         this.infoBtn.addEventListener('touchstart', this.handleTouch);
-        
+
         document.querySelector('#start_pve_btn').style.display = 'block'
-        document.querySelector('#start_pve_btn').value = '• 1P vs PC •'
+        if (isMobile)
+            document.querySelector('#start_pve_btn').value = " " + this.selections[0] + " "
+        else
+            document.querySelector('#start_pve_btn').value = "•" + this.selections[0] + "•"
+
         document.querySelector('#start_pvp_btn').style.display = 'block'
-        document.querySelector('#start_pvp_btn').value = '  1P vs 2P  '
+        document.querySelector('#start_pvp_btn').value = " " + this.selections[1] + " "
         document.querySelector('#info_btn').style.display = 'block'
-        document.querySelector('#info_btn').value = '  Controls  '
+        document.querySelector('#info_btn').value = " " + this.selections[2] + " "
         this.switchBG()
+
         if (isSoundOn) {
             playMusic(battleMusic, 'play')
         }
@@ -126,7 +131,6 @@ class StartScreenCLS extends Screen{
                 this.currentSelection = this.selections.length - 1
             startScreenIns.setSelection()
         }
-        console.log(this.currentSelection)
     }
 
     invokeSelection() {
@@ -142,6 +146,9 @@ class StartScreenCLS extends Screen{
         }
         else if (this.currentSelection === 2) {
             this.showInstructions()
+            // document.querySelector('#start_pve_btn').style.display = 'none'
+            // document.querySelector('#start_pvp_btn').style.display = 'none'
+            // document.querySelector('#info_btn').style.display = 'none'
         }
     }
 
