@@ -46,17 +46,7 @@ class StartScreenCLS extends Screen{
         this.startPveBtn.addEventListener('touchstart', this.handleTouch);
         this.startPvpBtn.addEventListener('touchstart', this.handleTouch);
         this.infoBtn.addEventListener('touchstart', this.handleTouch);
-
-        document.querySelector('#start_pve_btn').style.display = 'block'
-        if (isMobile)
-            document.querySelector('#start_pve_btn').value = " " + this.selections[0] + " "
-        else
-            document.querySelector('#start_pve_btn').value = "•" + this.selections[0] + "•"
-
-        document.querySelector('#start_pvp_btn').style.display = 'block'
-        document.querySelector('#start_pvp_btn').value = " " + this.selections[1] + " "
-        document.querySelector('#info_btn').style.display = 'block'
-        document.querySelector('#info_btn').value = " " + this.selections[2] + " "
+        this.resetButtons()
         this.switchBG()
 
         if (isSoundOn) {
@@ -89,8 +79,34 @@ class StartScreenCLS extends Screen{
         }, this.switchDuration)
     }
     
+    resetButtons() {
+        this.currentSelection = 0
+        document.querySelector('#start_pvp_btn').style.display = 'block'
+        document.querySelector('#start_pve_btn').style.display = 'block'
+        document.querySelector('#info_btn').style.display = 'block'
+        if (isMobile)
+            document.querySelector('#start_pve_btn').value =  this.selections[0] 
+        else
+            document.querySelector('#start_pve_btn').value = "•" + this.selections[0] + "•"
+        
+        document.querySelector('#start_pvp_btn').value = " " + this.selections[1] + " "
+        document.querySelector('#info_btn').value = " " + this.selections[2] + " "
+    }
+
     showInstructions() {
-        this.mainSprite = this.instructions
+        if (this.mainSprite === this.instructions) {
+            this.resetButtons()
+            this.showLogo()
+        }
+        else {
+            this.mainSprite = this.instructions
+            document.querySelector('#start_pve_btn').style.display = 'none'
+            document.querySelector('#start_pvp_btn').style.display = 'none'
+            if (isMobile)
+                document.querySelector('#info_btn').value = " Back "
+            else
+                document.querySelector('#info_btn').value = "•  Back  •"
+        }
     }
 
     showLogo() {
@@ -119,6 +135,9 @@ class StartScreenCLS extends Screen{
         if (key === "Enter" || key === " ") {
             this.invokeSelection()
         }
+        else if (this.mainSprite === this.instructions) {
+            return
+        }
         else if (key === "ArrowUp" || key === "w") {
             this.currentSelection = (this.currentSelection - 1) % this.selections.length
             if (this.currentSelection < 0)
@@ -146,9 +165,6 @@ class StartScreenCLS extends Screen{
         }
         else if (this.currentSelection === 2) {
             this.showInstructions()
-            // document.querySelector('#start_pve_btn').style.display = 'none'
-            // document.querySelector('#start_pvp_btn').style.display = 'none'
-            // document.querySelector('#info_btn').style.display = 'none'
         }
     }
 
