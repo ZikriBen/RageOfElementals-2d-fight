@@ -116,6 +116,8 @@ class StartScreenCLS extends Screen{
         }
         else if (key === "ArrowUp" || key === "w") {
             this.currentSelection = (this.currentSelection - 1) % this.selections.length
+            if (this.currentSelection < 0)
+                this.currentSelection = this.selections.length - 1
             startScreenIns.setSelection()
         }
         else if (key === "ArrowDown" || key === "s") {
@@ -124,6 +126,7 @@ class StartScreenCLS extends Screen{
                 this.currentSelection = this.selections.length - 1
             startScreenIns.setSelection()
         }
+        console.log(this.currentSelection)
     }
 
     invokeSelection() {
