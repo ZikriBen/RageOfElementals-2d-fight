@@ -2,9 +2,9 @@ let timerBlockId;
 let timerBlockId2;
 let isSoundOn = false
 
-// const introMusic = new Audio('./music/Guile_Theme.mp3');
 const introMusic = new Audio('./music/PerituneMaterial_RetroRPG_Battle2.mp3');
 const battleMusic = new Audio('./music/KensTheme(SSF2VRC7).wav');
+const battleMusic2 = new Audio('./music/Guile_Theme.mp3');
 let currentMusic = introMusic
 
 const svgPathSoundOn = "M11 2h2v20h-2v-2H9v-2h2V6H9V4h2V2zM7 8V6h2v2H7zm0 8H3V8h4v2H5v4h2v2zm0 0v2h2v-2H7zm10-6h-2v4h2v-4zm2-2h2v8h-2V8zm0 8v2h-4v-2h4zm0-10v2h-4V6h4z"
@@ -77,9 +77,11 @@ function toggleMusic(){
 }
 
 function playSound(audio) {
-    audio.pause();
-    audio.currentTime=0;
-    audio.play();
+    if (isSoundOn) {
+        audio.pause();
+        audio.currentTime=0;
+        audio.play();
+    }
 }
 
 
@@ -187,14 +189,14 @@ function _doActionNoSpam(attacker, type, timeout=40) {
     }, timeout); //40ms Timeout
 };
 
-function _doFuncNoSpam(func, args) {
+function _doFuncNoSpam(func, args, timeout=200) {
     //Reset Timeout if function is called before it ends
     if (!(timerBlockId2 == null)) {
         clearTimeout(timerBlockId2);
     }
     timerBlockId2 = setTimeout(function () {
         func(args)
-    }, 200);
+    }, timeout);
 };
 
 function resetHealth() {
@@ -260,5 +262,4 @@ function changeLife(attacker, life, lifeLost) {
     });
 
     actualElement.style.transform = "scaleX("+life/100+")";
-    console.log(" " + attacker + ": " + life)
 }

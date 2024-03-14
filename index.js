@@ -163,7 +163,7 @@ function animate() {
         else if (player.velocity.y > 0) {
             player.switchSprite('fall')
         }
-        // if (startScreenIns.gameMode === 'pve') { // can be optimize! # Original
+
         if (gameMode === 'pve') { // can be optimize!
             enemyAI();
         }
@@ -233,6 +233,7 @@ function animate() {
 }
 
 window.addEventListener('keydown', (event) => {
+    event.preventDefault();
     screens[currentScreen].keyFunc(event.key)
 });
 

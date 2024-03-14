@@ -29,6 +29,8 @@ class StartScreenCLS extends Screen{
         this.startPveBtn
         this.startPvpBtn
         this.infoBtn
+        this.beepSound = new Audio('./music/mixkit-video-game-mystery-alert-234.wav');
+        this.selectSound = new Audio('./music/mixkit-arcade-bonus-alert-767.wav');
     }
 
     init() {
@@ -114,6 +116,7 @@ class StartScreenCLS extends Screen{
     }
 
     setSelection() {
+        _doFuncNoSpam(playSound, this.beepSound, 10)
         if (this.currentSelection === 0) {
             document.querySelector('#start_pve_btn').value = "•" + this.selections[0] + "•"
             document.querySelector('#start_pvp_btn').value = " " + this.selections[1] + " "
@@ -133,6 +136,7 @@ class StartScreenCLS extends Screen{
 
     keyFunc(key) {
         if (key === "Enter" || key === " ") {
+            playSound(this.selectSound)
             this.invokeSelection()
         }
         else if (this.mainSprite === this.instructions) {
@@ -153,6 +157,7 @@ class StartScreenCLS extends Screen{
     }
 
     invokeSelection() {
+        
         if (this.currentSelection === 0) {
             _doFuncNoSpam(fadeFunc, charSelect)
             gameMode = 'pve'
@@ -291,8 +296,13 @@ class CharSelectCLS extends Screen{
         this.characters[this.arrow1Pos].image.src = this.fighters[this.arrow1Pos].idle_png
         this.power[this.arrow1Pos].image.src = this.fighters[this.arrow1Pos].pwr_png
         this.hp[this.arrow1Pos].image.src = this.fighters[this.arrow1Pos].hp_png
-        if (gameMode === 'pvp')
+
+        if (gameMode === 'pvp') {
             this.characters[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].idle_png
+            this.power[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].pwr_png
+            this.hp[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].hp_png
+        }
+        
 
     }
     handleTouchLeft(event) {
@@ -330,7 +340,6 @@ class CharSelectCLS extends Screen{
                     this.enemyFighter = this.fighters[this.arrow2Pos]
                     this.enemySelected = true
                     this.arrow2.framsHold = 0
-                    console.log(this.enemyFighter.name)
                     this.invokeSelection()
                 }
                 break
@@ -355,14 +364,14 @@ class CharSelectCLS extends Screen{
                 this.playerFighter = this.fighters[this.arrow1Pos]
                 this.playerSelected = true
                 this.arrow1.framsHold = 0
-                console.log(this.playerFighter.name)
                 this.invokeSelection()
                 break
         }
     }
     
     moveArrow(arrow, arrowPos, direcrtion) {
-        playSound(this.beepSound)
+        _doFuncNoSpam(playSound, this.beepSound, 10)
+
         this.characters[arrowPos].image.src = this.fighters[arrowPos].idle_bw_png
         this.power[arrowPos].image.src = this.fighters[arrowPos].pwr_bw_png
         this.hp[arrowPos].image.src = this.fighters[arrowPos].hp_bw_png
@@ -375,6 +384,7 @@ class CharSelectCLS extends Screen{
 
     invokeSelection() {
         playSound(this.selectSound)
+
         if (this.playerSelected && this.enemySelected) {
             let tempEnemySelection = 0
             if (gameMode === 'pvp') {
@@ -426,7 +436,6 @@ class GameScreenCLS extends Screen{
     }
 
     init(playerFighter, enemyFighter) {
-        console.log("Game screen init")
         const canvas = document.getElementById('canvas1'); // replace 'canvas1' with the actual ID of your canvas element
         document.querySelector('#healthBars').style.width = compCanvasWidth
         const scaleX = canvas.width / compCanvasWidth
@@ -791,6 +800,8 @@ class GameScreenCLS extends Screen{
         this.enemy.isDead = false
         this.player.isDead = false
         enemyAIOn = true
+        if (isSoundOn)
+            playMusic(battleMusic2, 'play')
     }
 }
 
