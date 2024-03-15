@@ -49,6 +49,7 @@ class StartScreenCLS extends Screen{
         this.startPvpBtn.addEventListener('touchstart', this.handleTouch);
         this.infoBtn.addEventListener('touchstart', this.handleTouch);
         this.resetButtons()
+        this.showLogo()
         this.switchBG()
 
         if (isSoundOn) {
@@ -83,13 +84,17 @@ class StartScreenCLS extends Screen{
     
     resetButtons() {
         this.currentSelection = 0
-        document.querySelector('#start_pvp_btn').style.display = 'block'
+        
         document.querySelector('#start_pve_btn').style.display = 'block'
         document.querySelector('#info_btn').style.display = 'block'
-        if (isMobile)
-            document.querySelector('#start_pve_btn').value =  this.selections[0] 
-        else
+        if (isMobile) {
+            document.querySelector('#start_pve_btn').value =  this.selections[0]
+            document.querySelector('#start_pvp_btn').style.display = 'none'
+        }
+        else{
+            document.querySelector('#start_pvp_btn').style.display = 'block'
             document.querySelector('#start_pve_btn').value = "•" + this.selections[0] + "•"
+        }
         
         document.querySelector('#start_pvp_btn').value = " " + this.selections[1] + " "
         document.querySelector('#info_btn').value = " " + this.selections[2] + " "
