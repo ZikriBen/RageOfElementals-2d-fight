@@ -1,4 +1,6 @@
 
+// import { loadImage, loadSound } from "./assetLoader";
+
 class Screen {
     constructor(ctx, canvasWidth, canvasHeight) {
         this.ctx = ctx
@@ -29,13 +31,13 @@ class StartScreenCLS extends Screen{
         this.startPveBtn
         this.startPvpBtn
         this.infoBtn
-        this.beepSound = new Audio('./music/mixkit-video-game-mystery-alert-234.wav');
-        this.selectSound = new Audio('./music/mixkit-arcade-bonus-alert-767.wav');
+        this.beepSound = assets.get('beep')
+        this.selectSound = assets.get('select')
     }
 
     init() {
-        this.mainSprite = this.logo = new BaseSprite({position: {x: 375, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
-        this.instructions = new BaseSprite({position: {x: 300, y: 60}, imagesSrc: './img/instructions.png', scale: 2.5, framesMax: 1})
+        this.mainSprite = this.logo = new BaseSprite({position: {x: 375, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1}, 'logo')
+        this.instructions = new BaseSprite({position: {x: 300, y: 60}, imagesSrc: './img/instructions.png', scale: 2.5, framesMax: 1}, 'instructions')
         document.querySelector('#baseDiv').style.width = compCanvasWidth
         document.querySelector('#baseDiv').style.height = compCanvasHeight
         
@@ -52,10 +54,13 @@ class StartScreenCLS extends Screen{
         this.showLogo()
         this.switchBG()
 
-        if (isSoundOn) {
-            playMusic(battleMusic, 'play')
-        }
+        // if (isSoundOn) {
+        //     playMusic(battleMusic, 'play')
+        // }
+        // const intro = assets.get('intro');
+        // intro.play()
     }
+
 
     delete() {
         clearInterval(this.interval)
@@ -255,7 +260,7 @@ class CharSelectCLS extends Screen{
         this.arrow2 = new BaseSprite({position: {x: this.arrowStartPos + this.charOffset, y: 235}, imagesSrc: './img/arrow_p2p.png', scale: 0.3, framesMax: 5, framsHold: 3})
         
         this.fighters = [fireFighter, groundFighter, windFighter, waterFighter, metalFighter]
-        
+        console.log(assets.get(`${this.fighters[0].keyPower}_bw`))
         if (this.characters.length === 0) {
             for (let i = 0; i < this.fighters.length; i++){
                 this.names.push(new BaseSprite({position: {x: this.charStartPos+ 280, y: 440}, imagesSrc: this.fighters[i].name_png, scale: 2, framesMax: 1}))
@@ -432,7 +437,7 @@ class GameScreenCLS extends Screen{
         this.enemyScore = 0
         this.manaInterval
         this.timerInterval
-        this.bgs = ['./img/bgs/background-fire.png', './img/bgs/background-metal.png', './img/bgs/background-water.png', './img/bgs/background-wind.png', './img/bgs/background-ground.png',]
+        this.bgs = ['background-fire', 'background-metal', 'background-water', 'background-wind', 'background-ground']
         this.gameBackgorunds = []
         this.touchArrowLeft
         this.touchArrowRight
@@ -442,29 +447,14 @@ class GameScreenCLS extends Screen{
 
     init(playerFighter, enemyFighter) {
         const canvas = document.getElementById('canvas1'); // replace 'canvas1' with the actual ID of your canvas element
-        document.querySelector('#healthBars').style.width = compCanvasWidth
         const scaleX = canvas.width / compCanvasWidth
         const scaleY = canvas.height / compCanvasHeight
-        
-        
-        
+        document.querySelector('#healthBars').style.width = compCanvasWidth
 
         if (isMobile) {
             // Joystick
             this.joystick = new Joystick(80, compCanvasHeight - 90, 70, 35, scaleX * 1.06, scaleY * 1.06)
-            
-            // Arrows
-            // this.handleTouchLeft = this.handleTouchLeft.bind(this);
-            // this.handleTouchRight = this.handleTouchRight.bind(this);
-            // this.touchArrowLeft = document.getElementById('leftArrow');
-            // this.touchArrowRight = document.getElementById('rightArrow');
-            
-            // this.touchArrowLeft.addEventListener('touchstart', this.handleTouchLeft);
-            // this.touchArrowRight.addEventListener('touchstart', this.handleTouchRight);
-            // this.touchArrowLeft.addEventListener('touchend', this.handleTouchEndLeft);
-            // this.touchArrowRight.addEventListener('touchend', this.handleTouchEndRight);
-    
-            
+
             // Circle Button
             this.handleTouchCircle = this.handleTouchCircle.bind(this);
             this.circleButton = document.getElementById('circleButton1');
@@ -473,7 +463,7 @@ class GameScreenCLS extends Screen{
         
         if (this.gameBackgorunds.length === 0) {
             for (let i = 0; i < this.bgs.length; i++){
-                this.gameBackgorunds.push(new SingleBG(this.ctx, this.bgs[i], this.canvasWidth, this.canvasHeight))
+                this.gameBackgorunds.push(new SingleBG(this.ctx, "", this.canvasWidth, this.canvasHeight, this.bgs[i]))
             }
         }
          
@@ -483,8 +473,8 @@ class GameScreenCLS extends Screen{
             position: {x: 250, y: 0}, 
             velocity: {x: 0, y: 0}, 
             offset: playerFighter.offset,
-            rightImagesSrc: playerFighter.SpriteSheetRight, 
-            leftImagesSrc: playerFighter.SpriteSheetLeft, 
+            rightImagesSrc: "", 
+            leftImagesSrc: "", 
             animationsStates: playerFighter.AnimationStates, 
             attackInfo: playerFighter.AttackInfo, 
             scale: playerFighter.scale,
@@ -498,15 +488,17 @@ class GameScreenCLS extends Screen{
                 },
                 width: 100,
                 height: 50
-            }
+            },
+            keyLeft:playerFighter.keyLeft,
+            keyRight:playerFighter.keyRight
         })
     
         this.enemy = new Fighter({
             position: {x: 675, y: 0}, 
             velocity: {x: 0, y: 0}, 
             offset: enemyFighter.offset, 
-            rightImagesSrc: enemyFighter.SpriteSheetRight, 
-            leftImagesSrc: enemyFighter.SpriteSheetLeft, 
+            rightImagesSrc: "", 
+            leftImagesSrc: "", 
             animationsStates: enemyFighter.AnimationStates, 
             attackInfo: enemyFighter.AttackInfo, 
             scale: enemyFighter.scale,
@@ -520,7 +512,9 @@ class GameScreenCLS extends Screen{
                 },
                 width: 100,
                 height: 50
-            }
+            },
+            keyLeft:enemyFighter.keyLeft,
+            keyRight:enemyFighter.keyRight
         })
         this.playerScore = 0
         this.enemyScore = 0
@@ -853,3 +847,109 @@ class GameOverScreenCLS extends Screen{
         }
     }
 }
+
+class LoadingScreenCLS extends Screen{
+    constructor(ctx, canvasWidth, canvasHeight) {
+        super(ctx, canvasWidth, canvasHeight)
+    }
+
+    init() {
+        if (this.speed > 0.1) {
+            return
+        }
+        // document.querySelector('#displayText').style.display = 'flex'
+        // document.querySelector('#displayText').innerHTML = 'Loading...'
+        document.querySelector('#healthBars').style.display = 'none'
+        document.querySelector('#player_health_bar').style.display = 'none'
+        document.querySelector('#enemy_health_bar').style.display = 'none'
+        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
+        this.ctx.fillStyle = 'black'
+        this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
+        this.switchDuration = 1500
+        this.interval
+        // this.fadeScreen()
+        this.textOpacity = 1;
+        this.speed = 0.1;
+        this.barWidth = 400;
+        this.barHeight = 20;
+        this.barFactor = this.barWidth / 100;
+        // setTimeout(() => {
+        //     document.querySelector('#start_pve_btn').style.display = 'block'
+        //     document.querySelector('#start_pve_btn').value = 'Press any key to continue...'
+        // }, 1000);
+    }
+
+    delete() {
+        document.querySelector('#start_pve_btn').value = ' '
+        document.querySelector('#displayText').style.display = 'none'
+        document.removeEventListener('touchstart', this.handleTouchStart);
+    }
+
+    fadeScreen() {
+        // Define a function to fade the text out
+        const fadeOut = () => {
+            gsap.to(this, { textOpacity: 0.2, duration: 0.8, onComplete: fadeIn }); // Fade out over 2 seconds, then call fadeIn
+        };
+    
+        // Define a function to fade the text in
+        const fadeIn = () => {
+            gsap.to(this, { textOpacity: 1, duration: 0.8, onComplete: fadeOut }); // Fade in over 0.8 seconds, then call fadeOut
+        };
+    
+        // Start the fade in
+        fadeIn();
+    }
+    
+    draw() {
+        this.ctx.fillStyle = 'black'
+        this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
+    
+        // Draw the loading text with the current opacity
+        // this.ctx.font = '16px "Press Start 2P", sans-serif'; // Set the font family and size
+        // this.ctx.fillStyle = `rgba(255, 255, 255, ${this.textOpacity})`;
+        // this.ctx.fillText('loading...', this.canvasWidth/2 - 80, this.canvasHeight/2 - 24);
+        this.drawFrame()
+    }
+    text(){
+        this.ctx.save();
+        this.ctx.fillStyle = "#30263d";
+        this.ctx.font = '16px "Press Start 2P", sans-serif';
+        this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
+        this.ctx.fillText('Loading ' +  this.speed.toFixed(0)+"%", this.canvasWidth/2, this.canvasHeight/2 + 10);
+        this.ctx.restore();
+      }
+      
+      rect(){
+        this.ctx.beginPath();
+        this.ctx.rect(this.canvasWidth/2 - this.barWidth/2, this.canvasHeight/2 , this.barWidth, this.barHeight);
+        this.ctx.lineWidth = 6;
+        this.ctx.strokeStyle = 'white';
+        this.ctx.fillStyle = 'white';
+        this.ctx.fill();
+        this.ctx.stroke();
+      }
+      
+      rect1(){
+        this.ctx.beginPath();
+        this.ctx.rect(this.canvasWidth/2 - this.barWidth/2, this.canvasHeight/2 , this.speed * this.barFactor, this.barHeight);
+        this.ctx.lineWidth = 1;
+        this.ctx.fillStyle = '#ffab00';
+        this.ctx.fill();
+        this.ctx.stroke();
+      }
+
+    keyFunc(key) {
+    }
+    setSpeed(speed) {
+        this.speed += speed
+    }
+    drawFrame(){      
+        this.rect();
+        this.rect1();
+        this.text();
+        if(this.speed > 100) this.speed = 100;
+        // this.speed += 1;
+    }
+}
+

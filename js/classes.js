@@ -1,10 +1,15 @@
 class BaseSprite {
-    constructor({position, imagesSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}, framsHold = 5}) {
+    constructor({position, imagesSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}, framsHold = 5}, key="") {
         this.position = position
         this.width = 50
         this.height = 150
-        this.image = new Image()
-        this.image.src = imagesSrc
+        if (key === "") {
+            this.image = new Image()
+            this.image.src = imagesSrc
+        }
+        else {
+            this.image = assets.get(key)
+        }
         this.scale = scale
         this.framesMax = framesMax
         this.currentFrame = 0
@@ -42,18 +47,27 @@ class BaseSprite {
 }
 
 class ComplexSprite {
-    constructor({position, rightImagesSrc, leftImagesSrc, animationsStates, animationName, staggerFrames = 5, scale = 1, offset = {x: 0, y: 0}}) {
+    constructor({position, rightImagesSrc, leftImagesSrc, animationsStates, animationName, staggerFrames = 5, scale = 1, offset = {x: 0, y: 0}, keyLeft="", keyRight=""}) {
         this.position = position
         this.width = 50
         this.height = 150
-        
-        this.rImage = new Image()
-        this.rImage.src = rightImagesSrc
-        this.lImage = new Image()
-        this.lImage.src = leftImagesSrc
-   
+        if (keyLeft === "") {
+            this.lImage = new Image()
+            this.lImage.src = leftImagesSrc
+        }
+        else {
+            this.lImage = assets.get(keyLeft)
+        }
+
+        if (keyRight === "") {
+            this.rImage = new Image()
+            this.rImage.src = rightImagesSrc
+        }
+        else {
+            this.rImage = assets.get(keyRight)
+        }
+
         this.image = this.lImage
-        
         this.scale = scale
         this.currentFrame = 0
         this.gameFrame = 0
@@ -145,7 +159,9 @@ class Fighter extends ComplexSprite {
         type,
         offset = {x: 0, y: 0}, 
         facing = 'right',
-        attackBox = { offset: {}, width: undefined, height: undefined }
+        attackBox = { offset: {}, width: undefined, height: undefined },
+        keyLeft="",
+        keyRight=""
     }) {
         super({
             position,
@@ -154,7 +170,9 @@ class Fighter extends ComplexSprite {
             animationName,
             animationsStates,
             scale,
-            offset
+            offset,
+            keyLeft,
+            keyRight
         })
         this.velocity = velocity
         this.gravity = 0.7
@@ -170,8 +188,6 @@ class Fighter extends ComplexSprite {
         this.framsTotal = 0
         this.framsHold = 5
         this.facing = facing
-        this.animationsStates = animationsStates
-        this.animationName = animationName
         this.isDead = false
         this.attackFrame = 0
         this.currentForce = 10
@@ -468,9 +484,14 @@ class ScrollingSprite {
 }
 
 class FullScrollingSprite {
-    constructor(imagesSrc, x, y, width, height, speed, scaleX = 1, scaleY = 1) {
-        this.image = new Image()
-        this.image.src = imagesSrc
+    constructor(imagesSrc, x, y, width, height, speed, scaleX = 1, scaleY = 1, key="") {
+        if (key === "") {
+            this.image = new Image()
+            this.image.src = imagesSrc
+        }
+        else {
+            this.image = assets.get(key)
+        }
         this.x = x;
         this.y = y;
         this.width = width;
@@ -479,8 +500,8 @@ class FullScrollingSprite {
         this.scaleX = scaleX
         this.scaleY = scaleY
 
-        this.bg1 = new ScrollingSprite(this.image, this.x, this.y, canvas.width, canvas.height, this.speed, this.scaleX, this.scaleY)
-        this.bg2 = new ScrollingSprite(this.image, -this.width, this.y, canvas.width, canvas.height, this.speed, this.scaleX, this.scaleY);
+        this.bg1 = new ScrollingSprite(this.image, this.x, this.y, this.width, this.height, this.speed, this.scaleX, this.scaleY)
+        this.bg2 = new ScrollingSprite(this.image, -this.width, this.y, this.width, this.height, this.speed, this.scaleX, this.scaleY);
     
     }
 
@@ -507,11 +528,12 @@ class BG {
     }
 }
 class SingleBG extends BG{
-    constructor(ctx, imagesSrc, canvasWidth, canvasHeight) {
+    constructor(ctx, imagesSrc, canvasWidth, canvasHeight, key="") {
         super(ctx, canvasWidth, canvasHeight)
         this.layers = []
         this.scaleX=1.005
-        this.layers.push(new FullScrollingSprite(imagesSrc, 0, 0, canvas.width, canvas.height, 0, this.scaleX))
+        this.scaleY=1
+        this.layers.push(new FullScrollingSprite(imagesSrc, 0, 0, canvasWidth, canvasHeight, 0, this.scaleX, this.scaleY, key))
     }
 
     draw() {
@@ -524,10 +546,10 @@ class RTB extends BG{
         super(ctx, canvasWidth, canvasHeight)
         this.layers = []
         this.scaleX=1.005
-        this.layers.push(new FullScrollingSprite('./img/rtb/background.png', 0, 0, canvas.width, canvas.height, 0.2))
-        this.layers.push(new FullScrollingSprite('./img/rtb/background2.png', 0, 0, canvas.width, canvas.height, 0.5, this.scaleX))
-        this.layers.push(new FullScrollingSprite('./img/rtb/background3.png', 0, 0, canvas.width, canvas.height, 1.2, this.scaleX))
-        this.layers.push(new FullScrollingSprite('./img/rtb/background4.png', 0, 0, canvas.width, canvas.height, 1.6, this.scaleX))
+        this.layers.push(new FullScrollingSprite('./img/rtb/background.png', 0, 0, canvasWidth, canvasHeight, 0.2))
+        this.layers.push(new FullScrollingSprite('./img/rtb/background2.png', 0, 0, canvasWidth, canvasHeight, 0.5, this.scaleX))
+        this.layers.push(new FullScrollingSprite('./img/rtb/background3.png', 0, 0, canvasWidth, canvasHeight, 1.2, this.scaleX))
+        this.layers.push(new FullScrollingSprite('./img/rtb/background4.png', 0, 0, canvasWidth, canvasHeight, 1.6, this.scaleX))
     }
 
     draw() {

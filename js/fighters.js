@@ -557,6 +557,8 @@ fireFighter = {
     idle_frames: 8,
     scale: 2,
     offset: {x:250, y: 104},
+    keyLeft: "fire_SpriteSheet_288x128_left",
+    keyRight: "fire_SpriteSheet_288x128_right",
 }
 
 groundFighter = {
@@ -574,7 +576,9 @@ groundFighter = {
     hp_png:"./img/ui/hp_bar_4.png",
     idle_frames: 6,
     scale: 2.5,
-    offset: {x:350, y: 152}
+    offset: {x:350, y: 152},
+    keyLeft: "ground_SpriteSheet_288x128_left",
+    keyRight: "ground_SpriteSheet_288x128_right"
 }
 
 windFighter = { 
@@ -593,6 +597,8 @@ windFighter = {
     idle_frames: 8,
     scale: 2.4,
     offset: {x:320, y: 152},
+    keyLeft: "wind_SpriteSheet_288x128_left",
+    keyRight: "wind_SpriteSheet_288x128_right",
 }
 
 waterFighter = {
@@ -610,7 +616,9 @@ waterFighter = {
     hp_png:"./img/ui/hp_bar_5.png",
     idle_frames: 8,
     scale: 2.2,
-    offset: {x:290, y: 130}
+    offset: {x:290, y: 130},
+    keyLeft: "water_SpriteSheet_288x128_left",
+    keyRight: "water_SpriteSheet_288x128_right",
 }
 
 metalFighter = {
@@ -628,5 +636,7 @@ metalFighter = {
     hp_png:"./img/ui/hp_bar_4.png",
     idle_frames: 8,
     scale: 2.2,
-    offset: {x:290, y: 130}
+    offset: {x:290, y: 130},
+    keyLeft: "metal_SpriteSheet_288x128_left",
+    keyRight: "metal_SpriteSheet_288x128_right",
 }

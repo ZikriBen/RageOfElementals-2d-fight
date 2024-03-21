@@ -1,11 +1,45 @@
 let timerBlockId;
 let timerBlockId2;
 let isSoundOn = false
+const assets = new Map();
 
-const introMusic = new Audio('./music/PerituneMaterial_RetroRPG_Battle2.mp3');
+const AssetType = {
+    IMAGE: 'image',
+    SOUND: 'sound' 
+};
+const AssetTypeLookup = {
+    png: AssetType.IMAGE,
+    mp3: AssetType.SOUND,
+    wav: AssetType.SOUND 
+};
+const assetList = [
+    ['logo', './img/ElementalLogo.png'],
+    ['instructions', './img/instructions.png'],
+    ['beep', './music/mixkit-video-game-mystery-alert-234.wav'],
+    ['select', './music/mixkit-arcade-bonus-alert-767.wav'],
+    ["fire_SpriteSheet_288x128_right","./img/Fighters/fire/fire_SpriteSheet_288x128_right.png"],
+    ["fire_SpriteSheet_288x128_left","./img/Fighters/fire/fire_SpriteSheet_288x128_left.png"],
+    ["ground_SpriteSheet_288x128_right", "./img/Fighters/ground/ground_SpriteSheet_288x128_right.png"],
+    ["ground_SpriteSheet_288x128_left", "./img/Fighters/ground/ground_SpriteSheet_288x128_left.png"],
+    ["wind_SpriteSheet_288x128_right","./img/Fighters/wind/wind_SpriteSheet_288x128_right.png"],
+    ["wind_SpriteSheet_288x128_left","./img/Fighters/wind/wind_SpriteSheet_288x128_left.png"],
+    ["water_SpriteSheet_288x128_right", "./img/Fighters/water/water_SpriteSheet_288x128_right.png"],
+    ["water_SpriteSheet_288x128_left", "./img/Fighters/water/water_SpriteSheet_288x128_left.png"],
+    ["metal_SpriteSheet_288x128_right","./img/Fighters/metal/metal_SpriteSheet_288x128_right.png"],
+    ["metal_SpriteSheet_288x128_left","./img/Fighters/metal/metal_SpriteSheet_288x128_left.png"],
+    ["name","./img/Fighters/fire/name.png"],
+    ["fire_idle","./img/Fighters/fire/fire_idle.png"],
+    ["fire_idle_bw","./img/Fighters/fire/fire_idle_bw.png"],
+    ["background-fire", "./img/bgs/background-fire.png"],
+    ["background-metal", "./img/bgs/background-metal.png"], 
+    ["background-water", "./img/bgs/background-water.png"], 
+    ["background-wind", "./img/bgs/background-wind.png"],
+    ["background-ground", "./img/bgs/background-ground.png"],
+]
+// const introMusic = new Audio('./music/PerituneMaterial_RetroRPG_Battle2.mp3');
 const battleMusic = new Audio('./music/KensTheme(SSF2VRC7).wav');
 const battleMusic2 = new Audio('./music/Guile_Theme.mp3');
-let currentMusic = introMusic
+let currentMusic = battleMusic
 
 const svgPathSoundOn = "M11 2h2v20h-2v-2H9v-2h2V6H9V4h2V2zM7 8V6h2v2H7zm0 8H3V8h4v2H5v4h2v2zm0 0v2h2v-2H7zm10-6h-2v4h2v-4zm2-2h2v8h-2V8zm0 8v2h-4v-2h4zm0-10v2h-4V6h4z"
 const svgPathSoundOff = "M13 2h-2v2H9v2H7v2H3v8h4v2h2v2h2v2h2V2zM9 18v-2H7v-2H5v-4h2V8h2V6h2v12H9zm10-6.777h-2v-2h-2v2h2v2h-2v2h2v-2h2v2h2v-2h-2v-2zm0 0h2v-2h-2v2z"
@@ -88,7 +122,7 @@ function playSound(audio) {
 function playMusic(audio, action='play') {
     currentMusic.pause();
     currentMusic = audio
-    currentMusic.volume = 0.2
+    currentMusic.volume = 0.3
 
     if (action === 'play') {
         audio.pause();
@@ -112,6 +146,7 @@ function fadeFunc(func) {
     setTimeout(func, 1000);
     document.querySelector('#start_pve_btn').style.display = 'none'
     document.querySelector('#start_pvp_btn').style.display = 'none'
+    document.querySelector('#info_btn').style.display = 'none'
     setTimeout(gsap.to, 1500, overlay, {opacity: 0, duration: 2})
 }
 
@@ -263,3 +298,102 @@ function changeLife(attacker, life, lifeLost) {
 
     actualElement.style.transform = "scaleX("+life/100+")";
 }
+
+function loadImage(key, filename, onComplete) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.addEventListener('load', () => {
+            resolve({key, filename, asset: image});
+            if (typeof onComplete === 'function') onComplete({ filename, image });
+        }, { once: true });
+        image.addEventListener('error', (event) => reject({filename, event}));
+        image.src = filename;
+    });
+}
+
+function loadSound(key, filename, onComplete) {
+    return new Promise((resolve, reject) => {
+        const sound = new Audio()
+        sound.addEventListener('canplay', () => {
+            resolve({key, filename, asset: sound})
+            if (typeof onComplete === 'function') onComplete({filename, sound})
+        }, {once: true});
+        sound.addEventListener('error', (event) => reject({filename, event}));
+        sound.src = filename;
+    });
+}
+
+async function load(assetsArray, onComplete) {
+    const promises = assetsArray.map(([key, filename]) => {
+        const extenstion = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+        const type = AssetTypeLookup[extenstion];
+
+        if (type === AssetType.IMAGE) {
+            return loadImage(key, filename, onComplete)
+        } else if (type === AssetType.SOUND) {
+            return loadSound(key, filename, onComplete)
+        } else {
+            throw new TypeError('Unknown file type error')
+        }
+    });
+
+    return Promise.all(promises).then((loadAssets) => {
+        for (const {key, asset} of loadAssets) {
+            assets.set(key, asset);
+        }
+    });
+}
+
+function handleAssetDownload({filename, image}) {
+    console.log(`${filename} has been downaloded!`);
+    LoadingScreenIns.setSpeed(Math.round(100 / assetList.length))
+}
+
+function enemyAI() {
+    const distanceX = player.position.x - enemy.position.x;
+    if (enemyAIOn) {
+        if (rectCollision(player, enemy)) {
+            if (player.isAttcking && player.currentFrame < 2) {
+            if (Math.random() < 0.015) {
+            enemy.defend();
+            return;
+            }
+            }
+            enemy.velocity.x = 0;
+            attack_seed = Math.random();
+            if (attack_seed < 0.1){
+                enemy.switchSprite('idle');
+            } else if (attack_seed > 0.96) {
+                _doActionNoSpam(enemy, 'sp_attack2');
+            } else {
+                if (enemy.velocity.y != 0) {
+                    _doActionNoSpam(enemy, 'air_attack');
+                } else {
+                    _doActionNoSpam(enemy, 'attack1', 80);
+                }
+            }
+        } else {
+            if (Math.random() < 0.04) {
+                if (player.velocity.y > 0) {
+                    enemy.velocity.y = -10;
+                    enemy.switchSprite('jump');
+                }
+            }
+            let direction = 1;
+            if (distanceX > 0) {
+                enemy.facing = "right";
+            
+        } else {
+                direction = -1;
+                enemy.facing = "left";
+            }
+            enemy.velocity.x = direction * 2;
+            enemy.switchSprite('run');
+        }
+    
+    } else {
+        enemy.velocity.x = 0;
+        enemy.switchSprite('idle');
+    }
+}
+
