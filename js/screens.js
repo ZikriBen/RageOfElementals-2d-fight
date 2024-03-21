@@ -213,8 +213,8 @@ class CharSelectCLS extends Screen{
         this.arrowStartPos = 145
         this.charStartPos = -190
         this.charOffset = 230
-        this.beepSound = new Audio('./music/mixkit-video-game-mystery-alert-234.wav');
-        this.selectSound = new Audio('./music/mixkit-arcade-bonus-alert-767.wav');
+        this.beepSound = assets.get('beep');
+        this.selectSound = assets.get('select');
         this.playerSelected = false
         this.enemySelected = false
         this.selectedPlayer

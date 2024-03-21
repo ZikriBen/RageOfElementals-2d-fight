@@ -17,6 +17,7 @@ const assetList = [
     ['instructions', './img/instructions.png'],
     ['beep', './music/mixkit-video-game-mystery-alert-234.wav'],
     ['select', './music/mixkit-arcade-bonus-alert-767.wav'],
+
     ["fire_SpriteSheet_288x128_right","./img/Fighters/fire/fire_SpriteSheet_288x128_right.png"],
     ["fire_SpriteSheet_288x128_left","./img/Fighters/fire/fire_SpriteSheet_288x128_left.png"],
     ["ground_SpriteSheet_288x128_right", "./img/Fighters/ground/ground_SpriteSheet_288x128_right.png"],
@@ -46,6 +47,7 @@ const assetList = [
     ["background-water", "./img/bgs/background-water.png"], 
     ["background-wind", "./img/bgs/background-wind.png"],
     ["background-ground", "./img/bgs/background-ground.png"],
+
     ["power_bar_2", "./img/ui/power_bar_2.png"],
     ["power_bar_3", "./img/ui/power_bar_3.png"],
     ["power_bar_4", "./img/ui/power_bar_4.png"],
@@ -56,6 +58,7 @@ const assetList = [
     ["power_bar_4_bw", "./img/ui/power_bar_4_bw.png"],
     ["power_bar_5_bw", "./img/ui/power_bar_5_bw.png"],
     ["power_bar_6_bw", "./img/ui/power_bar_6_bw.png"],
+
     ["hp_bar_2", "./img/ui/hp_bar_2.png"],
     ["hp_bar_3", "./img/ui/hp_bar_3.png"],
     ["hp_bar_4", "./img/ui/hp_bar_4.png"],
@@ -65,6 +68,7 @@ const assetList = [
     ["hp_bar_4_bw", "./img/ui/hp_bar_4_bw.png"],
     ["hp_bar_5_bw", "./img/ui/hp_bar_5_bw.png"],
     ["hp_bar_6_bw", "./img/ui/hp_bar_6_bw.png"],
+
     ["arrow_p1p", "./img/arrow_p1p.png"],
     ["arrow_p2p", "./img/arrow_p2p.png"],
     ["fire_name", "./img/Fighters/fire/name.png"],
