@@ -48,6 +48,26 @@ const assetList = [
     ["background-wind", "./img/bgs/background-wind.png"],
     ["background-ground", "./img/bgs/background-ground.png"],
 
+    ["rtb-bg1", './img/rtb/background.png'],
+    ["rtb-bg2", './img/rtb/background2.png'],
+    ["rtb-bg3", './img/rtb/background3.png'],
+    ["rtb-bg4", './img/rtb/background4.png'],
+    
+    ["MagicCliffs-bg1", './img/MagicCliffs/sky.png'],
+    ["MagicCliffs-bg2", './img/MagicCliffs/clouds.png'],
+    ["MagicCliffs-bg3", './img/MagicCliffs/sea.png'],
+    ["MagicCliffs-bg4", './img/MagicCliffs/far-grounds.png'],
+
+    ["RockyPass-bg1", './img/RockyPass/back.png'],
+    ["RockyPass-bg2", './img/RockyPass/middle.png'],
+    ["RockyPass-bg3", './img/RockyPass/near.png'],
+
+    ["PixelFantasyCaves-bg1", './img/PixelFantasyCaves/background1.png'],
+    ["PixelFantasyCaves-bg2", './img/PixelFantasyCaves/background2.png'],
+    ["PixelFantasyCaves-bg3", './img/PixelFantasyCaves/background3.png'],
+    ["PixelFantasyCaves-bg4a", './img/PixelFantasyCaves/background4a.png'],
+    ["PixelFantasyCaves-bg4b", './img/PixelFantasyCaves/background4b.png'],
+
     ["power_bar_2", "./img/ui/power_bar_2.png"],
     ["power_bar_3", "./img/ui/power_bar_3.png"],
     ["power_bar_4", "./img/ui/power_bar_4.png"],

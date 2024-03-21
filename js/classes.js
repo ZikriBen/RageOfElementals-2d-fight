@@ -546,10 +546,10 @@ class RTB extends BG{
         super(ctx, canvasWidth, canvasHeight)
         this.layers = []
         this.scaleX=1.005
-        this.layers.push(new FullScrollingSprite('./img/rtb/background.png', 0, 0, canvasWidth, canvasHeight, 0.2))
-        this.layers.push(new FullScrollingSprite('./img/rtb/background2.png', 0, 0, canvasWidth, canvasHeight, 0.5, this.scaleX))
-        this.layers.push(new FullScrollingSprite('./img/rtb/background3.png', 0, 0, canvasWidth, canvasHeight, 1.2, this.scaleX))
-        this.layers.push(new FullScrollingSprite('./img/rtb/background4.png', 0, 0, canvasWidth, canvasHeight, 1.6, this.scaleX))
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvasWidth, canvasHeight, 0.2, this.scaleX, this.scaleY, 'rtb-bg1'))
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvasWidth, canvasHeight, 0.5, this.scaleX, this.scaleY, 'rtb-bg2'))
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvasWidth, canvasHeight, 1.2, this.scaleX, this.scaleY, 'rtb-bg3'))
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvasWidth, canvasHeight, 1.6, this.scaleX, this.scaleY, 'rtb-bg4'))
     }
 
     draw() {
@@ -562,10 +562,10 @@ class MagicCliffs extends BG {
         super(ctx, canvasWidth, canvasHeight)
         this.layers = []
         this.scaleX=1.005
-        this.layers.push(new FullScrollingSprite('./img/MagicCliffs/sky.png', 0, 0, canvas.width, canvas.height, 0.3))
-        this.layers.push(new FullScrollingSprite('./img/MagicCliffs/clouds.png', 0, 150, canvas.width, canvas.height, 0.8, 1.005))
-        this.layers.push(new FullScrollingSprite('./img/MagicCliffs/sea.png', 0, 420, canvas.width, canvas.height, 1.2, 1.005, 0.3))
-        this.layers.push(new FullScrollingSprite('./img/MagicCliffs/far-grounds.png', 0, 480, canvas.width, canvas.height, 1.5, 0.5, 0.2))
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvas.width, canvas.height, 0.3, 1, 1, 'MagicCliffs-bg1'))
+        this.layers.push(new FullScrollingSprite('', 0, 150, canvas.width, canvas.height, 0.8, 1.005, 1, 'MagicCliffs-bg2'))
+        this.layers.push(new FullScrollingSprite('', 0, 420, canvas.width, canvas.height, 1.2, 1.005, 0.3, 'MagicCliffs-bg3'))
+        this.layers.push(new FullScrollingSprite('', 0, 480, canvas.width, canvas.height, 1.5, 0.5, 0.2, 'MagicCliffs-bg4'))
     }
 
     draw() {
@@ -577,9 +577,9 @@ class RockyPass extends BG {
     constructor(ctx, canvasWidth, canvasHeight) {
         super(ctx, canvasWidth, canvasHeight)
         this.layers = []
-        this.layers.push(new FullScrollingSprite('./img/RockyPass/back.png', 0, 0, canvas.width, canvas.height, 0.5, 1.005))
-        this.layers.push(new FullScrollingSprite('./img/RockyPass/middle.png', 0, 0, canvas.width, canvas.height, 1, 1.005))
-        this.layers.push(new FullScrollingSprite('./img/RockyPass/near.png', 0, 0, canvas.width, canvas.height, 1.5, 1.005))
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvas.width, canvas.height, 0.5, 1.005, 1, 'RockyPass-bg1'))
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvas.width, canvas.height, 1, 1.005, 1,   'RockyPass-bg2'))
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvas.width, canvas.height, 1.5, 1.005, 1, 'RockyPass-bg3'))
     }
 
     draw() {
@@ -591,24 +591,11 @@ class PixelFantasyCaves extends BG {
     constructor(ctx, canvasWidth, canvasHeight) {
         super(ctx, canvasWidth, canvasHeight)
         this.layers = []
-        this.layers.push(new FullScrollingSprite('./img/PixelFantasyCaves/background1.png', 0, 0, canvas.width, canvas.height, 0.2, 1.005))
-        this.layers.push(new FullScrollingSprite('./img/PixelFantasyCaves/background2.png', 0, 0, canvas.width, canvas.height, 0.5, 1.005))
-        this.layers.push(new FullScrollingSprite('./img/PixelFantasyCaves/background3.png', 0, 0, canvas.width, canvas.height, 0.8, 1.005))
-        this.layers.push(new FullScrollingSprite('./img/PixelFantasyCaves/background4a.png', 0, 0, canvas.width, canvas.height, 1.2, 1.005))
-        this.layers.push(new FullScrollingSprite('./img/PixelFantasyCaves/background4b.png', 0, 0, canvas.width, canvas.height, 1.5, 1.005))
-    }
-
-    draw() {
-        this.drawBG()
-    }
-}
-
-class TestBG extends BG {
-    constructor(ctx, canvasWidth, canvasHeight) {
-        super(ctx, canvasWidth, canvasHeight)
-        this.layers = []
-        this.layers.push(new FullScrollingSprite('./img/bgs/background-fire.png', 0, 0, canvas.width, canvas.height, 0, 1.005))
-        
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvas.width, canvas.height, 0.2, 1.005, 1, 'PixelFantasyCaves-bg1'))
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvas.width, canvas.height, 0.5, 1.005, 1, 'PixelFantasyCaves-bg2'))
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvas.width, canvas.height, 0.8, 1.005, 1, 'PixelFantasyCaves-bg3'))
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvas.width, canvas.height, 1.2, 1.005, 1, 'PixelFantasyCaves-bg4a'))
+        this.layers.push(new FullScrollingSprite('', 0, 0, canvas.width, canvas.height, 1.5, 1.005, 1, 'PixelFantasyCaves-bg4b'))
     }
 
     draw() {
