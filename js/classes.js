@@ -1,5 +1,5 @@
 class BaseSprite {
-    constructor({position, imagesSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}, framsHold = 5}, key="") {
+    constructor({position, imagesSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}, framsHold = 5, key=""}) {
         this.position = position
         this.width = 50
         this.height = 150

@@ -36,8 +36,8 @@ class StartScreenCLS extends Screen{
     }
 
     init() {
-        this.mainSprite = this.logo = new BaseSprite({position: {x: 375, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1}, 'logo')
-        this.instructions = new BaseSprite({position: {x: 300, y: 60}, imagesSrc: './img/instructions.png', scale: 2.5, framesMax: 1}, 'instructions')
+        this.mainSprite = this.logo = new BaseSprite({position: {x: 375, y: 180}, imagesSrc: '', scale: 2, framesMax: 1, key:'logo'})
+        this.instructions = new BaseSprite({position: {x: 300, y: 60}, imagesSrc: '', scale: 2.5, framesMax: 1, key:'instructions'})
         document.querySelector('#baseDiv').style.width = compCanvasWidth
         document.querySelector('#baseDiv').style.height = compCanvasHeight
         
@@ -256,23 +256,19 @@ class CharSelectCLS extends Screen{
             this.circleButton.addEventListener('touchstart', this.handleTouchCircle);
         }
         
-        this.arrow1 = new BaseSprite({position: {x: this.arrowStartPos, y: 235}, imagesSrc: './img/arrow_p1p.png', scale: 0.3, framesMax: 5})
-        this.arrow2 = new BaseSprite({position: {x: this.arrowStartPos + this.charOffset, y: 235}, imagesSrc: './img/arrow_p2p.png', scale: 0.3, framesMax: 5, framsHold: 3})
+        this.arrow1 = new BaseSprite({position: {x: this.arrowStartPos, y: 235}, imagesSrc: "", scale: 0.3, framesMax: 5, key:"arrow_p1p"})
+        this.arrow2 = new BaseSprite({position: {x: this.arrowStartPos + this.charOffset, y: 235}, imagesSrc: "", scale: 0.3, framesMax: 5, framsHold: 3, key:"arrow_p2p"})
         
         this.fighters = [fireFighter, groundFighter, windFighter, waterFighter, metalFighter]
-        console.log(assets.get(`${this.fighters[0].keyPower}_bw`))
+
         if (this.characters.length === 0) {
             for (let i = 0; i < this.fighters.length; i++){
-                this.names.push(new BaseSprite({position: {x: this.charStartPos+ 280, y: 440}, imagesSrc: this.fighters[i].name_png, scale: 2, framesMax: 1}))
-                this.power.push(new BaseSprite({position: {x: this.charStartPos + 280, y: 460}, imagesSrc: this.fighters[i].pwr_bw_png, scale: 2, framesMax: 1}))
-                this.hp.push(new BaseSprite({position: {x: this.charStartPos + 280, y: 480}, imagesSrc: this.fighters[i].hp_bw_png, scale: 2, framesMax: 1}))
-                this.characters.push(new BaseSprite({position: {x: this.charStartPos, y: 100}, imagesSrc: this.fighters[i].idle_bw_png, scale: 2.5, framesMax: this.fighters[i].idle_frames}))
+                this.names.push(new BaseSprite({position: {x: this.charStartPos+ 280, y: 440}, imagesSrc: "", key:`${this.fighters[i].keyName}`, scale: 2, framesMax: 1}))
+                this.power.push(new BaseSprite({position: {x: this.charStartPos + 280, y: 460}, imagesSrc: "", key:`${this.fighters[i].keyPower}_bw`, scale: 2, framesMax: 1}))
+                this.hp.push(new BaseSprite({position: {x: this.charStartPos + 280, y: 480}, imagesSrc: "", key:`${this.fighters[i].keyHP}_bw`, scale: 2, framesMax: 1}))
+                this.characters.push(new BaseSprite({position: {x: this.charStartPos, y: 100}, imagesSrc: "", key:`${this.fighters[i].keyIdle}_bw`, scale: 2.5, framesMax: this.fighters[i].idle_frames}))
                 this.charStartPos += this.charOffset
             }
-        }
-        
-        for (let i = 0; i < this.characters.length; i++){
-            this.characters[i].image.src = this.fighters[i].idle_bw_png
         }
     }
 
@@ -303,14 +299,14 @@ class CharSelectCLS extends Screen{
             this.names[i].update()
         }
         
-        this.characters[this.arrow1Pos].image.src = this.fighters[this.arrow1Pos].idle_png
-        this.power[this.arrow1Pos].image.src = this.fighters[this.arrow1Pos].pwr_png
-        this.hp[this.arrow1Pos].image.src = this.fighters[this.arrow1Pos].hp_png
+        this.power[this.arrow1Pos].image = assets.get(this.fighters[this.arrow1Pos].keyPower)
+        this.characters[this.arrow1Pos].image = assets.get(this.fighters[this.arrow1Pos].keyIdle)
+        this.hp[this.arrow1Pos].image = assets.get(this.fighters[this.arrow1Pos].keyHP)
 
         if (gameMode === 'pvp') {
-            this.characters[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].idle_png
-            this.power[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].pwr_png
-            this.hp[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].hp_png
+            this.power[this.arrow2Pos].image = assets.get(this.fighters[this.arrow2Pos].keyPower)
+            this.characters[this.arrow2Pos].image = assets.get(this.fighters[this.arrow2Pos].keyIdle)
+            this.hp[this.arrow2Pos].image = assets.get(this.fighters[this.arrow2Pos].keyHP)
         }
         
 
@@ -382,9 +378,9 @@ class CharSelectCLS extends Screen{
     moveArrow(arrow, arrowPos, direcrtion) {
         _doFuncNoSpam(playSound, this.beepSound, 10)
 
-        this.characters[arrowPos].image.src = this.fighters[arrowPos].idle_bw_png
-        this.power[arrowPos].image.src = this.fighters[arrowPos].pwr_bw_png
-        this.hp[arrowPos].image.src = this.fighters[arrowPos].hp_bw_png
+        this.power[arrowPos].image = assets.get(`${this.fighters[arrowPos].keyPower}_bw`)
+        this.characters[arrowPos].image = assets.get(`${this.fighters[arrowPos].keyIdle}_bw`)
+        this.hp[arrowPos].image = assets.get(`${this.fighters[arrowPos].keyHP}_bw`)
         arrowPos = (arrowPos + direcrtion) % this.characters.length
         if (arrowPos < 0)
             arrowPos = this.characters.length - 1
