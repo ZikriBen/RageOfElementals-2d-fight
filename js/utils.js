@@ -406,8 +406,8 @@ async function load(assetsArray, onComplete) {
 }
 
 function handleAssetDownload({filename, image}) {
-    console.log(`${filename} has been downaloded!`);
-    LoadingScreenIns.setSpeed(Math.round(100 / assetList.length))
+    // console.log(`${filename} has been downaloded!`);
+    LoadingScreenIns.setSpeed(100 / assetList.length)
 }
 
 function enemyAI() {
