@@ -45,6 +45,7 @@ class StartScreenCLS extends Screen{
         this.startPveBtn = document.getElementById('start_pve_btn');
         this.startPvpBtn = document.getElementById('start_pvp_btn');
         this.infoBtn = document.getElementById('info_btn');
+        document.querySelector('#soundSvg').style.display = 'flex'
 
         // Add touchstart event listeners to the buttons
         this.startPveBtn.addEventListener('touchstart', this.handleTouch);
@@ -53,12 +54,7 @@ class StartScreenCLS extends Screen{
         this.resetButtons()
         this.showLogo()
         this.switchBG()
-
-        // if (isSoundOn) {
-        //     playMusic(battleMusic, 'play')
-        // }
-        // const intro = assets.get('intro');
-        // intro.play()
+        currentMusic = assets.get('intro')
     }
 
 
@@ -537,7 +533,7 @@ class GameScreenCLS extends Screen{
         this.decreaseTimer()
         this.manaRaise()
         if (isSoundOn) {
-            playMusic(battleMusic, 'play')
+            playMusic(assets.get('ken_theme'), 'play')
         }
     }
 
@@ -796,7 +792,7 @@ class GameScreenCLS extends Screen{
         this.player.isDead = false
         enemyAIOn = true
         if (isSoundOn)
-            playMusic(battleMusic2, 'play')
+            playMusic(assets.get('guile_theme'), 'play')
     }
 }
 
