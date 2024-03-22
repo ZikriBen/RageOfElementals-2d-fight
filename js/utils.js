@@ -17,6 +17,9 @@ const assetList = [
     ['instructions', './img/instructions.png'],
     ['beep', './music/mixkit-video-game-mystery-alert-234.wav'],
     ['select', './music/mixkit-arcade-bonus-alert-767.wav'],
+    ['intro', './music/PerituneMaterial_RetroRPG_Battle2.mp3'],
+    ['ken_theme', './music/KensTheme(SSF2VRC7).wav'],
+    ['guile_theme', "./music/Guile_Theme.mp3"],
 
     ["fire_SpriteSheet_288x128_right","./img/Fighters/fire/fire_SpriteSheet_288x128_right.png"],
     ["fire_SpriteSheet_288x128_left","./img/Fighters/fire/fire_SpriteSheet_288x128_left.png"],
@@ -97,10 +100,8 @@ const assetList = [
     ["water_name", "./img/Fighters/water/name.png"],
     ["metal_name", "./img/Fighters/metal/name.png"],
 ]
-// const introMusic = new Audio('./music/PerituneMaterial_RetroRPG_Battle2.mp3');
-const battleMusic = new Audio('./music/KensTheme(SSF2VRC7).wav');
-const battleMusic2 = new Audio('./music/Guile_Theme.mp3');
-let currentMusic = battleMusic
+
+let currentMusic;l
 
 const svgPathSoundOn = "M11 2h2v20h-2v-2H9v-2h2V6H9V4h2V2zM7 8V6h2v2H7zm0 8H3V8h4v2H5v4h2v2zm0 0v2h2v-2H7zm10-6h-2v4h2v-4zm2-2h2v8h-2V8zm0 8v2h-4v-2h4zm0-10v2h-4V6h4z"
 const svgPathSoundOff = "M13 2h-2v2H9v2H7v2H3v8h4v2h2v2h2v2h2V2zM9 18v-2H7v-2H5v-4h2V8h2V6h2v12H9zm10-6.777h-2v-2h-2v2h2v2h-2v2h2v-2h2v2h2v-2h-2v-2zm0 0h2v-2h-2v2z"
@@ -181,6 +182,7 @@ function playSound(audio) {
 
 
 function playMusic(audio, action='play') {
+    console.log(currentMusic)
     currentMusic.pause();
     currentMusic = audio
     currentMusic.volume = 0.3
@@ -250,7 +252,6 @@ function turn(character, key, oppositKey, side) {
         return
     }
 }
-
 
 function _doActionNoSpam(attacker, type, timeout=40) {
     //Reset Timeout if function is called before it ends
@@ -326,7 +327,7 @@ function changeLife(attacker, life, lifeLost) {
         actualElement = document.getElementById('enemyActual');
     }
 
-    let webAnim; // Create a separate animation variable for each health bar
+    let webAnim;
 
     if(lifeLost > life) {
         lifeLost = life
@@ -345,12 +346,10 @@ function changeLife(attacker, life, lifeLost) {
     }
       
     webAnim = lostElement.animate([
-      // keyframes
       { transform: 'scaleX(1)' }, 
       { transform: 'scaleX(0)' }
   
     ], { 
-      // timing options
       duration: 300,
       iterations: 1,
       fill: 'both',
@@ -358,56 +357,6 @@ function changeLife(attacker, life, lifeLost) {
     });
 
     actualElement.style.transform = "scaleX("+life/100+")";
-}
-
-function loadImage(key, filename, onComplete) {
-    return new Promise((resolve, reject) => {
-        const image = new Image();
-        image.addEventListener('load', () => {
-            resolve({key, filename, asset: image});
-            if (typeof onComplete === 'function') onComplete({ filename, image });
-        }, { once: true });
-        image.addEventListener('error', (event) => reject({filename, event}));
-        image.src = filename;
-    });
-}
-
-function loadSound(key, filename, onComplete) {
-    return new Promise((resolve, reject) => {
-        const sound = new Audio()
-        sound.addEventListener('canplay', () => {
-            resolve({key, filename, asset: sound})
-            if (typeof onComplete === 'function') onComplete({filename, sound})
-        }, {once: true});
-        sound.addEventListener('error', (event) => reject({filename, event}));
-        sound.src = filename;
-    });
-}
-
-async function load(assetsArray, onComplete) {
-    const promises = assetsArray.map(([key, filename]) => {
-        const extenstion = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
-        const type = AssetTypeLookup[extenstion];
-
-        if (type === AssetType.IMAGE) {
-            return loadImage(key, filename, onComplete)
-        } else if (type === AssetType.SOUND) {
-            return loadSound(key, filename, onComplete)
-        } else {
-            throw new TypeError('Unknown file type error')
-        }
-    });
-
-    return Promise.all(promises).then((loadAssets) => {
-        for (const {key, asset} of loadAssets) {
-            assets.set(key, asset);
-        }
-    });
-}
-
-function handleAssetDownload({filename, image}) {
-    // console.log(`${filename} has been downaloded!`);
-    LoadingScreenIns.setSpeed(100 / assetList.length)
 }
 
 function enemyAI() {

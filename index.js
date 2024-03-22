@@ -48,7 +48,7 @@ function animateLoading() {
 }
 animateLoading();
 
-load(assetList, handleAssetDownload).then(() => {
+load(assetList, handleAssetDownload).then(() => {    
     isLoading = false;
     startScreenIns = new StartScreenCLS(c, canvas.width, canvas.height);
     charSelectIns = new CharSelectCLS(c, canvas.width, canvas.height);

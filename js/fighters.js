@@ -1,4 +1,4 @@
-let fireAnimationsStates = [
+const fireAnimationsStates = [
     {
         name: 'idle',
         frames: 8,
@@ -58,7 +58,7 @@ let fireAnimationsStates = [
     
 ]
 
-let fireAttckInfo = {
+const fireAttckInfo = {
     attack: {
         name: 'attack1',
         next: 'attack2',
@@ -105,7 +105,7 @@ let fireAttckInfo = {
     }
 }
 
-let groundAnimationsStates = [
+const groundAnimationsStates = [
     {
         name: 'idle',
         frames: 6,
@@ -164,7 +164,7 @@ let groundAnimationsStates = [
     }
 ]
 
-let groundAttckInfo = {
+const groundAttckInfo = {
     attack: {
         name: 'attack1',
         frames: 6,
@@ -215,7 +215,7 @@ let groundAttckInfo = {
     }
 }
 
-let windAnimationsStates = [
+const windAnimationsStates = [
     {
         name: 'idle',
         frames: 8,
@@ -270,7 +270,7 @@ let windAnimationsStates = [
     }
 ]
 
-let windAttckInfo = {
+const windAttckInfo = {
     attack: {
         name: 'attack1',
         frames: 8,
@@ -315,7 +315,7 @@ let windAttckInfo = {
     }
 }
 
-let waterAnimationsStates = [
+const waterAnimationsStates = [
     {
         name: 'idle',
         frames: 8,
@@ -378,7 +378,7 @@ let waterAnimationsStates = [
     }
 ]
 
-let waterAttckInfo = {
+const waterAttckInfo = {
     attack: {
         name: 'attack1',
         frames: 7,
@@ -429,7 +429,7 @@ let waterAttckInfo = {
     }
 }
 
-let metalAnimationsStates = [
+const metalAnimationsStates = [
     {
         name: 'idle',
         frames: 8,
@@ -496,7 +496,7 @@ let metalAnimationsStates = [
     }
 ]
 
-let metalAttckInfo = {
+const metalAttckInfo = {
     attack: {
         name: 'attack1',
         frames: 6,
@@ -541,7 +541,7 @@ let metalAttckInfo = {
     }
 }
 
-fireFighter = {
+const fireFighter = {
     name: "Fire",
     AnimationStates: fireAnimationsStates,
     AttackInfo: fireAttckInfo,
@@ -556,7 +556,7 @@ fireFighter = {
     keyName:"fire_name"
 }
 
-groundFighter = {
+const groundFighter = {
     name: "Ground",
     AnimationStates: groundAnimationsStates,
     AttackInfo: groundAttckInfo,
@@ -571,7 +571,7 @@ groundFighter = {
     keyName:"ground_name"
 }
 
-windFighter = { 
+const windFighter = { 
     name: "Wind",
     AnimationStates: windAnimationsStates,
     AttackInfo: windAttckInfo,
@@ -586,7 +586,7 @@ windFighter = {
     keyName:"wind_name"
 }
 
-waterFighter = {
+const waterFighter = {
     name: "Water",
     AnimationStates: waterAnimationsStates,
     AttackInfo: waterAttckInfo,
@@ -601,7 +601,7 @@ waterFighter = {
     keyName:"water_name"
 }
 
-metalFighter = {
+const metalFighter = {
     name: "Metal",
     AnimationStates: metalAnimationsStates,
     AttackInfo: metalAttckInfo,
