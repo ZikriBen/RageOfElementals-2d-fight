@@ -1,4 +1,4 @@
-let fireAnimationsStates = [
+const fireAnimationsStates = [
     {
         name: 'idle',
         frames: 8,
@@ -58,7 +58,7 @@ let fireAnimationsStates = [
     
 ]
 
-let fireAttckInfo = {
+const fireAttckInfo = {
     attack: {
         name: 'attack1',
         next: 'attack2',
@@ -105,7 +105,7 @@ let fireAttckInfo = {
     }
 }
 
-let groundAnimationsStates = [
+const groundAnimationsStates = [
     {
         name: 'idle',
         frames: 6,
@@ -164,7 +164,7 @@ let groundAnimationsStates = [
     }
 ]
 
-let groundAttckInfo = {
+const groundAttckInfo = {
     attack: {
         name: 'attack1',
         frames: 6,
@@ -215,7 +215,7 @@ let groundAttckInfo = {
     }
 }
 
-let windAnimationsStates = [
+const windAnimationsStates = [
     {
         name: 'idle',
         frames: 8,
@@ -270,7 +270,7 @@ let windAnimationsStates = [
     }
 ]
 
-let windAttckInfo = {
+const windAttckInfo = {
     attack: {
         name: 'attack1',
         frames: 8,
@@ -315,7 +315,7 @@ let windAttckInfo = {
     }
 }
 
-let waterAnimationsStates = [
+const waterAnimationsStates = [
     {
         name: 'idle',
         frames: 8,
@@ -378,7 +378,7 @@ let waterAnimationsStates = [
     }
 ]
 
-let waterAttckInfo = {
+const waterAttckInfo = {
     attack: {
         name: 'attack1',
         frames: 7,
@@ -429,7 +429,7 @@ let waterAttckInfo = {
     }
 }
 
-let metalAnimationsStates = [
+const metalAnimationsStates = [
     {
         name: 'idle',
         frames: 8,
@@ -496,7 +496,7 @@ let metalAnimationsStates = [
     }
 ]
 
-let metalAttckInfo = {
+const metalAttckInfo = {
     attack: {
         name: 'attack1',
         frames: 6,
@@ -541,92 +541,77 @@ let metalAttckInfo = {
     }
 }
 
-fireFighter = {
+const fireFighter = {
     name: "Fire",
     AnimationStates: fireAnimationsStates,
     AttackInfo: fireAttckInfo,
-    SpriteSheetRight: "./img/Fighters/fire/fire_SpriteSheet_288x128_right.png",
-    SpriteSheetLeft: "./img/Fighters/fire/fire_SpriteSheet_288x128_left.png",
-    name_png: "./img/Fighters/fire/name.png",
-    idle_png: "./img/Fighters/fire/fire_idle.png",
-    idle_bw_png:"./img/Fighters/fire/fire_idle_bw.png",
-    pwr_bw_png:"./img/ui/power_bar_3_bw.png",
-    pwr_png:"./img/ui/power_bar_3.png",
-    hp_bw_png:"./img/ui/hp_bar_6_bw.png",
-    hp_png:"./img/ui/hp_bar_6.png",
     idle_frames: 8,
     scale: 2,
     offset: {x:250, y: 104},
+    keyLeft: "fire_SpriteSheet_288x128_left",
+    keyRight: "fire_SpriteSheet_288x128_right",
+    keyIdle:"fire_idle",
+    keyPower:"power_bar_3",
+    keyHP: "hp_bar_6",
+    keyName:"fire_name"
 }
 
-groundFighter = {
+const groundFighter = {
     name: "Ground",
     AnimationStates: groundAnimationsStates,
     AttackInfo: groundAttckInfo,
-    SpriteSheetRight: "./img/Fighters/ground/ground_SpriteSheet_288x128_right.png",
-    SpriteSheetLeft: "./img/Fighters/ground/ground_SpriteSheet_288x128_left.png",
-    name_png: "./img/Fighters/ground/name.png",
-    idle_png: "./img/Fighters/ground/ground_idle.png",
-    idle_bw_png: "./img/Fighters/ground/ground_idle_bw.png",
-    pwr_bw_png:"./img/ui/power_bar_4_bw.png",
-    pwr_png:"./img/ui/power_bar_4.png",
-    hp_bw_png:"./img/ui/hp_bar_4_bw.png",
-    hp_png:"./img/ui/hp_bar_4.png",
     idle_frames: 6,
     scale: 2.5,
-    offset: {x:350, y: 152}
+    offset: {x:350, y: 152},
+    keyLeft: "ground_SpriteSheet_288x128_left",
+    keyRight: "ground_SpriteSheet_288x128_right",
+    keyIdle:"ground_idle",
+    keyPower:"power_bar_4",
+    keyHP: "hp_bar_4",
+    keyName:"ground_name"
 }
 
-windFighter = { 
+const windFighter = { 
     name: "Wind",
     AnimationStates: windAnimationsStates,
     AttackInfo: windAttckInfo,
-    SpriteSheetRight: "./img/Fighters/wind/wind_SpriteSheet_288x128_right.png",
-    SpriteSheetLeft: "./img/Fighters/wind/wind_SpriteSheet_288x128_left.png",
-    name_png: "./img/Fighters/wind/name.png",
-    idle_png: "./img/Fighters/wind/wind_idle.png",
-    idle_bw_png: "./img/Fighters/wind/wind_idle_bw.png",
-    pwr_bw_png:"./img/ui/power_bar_6_bw.png",
-    pwr_png:"./img/ui/power_bar_6.png",
-    hp_bw_png:"./img/ui/hp_bar_3_bw.png",
-    hp_png:"./img/ui/hp_bar_3.png",
     idle_frames: 8,
     scale: 2.4,
     offset: {x:320, y: 152},
+    keyLeft: "wind_SpriteSheet_288x128_left",
+    keyRight: "wind_SpriteSheet_288x128_right",
+    keyIdle:"wind_idle",
+    keyPower:"power_bar_6",
+    keyHP: "hp_bar_3",
+    keyName:"wind_name"
 }
 
-waterFighter = {
+const waterFighter = {
     name: "Water",
     AnimationStates: waterAnimationsStates,
     AttackInfo: waterAttckInfo,
-    SpriteSheetRight: "./img/Fighters/water/water_SpriteSheet_288x128_right.png",
-    SpriteSheetLeft: "./img/Fighters/water/water_SpriteSheet_288x128_left.png",
-    name_png: "./img/Fighters/water/name.png",
-    idle_png: "./img/Fighters/water/water_idle.png",
-    idle_bw_png: "./img/Fighters/water/water_idle_bw.png",
-    pwr_bw_png:"./img/ui/power_bar_4_bw.png",
-    pwr_png:"./img/ui/power_bar_4.png",
-    hp_bw_png:"./img/ui/hp_bar_5_bw.png",
-    hp_png:"./img/ui/hp_bar_5.png",
     idle_frames: 8,
     scale: 2.2,
-    offset: {x:290, y: 130}
+    offset: {x:290, y: 130},
+    keyLeft: "water_SpriteSheet_288x128_left",
+    keyRight: "water_SpriteSheet_288x128_right",
+    keyIdle:"water_idle",
+    keyPower:"power_bar_4",
+    keyHP: "hp_bar_5",
+    keyName:"water_name"
 }
 
-metalFighter = {
+const metalFighter = {
     name: "Metal",
     AnimationStates: metalAnimationsStates,
     AttackInfo: metalAttckInfo,
-    SpriteSheetRight: "./img/Fighters/metal/metal_SpriteSheet_288x128_right.png",
-    SpriteSheetLeft: "./img/Fighters/metal/metal_SpriteSheet_288x128_left.png",
-    name_png: "./img/Fighters/metal/name.png",
-    idle_png: "./img/Fighters/metal/metal_idle.png",
-    idle_bw_png: "./img/Fighters/metal/metal_idle_bw.png",
-    pwr_bw_png:"./img/ui/power_bar_5_bw.png",
-    pwr_png:"./img/ui/power_bar_5.png",
-    hp_bw_png:"./img/ui/hp_bar_4_bw.png",
-    hp_png:"./img/ui/hp_bar_4.png",
     idle_frames: 8,
     scale: 2.2,
-    offset: {x:290, y: 130}
+    offset: {x:290, y: 130},
+    keyLeft: "metal_SpriteSheet_288x128_left",
+    keyRight: "metal_SpriteSheet_288x128_right",
+    keyIdle:"metal_idle",
+    keyPower:"power_bar_5",
+    keyHP: "hp_bar_4",
+    keyName:"metal_name"
 }

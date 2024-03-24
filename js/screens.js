@@ -1,4 +1,6 @@
 
+// import { loadImage, loadSound } from "./assetLoader";
+
 class Screen {
     constructor(ctx, canvasWidth, canvasHeight) {
         this.ctx = ctx
@@ -29,13 +31,13 @@ class StartScreenCLS extends Screen{
         this.startPveBtn
         this.startPvpBtn
         this.infoBtn
-        this.beepSound = new Audio('./music/mixkit-video-game-mystery-alert-234.wav');
-        this.selectSound = new Audio('./music/mixkit-arcade-bonus-alert-767.wav');
+        this.beepSound = assets.get('beep')
+        this.selectSound = assets.get('select')
     }
 
     init() {
-        this.mainSprite = this.logo = new BaseSprite({position: {x: 375, y: 180}, imagesSrc: './img/ElementalLogo.png', scale: 2, framesMax: 1})
-        this.instructions = new BaseSprite({position: {x: 300, y: 60}, imagesSrc: './img/instructions.png', scale: 2.5, framesMax: 1})
+        this.mainSprite = this.logo = new BaseSprite({position: {x: 375, y: 180}, imagesSrc: '', scale: 2, framesMax: 1, key:'logo'})
+        this.instructions = new BaseSprite({position: {x: 300, y: 60}, imagesSrc: '', scale: 2.5, framesMax: 1, key:'instructions'})
         document.querySelector('#baseDiv').style.width = compCanvasWidth
         document.querySelector('#baseDiv').style.height = compCanvasHeight
         
@@ -43,6 +45,7 @@ class StartScreenCLS extends Screen{
         this.startPveBtn = document.getElementById('start_pve_btn');
         this.startPvpBtn = document.getElementById('start_pvp_btn');
         this.infoBtn = document.getElementById('info_btn');
+        document.querySelector('#soundSvg').style.display = 'flex'
 
         // Add touchstart event listeners to the buttons
         this.startPveBtn.addEventListener('touchstart', this.handleTouch);
@@ -51,11 +54,9 @@ class StartScreenCLS extends Screen{
         this.resetButtons()
         this.showLogo()
         this.switchBG()
-
-        if (isSoundOn) {
-            playMusic(battleMusic, 'play')
-        }
+        currentMusic = assets.get('intro')
     }
+
 
     delete() {
         clearInterval(this.interval)
@@ -208,8 +209,8 @@ class CharSelectCLS extends Screen{
         this.arrowStartPos = 145
         this.charStartPos = -190
         this.charOffset = 230
-        this.beepSound = new Audio('./music/mixkit-video-game-mystery-alert-234.wav');
-        this.selectSound = new Audio('./music/mixkit-arcade-bonus-alert-767.wav');
+        this.beepSound = assets.get('beep');
+        this.selectSound = assets.get('select');
         this.playerSelected = false
         this.enemySelected = false
         this.selectedPlayer
@@ -251,23 +252,19 @@ class CharSelectCLS extends Screen{
             this.circleButton.addEventListener('touchstart', this.handleTouchCircle);
         }
         
-        this.arrow1 = new BaseSprite({position: {x: this.arrowStartPos, y: 235}, imagesSrc: './img/arrow_p1p.png', scale: 0.3, framesMax: 5})
-        this.arrow2 = new BaseSprite({position: {x: this.arrowStartPos + this.charOffset, y: 235}, imagesSrc: './img/arrow_p2p.png', scale: 0.3, framesMax: 5, framsHold: 3})
+        this.arrow1 = new BaseSprite({position: {x: this.arrowStartPos, y: 235}, imagesSrc: "", scale: 0.3, framesMax: 5, key:"arrow_p1p"})
+        this.arrow2 = new BaseSprite({position: {x: this.arrowStartPos + this.charOffset, y: 235}, imagesSrc: "", scale: 0.3, framesMax: 5, framsHold: 3, key:"arrow_p2p"})
         
         this.fighters = [fireFighter, groundFighter, windFighter, waterFighter, metalFighter]
-        
+
         if (this.characters.length === 0) {
             for (let i = 0; i < this.fighters.length; i++){
-                this.names.push(new BaseSprite({position: {x: this.charStartPos+ 280, y: 440}, imagesSrc: this.fighters[i].name_png, scale: 2, framesMax: 1}))
-                this.power.push(new BaseSprite({position: {x: this.charStartPos + 280, y: 460}, imagesSrc: this.fighters[i].pwr_bw_png, scale: 2, framesMax: 1}))
-                this.hp.push(new BaseSprite({position: {x: this.charStartPos + 280, y: 480}, imagesSrc: this.fighters[i].hp_bw_png, scale: 2, framesMax: 1}))
-                this.characters.push(new BaseSprite({position: {x: this.charStartPos, y: 100}, imagesSrc: this.fighters[i].idle_bw_png, scale: 2.5, framesMax: this.fighters[i].idle_frames}))
+                this.names.push(new BaseSprite({position: {x: this.charStartPos+ 280, y: 440}, imagesSrc: "", key:`${this.fighters[i].keyName}`, scale: 2, framesMax: 1}))
+                this.power.push(new BaseSprite({position: {x: this.charStartPos + 280, y: 460}, imagesSrc: "", key:`${this.fighters[i].keyPower}_bw`, scale: 2, framesMax: 1}))
+                this.hp.push(new BaseSprite({position: {x: this.charStartPos + 280, y: 480}, imagesSrc: "", key:`${this.fighters[i].keyHP}_bw`, scale: 2, framesMax: 1}))
+                this.characters.push(new BaseSprite({position: {x: this.charStartPos, y: 100}, imagesSrc: "", key:`${this.fighters[i].keyIdle}_bw`, scale: 2.5, framesMax: this.fighters[i].idle_frames}))
                 this.charStartPos += this.charOffset
             }
-        }
-        
-        for (let i = 0; i < this.characters.length; i++){
-            this.characters[i].image.src = this.fighters[i].idle_bw_png
         }
     }
 
@@ -298,14 +295,14 @@ class CharSelectCLS extends Screen{
             this.names[i].update()
         }
         
-        this.characters[this.arrow1Pos].image.src = this.fighters[this.arrow1Pos].idle_png
-        this.power[this.arrow1Pos].image.src = this.fighters[this.arrow1Pos].pwr_png
-        this.hp[this.arrow1Pos].image.src = this.fighters[this.arrow1Pos].hp_png
+        this.power[this.arrow1Pos].image = assets.get(this.fighters[this.arrow1Pos].keyPower)
+        this.characters[this.arrow1Pos].image = assets.get(this.fighters[this.arrow1Pos].keyIdle)
+        this.hp[this.arrow1Pos].image = assets.get(this.fighters[this.arrow1Pos].keyHP)
 
         if (gameMode === 'pvp') {
-            this.characters[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].idle_png
-            this.power[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].pwr_png
-            this.hp[this.arrow2Pos].image.src = this.fighters[this.arrow2Pos].hp_png
+            this.power[this.arrow2Pos].image = assets.get(this.fighters[this.arrow2Pos].keyPower)
+            this.characters[this.arrow2Pos].image = assets.get(this.fighters[this.arrow2Pos].keyIdle)
+            this.hp[this.arrow2Pos].image = assets.get(this.fighters[this.arrow2Pos].keyHP)
         }
         
 
@@ -377,9 +374,9 @@ class CharSelectCLS extends Screen{
     moveArrow(arrow, arrowPos, direcrtion) {
         _doFuncNoSpam(playSound, this.beepSound, 10)
 
-        this.characters[arrowPos].image.src = this.fighters[arrowPos].idle_bw_png
-        this.power[arrowPos].image.src = this.fighters[arrowPos].pwr_bw_png
-        this.hp[arrowPos].image.src = this.fighters[arrowPos].hp_bw_png
+        this.power[arrowPos].image = assets.get(`${this.fighters[arrowPos].keyPower}_bw`)
+        this.characters[arrowPos].image = assets.get(`${this.fighters[arrowPos].keyIdle}_bw`)
+        this.hp[arrowPos].image = assets.get(`${this.fighters[arrowPos].keyHP}_bw`)
         arrowPos = (arrowPos + direcrtion) % this.characters.length
         if (arrowPos < 0)
             arrowPos = this.characters.length - 1
@@ -432,7 +429,7 @@ class GameScreenCLS extends Screen{
         this.enemyScore = 0
         this.manaInterval
         this.timerInterval
-        this.bgs = ['./img/bgs/background-fire.png', './img/bgs/background-metal.png', './img/bgs/background-water.png', './img/bgs/background-wind.png', './img/bgs/background-ground.png',]
+        this.bgs = ['background-fire', 'background-metal', 'background-water', 'background-wind', 'background-ground']
         this.gameBackgorunds = []
         this.touchArrowLeft
         this.touchArrowRight
@@ -442,29 +439,14 @@ class GameScreenCLS extends Screen{
 
     init(playerFighter, enemyFighter) {
         const canvas = document.getElementById('canvas1'); // replace 'canvas1' with the actual ID of your canvas element
-        document.querySelector('#healthBars').style.width = compCanvasWidth
         const scaleX = canvas.width / compCanvasWidth
         const scaleY = canvas.height / compCanvasHeight
-        
-        
-        
+        document.querySelector('#healthBars').style.width = compCanvasWidth
 
         if (isMobile) {
             // Joystick
             this.joystick = new Joystick(80, compCanvasHeight - 90, 70, 35, scaleX * 1.06, scaleY * 1.06)
-            
-            // Arrows
-            // this.handleTouchLeft = this.handleTouchLeft.bind(this);
-            // this.handleTouchRight = this.handleTouchRight.bind(this);
-            // this.touchArrowLeft = document.getElementById('leftArrow');
-            // this.touchArrowRight = document.getElementById('rightArrow');
-            
-            // this.touchArrowLeft.addEventListener('touchstart', this.handleTouchLeft);
-            // this.touchArrowRight.addEventListener('touchstart', this.handleTouchRight);
-            // this.touchArrowLeft.addEventListener('touchend', this.handleTouchEndLeft);
-            // this.touchArrowRight.addEventListener('touchend', this.handleTouchEndRight);
-    
-            
+
             // Circle Button
             this.handleTouchCircle = this.handleTouchCircle.bind(this);
             this.circleButton = document.getElementById('circleButton1');
@@ -473,7 +455,7 @@ class GameScreenCLS extends Screen{
         
         if (this.gameBackgorunds.length === 0) {
             for (let i = 0; i < this.bgs.length; i++){
-                this.gameBackgorunds.push(new SingleBG(this.ctx, this.bgs[i], this.canvasWidth, this.canvasHeight))
+                this.gameBackgorunds.push(new SingleBG(this.ctx, "", this.canvasWidth, this.canvasHeight, this.bgs[i]))
             }
         }
          
@@ -483,8 +465,8 @@ class GameScreenCLS extends Screen{
             position: {x: 250, y: 0}, 
             velocity: {x: 0, y: 0}, 
             offset: playerFighter.offset,
-            rightImagesSrc: playerFighter.SpriteSheetRight, 
-            leftImagesSrc: playerFighter.SpriteSheetLeft, 
+            rightImagesSrc: "", 
+            leftImagesSrc: "", 
             animationsStates: playerFighter.AnimationStates, 
             attackInfo: playerFighter.AttackInfo, 
             scale: playerFighter.scale,
@@ -498,15 +480,17 @@ class GameScreenCLS extends Screen{
                 },
                 width: 100,
                 height: 50
-            }
+            },
+            keyLeft:playerFighter.keyLeft,
+            keyRight:playerFighter.keyRight
         })
     
         this.enemy = new Fighter({
             position: {x: 675, y: 0}, 
             velocity: {x: 0, y: 0}, 
             offset: enemyFighter.offset, 
-            rightImagesSrc: enemyFighter.SpriteSheetRight, 
-            leftImagesSrc: enemyFighter.SpriteSheetLeft, 
+            rightImagesSrc: "", 
+            leftImagesSrc: "", 
             animationsStates: enemyFighter.AnimationStates, 
             attackInfo: enemyFighter.AttackInfo, 
             scale: enemyFighter.scale,
@@ -520,7 +504,9 @@ class GameScreenCLS extends Screen{
                 },
                 width: 100,
                 height: 50
-            }
+            },
+            keyLeft:enemyFighter.keyLeft,
+            keyRight:enemyFighter.keyRight
         })
         this.playerScore = 0
         this.enemyScore = 0
@@ -547,7 +533,7 @@ class GameScreenCLS extends Screen{
         this.decreaseTimer()
         this.manaRaise()
         if (isSoundOn) {
-            playMusic(battleMusic, 'play')
+            playMusic(assets.get('ken_theme'), 'play')
         }
     }
 
@@ -806,7 +792,7 @@ class GameScreenCLS extends Screen{
         this.player.isDead = false
         enemyAIOn = true
         if (isSoundOn)
-            playMusic(battleMusic2, 'play')
+            playMusic(assets.get('guile_theme'), 'play')
     }
 }
 
@@ -853,3 +839,109 @@ class GameOverScreenCLS extends Screen{
         }
     }
 }
+
+class LoadingScreenCLS extends Screen{
+    constructor(ctx, canvasWidth, canvasHeight) {
+        super(ctx, canvasWidth, canvasHeight)
+    }
+
+    init() {
+        if (this.speed > 0.1) {
+            return
+        }
+        // document.querySelector('#displayText').style.display = 'flex'
+        // document.querySelector('#displayText').innerHTML = 'Loading...'
+        document.querySelector('#healthBars').style.display = 'none'
+        document.querySelector('#player_health_bar').style.display = 'none'
+        document.querySelector('#enemy_health_bar').style.display = 'none'
+        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
+        this.ctx.fillStyle = 'black'
+        this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
+        this.switchDuration = 1500
+        this.interval
+        // this.fadeScreen()
+        this.textOpacity = 1;
+        this.speed = 0.1;
+        this.barWidth = 400;
+        this.barHeight = 20;
+        this.barFactor = this.barWidth / 100;
+        // setTimeout(() => {
+        //     document.querySelector('#start_pve_btn').style.display = 'block'
+        //     document.querySelector('#start_pve_btn').value = 'Press any key to continue...'
+        // }, 1000);
+    }
+
+    delete() {
+        document.querySelector('#start_pve_btn').value = ' '
+        document.querySelector('#displayText').style.display = 'none'
+        document.removeEventListener('touchstart', this.handleTouchStart);
+    }
+
+    fadeScreen() {
+        // Define a function to fade the text out
+        const fadeOut = () => {
+            gsap.to(this, { textOpacity: 0.2, duration: 0.8, onComplete: fadeIn }); // Fade out over 2 seconds, then call fadeIn
+        };
+    
+        // Define a function to fade the text in
+        const fadeIn = () => {
+            gsap.to(this, { textOpacity: 1, duration: 0.8, onComplete: fadeOut }); // Fade in over 0.8 seconds, then call fadeOut
+        };
+    
+        // Start the fade in
+        fadeIn();
+    }
+    
+    draw() {
+        this.ctx.fillStyle = 'black'
+        this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
+    
+        // Draw the loading text with the current opacity
+        // this.ctx.font = '16px "Press Start 2P", sans-serif'; // Set the font family and size
+        // this.ctx.fillStyle = `rgba(255, 255, 255, ${this.textOpacity})`;
+        // this.ctx.fillText('loading...', this.canvasWidth/2 - 80, this.canvasHeight/2 - 24);
+        this.drawFrame()
+    }
+    text(){
+        this.ctx.save();
+        this.ctx.fillStyle = "#30263d";
+        this.ctx.font = '16px "Press Start 2P", sans-serif';
+        this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
+        this.ctx.fillText('Loading ' +  this.speed.toFixed(0)+"%", this.canvasWidth/2, this.canvasHeight/2 + 10);
+        this.ctx.restore();
+      }
+      
+      rect(){
+        this.ctx.beginPath();
+        this.ctx.rect(this.canvasWidth/2 - this.barWidth/2, this.canvasHeight/2 , this.barWidth, this.barHeight);
+        this.ctx.lineWidth = 6;
+        this.ctx.strokeStyle = 'white';
+        this.ctx.fillStyle = 'white';
+        this.ctx.fill();
+        this.ctx.stroke();
+      }
+      
+      rect1(){
+        this.ctx.beginPath();
+        this.ctx.rect(this.canvasWidth/2 - this.barWidth/2, this.canvasHeight/2 , this.speed * this.barFactor, this.barHeight);
+        this.ctx.lineWidth = 1;
+        this.ctx.fillStyle = '#ffab00';
+        this.ctx.fill();
+        this.ctx.stroke();
+      }
+
+    keyFunc(key) {
+    }
+    setSpeed(speed) {
+        this.speed += speed
+    }
+    drawFrame(){      
+        this.rect();
+        this.rect1();
+        this.text();
+        if(this.speed > 100) this.speed = 100;
+        // this.speed += 1;
+    }
+}
+

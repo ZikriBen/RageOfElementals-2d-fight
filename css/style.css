@@ -238,6 +238,7 @@ footer p a:hover {
     position: absolute;
     bottom: 3%;
     right: 1.2%;
+    display: none;
 }
 
 #enemy_health_bar {
