@@ -495,6 +495,10 @@ class Fighter extends ComplexSprite {
             this.defending = false
         }
         if (sprite !== this.animationName) {
+            // Reset defending when switching away from defend/roll animations
+            if (this.animationName === 'defend' || this.animationName === 'roll') {
+                this.defending = false
+            }
             this.changeAnimationName(sprite, this.facing)
             this.framesMax = this.spriteAnimations[this.animationName].loc.length
             this.currentFrame = 0
