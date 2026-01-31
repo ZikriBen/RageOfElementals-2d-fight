@@ -317,8 +317,13 @@ class Fighter extends ComplexSprite {
     }
 
     roll() {
-        this.switchSprite('roll')
-        this.defending = true
+        // Only set defending if not already in another blocking animation
+        if (this.animationName !== 'roll') {
+            this.switchSprite('roll')
+            if (this.animationName === 'roll') {
+                this.defending = true
+            }
+        }
     }
 
     meditate() {
@@ -333,8 +338,13 @@ class Fighter extends ComplexSprite {
     }
 
     defend() {
-        this.switchSprite('defend')
-        this.defending = true
+        // Only set defending if the animation actually starts
+        if (this.animationName !== 'defend') {
+            this.switchSprite('defend')
+            if (this.animationName === 'defend') {
+                this.defending = true
+            }
+        }
     }
 
     heal(hp) {
@@ -519,18 +529,12 @@ class ScrollingSprite {
         this.speed = speed;
         this.scaleX = scaleX
         this.scaleY = scaleY
-        this.lastScrollTime = performance.now()
     }
 
-    scroll() {
-        const now = performance.now()
-        const deltaTime = now - this.lastScrollTime
-        this.lastScrollTime = now
-        const timeScale = deltaTime / FRAME_DURATION
-
+    scroll(timeScale) {
         this.x -= this.speed * timeScale;
         if (this.x <= -this.width) {
-            this.x = this.width - 1;
+            this.x += this.width * 2;
         }
     }
 
@@ -555,16 +559,23 @@ class FullScrollingSprite {
         this.speed = speed;
         this.scaleX = scaleX
         this.scaleY = scaleY
+        this.lastScrollTime = performance.now()
 
         this.bg1 = new ScrollingSprite(this.image, this.x, this.y, this.width, this.height, this.speed, this.scaleX, this.scaleY)
-        this.bg2 = new ScrollingSprite(this.image, -this.width, this.y, this.width, this.height, this.speed, this.scaleX, this.scaleY);
-    
+        this.bg2 = new ScrollingSprite(this.image, this.width, this.y, this.width, this.height, this.speed, this.scaleX, this.scaleY);
+
     }
 
     draw(ctx) {
-        this.bg1.scroll()
+        // Calculate time scale once for both sprites to keep them in sync
+        const now = performance.now()
+        const deltaTime = now - this.lastScrollTime
+        this.lastScrollTime = now
+        const timeScale = deltaTime / FRAME_DURATION
+
+        this.bg1.scroll(timeScale)
         this.bg1.draw(ctx)
-        this.bg2.scroll()
+        this.bg2.scroll(timeScale)
         this.bg2.draw(ctx)
     }
 }
