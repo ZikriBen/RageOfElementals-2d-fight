@@ -1,3 +1,6 @@
+const TARGET_FPS = 60
+const FRAME_DURATION = 1000 / TARGET_FPS  // ~16.67ms per frame at 60 FPS
+
 class BaseSprite {
     constructor({position, imagesSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}, framsHold = 5, key=""}) {
         this.position = position
@@ -16,6 +19,8 @@ class BaseSprite {
         this.framsTotal = 0
         this.framsHold = framsHold
         this.offset = offset
+        this.lastFrameTime = performance.now()
+        this.frameAccumulator = 0
     }
 
     draw() {
@@ -33,9 +38,16 @@ class BaseSprite {
     }
 
     animateFrames() {
-        
-        this.framsTotal++
-        if (this.framsTotal % this.framsHold === 0) {
+        const now = performance.now()
+        const deltaTime = now - this.lastFrameTime
+        this.lastFrameTime = now
+
+        this.frameAccumulator += deltaTime
+
+        // Advance frame when enough time has accumulated (based on framsHold multiplier)
+        const frameTime = FRAME_DURATION * this.framsHold
+        if (this.frameAccumulator >= frameTime) {
+            this.frameAccumulator -= frameTime
             this.currentFrame = (this.currentFrame + 1) % this.framesMax
         }
     }
@@ -74,16 +86,19 @@ class ComplexSprite {
         this.staggerFrames = staggerFrames
         this.offset = offset
         this.animationsStates = animationsStates
-        
+
         this.spriteWidth = 288
         this.spriteHeight = 128
         this.frameX = 0
         this.frameY = 0
         this.isDead = false
 
+        // Delta-time animation
+        this.lastFrameTime = performance.now()
+        this.frameAccumulator = 0
 
         this.animationName = animationName
-        
+
 
         this.spriteAnimations = []
 
@@ -91,14 +106,14 @@ class ComplexSprite {
             let frames = {
                 loc: []
             }
-        
+
             for (let i = 0; i < state.frames; i++){
                 let positionX = i * this.spriteWidth
                 let positiony = index * this.spriteHeight
-                
-                frames.loc.push({x: positionX, y: positiony}) 
+
+                frames.loc.push({x: positionX, y: positiony})
             }
-        
+
             this.spriteAnimations[state.name] = frames
         })
 
@@ -116,10 +131,19 @@ class ComplexSprite {
     }
 
     animateFrames() {
-        this.gameFrame++
-        if (this.gameFrame % this.staggerFrames === 0) {
+        const now = performance.now()
+        const deltaTime = now - this.lastFrameTime
+        this.lastFrameTime = now
+
+        this.frameAccumulator += deltaTime
+
+        // Advance frame when enough time has accumulated (based on staggerFrames multiplier)
+        const frameTime = FRAME_DURATION * this.staggerFrames
+        if (this.frameAccumulator >= frameTime) {
+            this.frameAccumulator -= frameTime
             this.currentFrame = (this.currentFrame + 1) % this.framesMax
         }
+
         this.frameX = this.spriteWidth * this.currentFrame
         // TODO: this Crashes!
         try {
@@ -331,6 +355,14 @@ class Fighter extends ComplexSprite {
     update() {
         this.draw()
         if (!this.isDead) this.animateFrames()
+
+        // Delta-time for physics
+        const now = performance.now()
+        if (!this.lastPhysicsTime) this.lastPhysicsTime = now
+        const deltaTime = now - this.lastPhysicsTime
+        this.lastPhysicsTime = now
+        const timeScale = deltaTime / FRAME_DURATION  // Scale relative to target frame time
+
         let x;
         if (this.facing === 'left') {
             x = this.position.x - this.attackBox.offset.x - this.attackBox.width
@@ -340,16 +372,16 @@ class Fighter extends ComplexSprite {
         }
         this.attackBox.position.x = x
         this.attackBox.position.y = this.position.y + this.attackBox.offset.y
-        
+
 
         // c.fillStyle = 'rgba(255, 0, 0, 0.35)'
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
         // c.fillStyle ='rgba(0, 0, 0, 0.35)'
         // c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
 
-        this.position.x += this.velocity.x
-        this.position.y += this.velocity.y
-        
+        this.position.x += this.velocity.x * timeScale
+        this.position.y += this.velocity.y * timeScale
+
         if (this.position.x + this.width + this.velocity.x <= 0 + this.width) {
             this.position.x = 0
         }
@@ -363,7 +395,7 @@ class Fighter extends ComplexSprite {
             this.position.y = 330
         }
         else {
-            this.velocity.y += this.gravity
+            this.velocity.y += this.gravity * timeScale
         }
     }
 
