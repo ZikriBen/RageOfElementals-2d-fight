@@ -519,11 +519,16 @@ class ScrollingSprite {
         this.speed = speed;
         this.scaleX = scaleX
         this.scaleY = scaleY
-
+        this.lastScrollTime = performance.now()
     }
 
     scroll() {
-        this.x -= this.speed;
+        const now = performance.now()
+        const deltaTime = now - this.lastScrollTime
+        this.lastScrollTime = now
+        const timeScale = deltaTime / FRAME_DURATION
+
+        this.x -= this.speed * timeScale;
         if (this.x <= -this.width) {
             this.x = this.width - 1;
         }
