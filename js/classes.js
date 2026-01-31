@@ -199,7 +199,7 @@ class Fighter extends ComplexSprite {
             keyRight
         })
         this.velocity = velocity
-        this.gravity = 0.7
+        this.gravity = 0.55
         this.defaulPos = structuredClone(position)
         this.width = 50
         this.height = 150
@@ -247,7 +247,7 @@ class Fighter extends ComplexSprite {
     }
 
     attack() {
-        if (this.animationName === "sp_attack1") {
+        if (this.animationName === "sp_attack1" || this.animationName === "take_hit") {
             return
         }
         this.switchSprite(this.attackInfo.attack.name, true)
@@ -259,6 +259,7 @@ class Fighter extends ComplexSprite {
         this.isAttcking = true
     }
     attack2() {
+        if (this.animationName === "take_hit") return
         this.attackBox.width = this.attackInfo.attack2.attackBox.width
         this.attackBox.height = this.attackInfo.attack2.attackBox.height
         this.attackBox.offset = this.attackInfo.attack2.attackBox.offset
@@ -268,6 +269,7 @@ class Fighter extends ComplexSprite {
         this.isAttcking = true
     }
     sp_attack1() {
+        if (this.animationName === "take_hit") return
         this.switchSprite(this.attackInfo.sp_attack1.name)
         this.attackBox.width = this.attackInfo.sp_attack1.attackBox.width
         this.attackBox.height = this.attackInfo.sp_attack1.attackBox.height
@@ -277,7 +279,7 @@ class Fighter extends ComplexSprite {
         this.isAttcking = true
     }
     sp_attack2() {
-        if (this.animationName === "sp_attack2" || this.mana < this.attackInfo.sp_attack2.mana) {
+        if (this.animationName === "sp_attack2" || this.animationName === "take_hit" || this.mana < this.attackInfo.sp_attack2.mana) {
             // playSound(errorSound)
             return
         }
@@ -291,6 +293,7 @@ class Fighter extends ComplexSprite {
         this.mana -= this.attackInfo.sp_attack2.mana
     }
     air_attack() {
+        if (this.animationName === "take_hit") return
         this.switchSprite(this.attackInfo.air_attack.name)
         this.attackBox.width = this.attackInfo.air_attack.attackBox.width
         this.attackBox.height = this.attackInfo.air_attack.attackBox.height
@@ -339,7 +342,7 @@ class Fighter extends ComplexSprite {
 
     defend() {
         // Only set defending if the animation actually starts
-        if (this.animationName !== 'defend') {
+        if (this.animationName !== 'defend' && this.animationName !== 'take_hit') {
             this.switchSprite('defend')
             if (this.animationName === 'defend') {
                 this.defending = true
@@ -358,7 +361,11 @@ class Fighter extends ComplexSprite {
 
     takeHit(force) {
         let hit;
-        if (this.defending) 
+        // Only count as defending if actually in defend/roll animation
+        const actuallyDefending = this.defending &&
+            (this.animationName === 'defend' || this.animationName === 'roll');
+
+        if (actuallyDefending)
             hit = Math.round(force / 10)
         else
             hit = force
@@ -369,6 +376,11 @@ class Fighter extends ComplexSprite {
             this.switchSprite('death')
         }
         else {
+            // Super armor: don't interrupt special attacks with take_hit
+            if (this.animationName === 'sp_attack2' || this.animationName === 'sp_attack1') {
+                // Still take damage but don't change animation
+                return
+            }
             this.switchSprite('take_hit')
         }
     }
@@ -376,6 +388,11 @@ class Fighter extends ComplexSprite {
     update() {
         this.draw()
         if (!this.isDead) this.animateFrames()
+
+        // Reset defending flag if not in defend/roll animation
+        if (this.defending && this.animationName !== 'defend' && this.animationName !== 'roll') {
+            this.defending = false
+        }
 
         // Delta-time for physics
         const now = performance.now()
@@ -395,9 +412,10 @@ class Fighter extends ComplexSprite {
         this.attackBox.position.y = this.position.y + this.attackBox.offset.y
 
 
-        // c.fillStyle = 'rgba(255, 0, 0, 0.35)'
+        // Debug: show hitboxes (uncomment to enable)
+        // c.fillStyle = 'rgba(0, 255, 0, 0.35)'
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        // c.fillStyle ='rgba(0, 0, 0, 0.35)'
+        // c.fillStyle = 'rgba(255, 0, 0, 0.35)'
         // c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
 
         this.position.x += this.velocity.x * timeScale
@@ -448,10 +466,12 @@ class Fighter extends ComplexSprite {
             }
             this.isAttcking = false
         }
-        if (this.animationName === 'take_hit' && sprite !== 'death') {    
+        if (this.animationName === 'take_hit' && sprite !== 'death') {
             if (this.currentFrame < this.spriteAnimations['take_hit'].loc.length - 1) {
                 return
             }
+            // Auto-switch to idle when take_hit finishes
+            sprite = 'idle'
         }
         if (this.animationName === 'attack1' && sprite !== 'death') {
             if (this.currentFrame < this.spriteAnimations['attack1'].loc.length - 1) {

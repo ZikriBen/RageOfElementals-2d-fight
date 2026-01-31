@@ -65,7 +65,7 @@ const fireAttckInfo = {
         attackFrame: 4,
         frames: 11,
         force: 10,
-        attackBox :{offset: {x: 0, y: 50}, width: 120, height: 50}
+        attackBox :{offset: {x: 0, y: 50}, width: 80, height: 40}
     },
     attack2: {
         name: 'attack2',
@@ -73,14 +73,14 @@ const fireAttckInfo = {
         attackFrame: 12,
         frames: 19,
         force: 10,
-        attackBox :{offset: {x: 0, y: 50}, width: 120, height: 50}
+        attackBox :{offset: {x: 0, y: 50}, width: 85, height: 40}
     },
     air_attack: {
         name: 'air_attack',
         frames: 8,
         attackFrame: 5,
         force: 10,
-        attackBox :{offset: {x: 0, y: 50}, width: 120, height: 50}
+        attackBox :{offset: {x: 0, y: 30}, width: 80, height: 50}
     },
     defend: {
         name: 'defend',
@@ -92,7 +92,7 @@ const fireAttckInfo = {
         combo: ['z', 'x', 'c'],
         attackFrame: 23,
         force: 10,
-        attackBox :{offset: {x: 20, y: 50}, width: 150, height: 50}
+        attackBox :{offset: {x: 10, y: 50}, width: 100, height: 40}
     },
     sp_attack2: {
         name: 'sp_attack2',
@@ -101,7 +101,7 @@ const fireAttckInfo = {
         combo: ['z', 'x', 'c'],
         attackFrame: 12,
         force: 50,
-        attackBox :{offset: {x: 0, y: 0}, width: 170, height: 150}
+        attackBox :{offset: {x: 0, y: 20}, width: 120, height: 100}
     }
 }
 
@@ -302,7 +302,7 @@ const windAttckInfo = {
         combo: ['z', 'x', 'c'],
         attackFrame: 18,
         force: 10,
-        attackBox :{offset: {x: 0, y: 60}, width: 200, height: 90}
+        attackBox :{offset: {x: 0, y: 60}, width: 130, height: 70}
     },
     sp_attack2: {
         name: 'sp_attack2',
@@ -311,7 +311,7 @@ const windAttckInfo = {
         combo: ['z', 'x', 'c'],
         attackFrame: 18,
         force: 50,
-        attackBox :{offset: {x: -75, y: 60}, width: 100, height: 90}
+        attackBox :{offset: {x: -50, y: 60}, width: 80, height: 70}
     }
 }
 
@@ -384,21 +384,21 @@ const waterAttckInfo = {
         frames: 7,
         attackFrame: 3,
         force: 7,
-        attackBox :{offset: {x: 0, y: 50}, width: 100, height: 50}
+        attackBox :{offset: {x: 0, y: 50}, width: 70, height: 40}
     },
 	attack2: {
         name: 'attack2',
         frames: 21,
         attackFrame: 14,
         force: 8,
-        attackBox :{offset: {x: 0, y: 50}, width: 100, height: 50}
+        attackBox :{offset: {x: 0, y: 50}, width: 75, height: 40}
     },
     air_attack: {
         name: 'air_attack',
         frames: 7,
         attackFrame: 4,
         force: 10,
-        attackBox :{offset: {x: 0, y: 50}, width: 100, height: 50}
+        attackBox :{offset: {x: 0, y: 30}, width: 70, height: 50}
     },
     defend: {
         name: 'defend',
@@ -416,7 +416,7 @@ const waterAttckInfo = {
         combo: ['z', 'x', 'c'],
         attackFrame: 23,
         force: 7,
-        attackBox :{offset: {x: 60, y: 50}, width: 100, height: 100}
+        attackBox :{offset: {x: 40, y: 50}, width: 80, height: 80}
     },
     sp_attack2: {
         name: 'sp_attack2',
@@ -425,7 +425,7 @@ const waterAttckInfo = {
         combo: ['z', 'x', 'c'],
         attackFrame: 13,
         force: 50,
-        attackBox :{offset: {x: 60, y: 0}, width: 100, height: 150}
+        attackBox :{offset: {x: 40, y: 20}, width: 80, height: 100}
     }
 }
 
@@ -502,21 +502,21 @@ const metalAttckInfo = {
         frames: 6,
         attackFrame: 1,
         force: 7,
-        attackBox :{offset: {x: 0, y: 50}, width: 80, height: 50}
+        attackBox :{offset: {x: 0, y: 50}, width: 65, height: 40}
     },
 	attack2: {
         name: 'attack2',
         frames: 8,
         attackFrame: 6,
         force: 5,
-        attackBox :{offset: {x: 0, y: 50}, width: 80, height: 50}
+        attackBox :{offset: {x: 0, y: 50}, width: 65, height: 40}
     },
     air_attack: {
         name: 'air_attack',
         frames: 8,
         attackFrame: 4,
         force: 10,
-        attackBox :{offset: {x: 0, y: 50}, width: 120, height: 50}
+        attackBox :{offset: {x: 0, y: 30}, width: 80, height: 50}
     },
     defend: {
         name: 'defend',
@@ -528,7 +528,7 @@ const metalAttckInfo = {
         combo: ['z', 'x', 'c'],
         attackFrame: 12,
         force: 10,
-        attackBox :{offset: {x: 0, y: 0}, width: 120, height: 150}
+        attackBox :{offset: {x: 0, y: 20}, width: 90, height: 100}
     },
     sp_attack2: {
         name: 'sp_attack2',
@@ -537,7 +537,7 @@ const metalAttckInfo = {
         combo: ['z', 'x', 'c'],
         attackFrame: 4,
         force: 30,
-        attackBox :{offset: {x: -200, y: 40}, width: 400, height: 120}
+        attackBox :{offset: {x: -100, y: 40}, width: 250, height: 80}
     }
 }
 

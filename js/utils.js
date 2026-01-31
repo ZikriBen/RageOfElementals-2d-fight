@@ -1,6 +1,7 @@
 let timerBlockId;
 let timerBlockId2;
-let isSoundOn = false
+let isSoundOn = true
+let userHasInteracted = false
 const assets = new Map();
 
 const AssetType = {
@@ -182,14 +183,17 @@ function playSound(audio) {
 
 
 function playMusic(audio, action='play') {
-    console.log(currentMusic)
-    currentMusic.pause();
+    // Stop any currently playing music first
+    if (currentMusic && currentMusic !== audio) {
+        currentMusic.pause();
+        currentMusic.currentTime = 0;
+    }
+
     currentMusic = audio
     currentMusic.volume = 0.3
 
     if (action === 'play') {
-        audio.pause();
-        audio.currentTime=0;
+        audio.currentTime = 0;
         audio.play();
     }
     else if (action === 'pause') {
@@ -200,7 +204,7 @@ function playMusic(audio, action='play') {
     }
     else if (action === 'stop') {
         audio.pause();
-        audio.currentTime=0;
+        audio.currentTime = 0;
     }
 }
 
@@ -359,51 +363,6 @@ function changeLife(attacker, life, lifeLost) {
     actualElement.style.transform = "scaleX("+life/100+")";
 }
 
-function enemyAI() {
-    const distanceX = player.position.x - enemy.position.x;
-    if (enemyAIOn) {
-        if (rectCollision(player, enemy)) {
-            if (player.isAttcking && player.currentFrame < 2) {
-            if (Math.random() < 0.015) {
-            enemy.defend();
-            return;
-            }
-            }
-            enemy.velocity.x = 0;
-            attack_seed = Math.random();
-            if (attack_seed < 0.1){
-                enemy.switchSprite('idle');
-            } else if (attack_seed > 0.96) {
-                _doActionNoSpam(enemy, 'sp_attack2');
-            } else {
-                if (enemy.velocity.y != 0) {
-                    _doActionNoSpam(enemy, 'air_attack');
-                } else {
-                    _doActionNoSpam(enemy, 'attack1', 80);
-                }
-            }
-        } else {
-            if (Math.random() < 0.04) {
-                if (player.velocity.y > 0) {
-                    enemy.jump(-10);
-                    enemy.switchSprite('jump');
-                }
-            }
-            let direction = 1;
-            if (distanceX > 0) {
-                enemy.facing = "right";
-            
-        } else {
-                direction = -1;
-                enemy.facing = "left";
-            }
-            enemy.velocity.x = direction * 2;
-            enemy.switchSprite('run');
-        }
-    
-    } else {
-        enemy.velocity.x = 0;
-        enemy.switchSprite('idle');
-    }
-}
+// enemyAI function has been moved to js/enemyAI.js
+// The new AI system uses a state machine with difficulty levels
 

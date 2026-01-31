@@ -33,6 +33,9 @@ class StartScreenCLS extends Screen{
         this.infoBtn
         this.beepSound = assets.get('beep')
         this.selectSound = assets.get('select')
+        this.difficultyMode = false
+        this.difficultySelection = 1
+        this.difficultyOptions = [' Easy ', ' Normal ', ' Hard ']
     }
 
     init() {
@@ -54,7 +57,28 @@ class StartScreenCLS extends Screen{
         this.resetButtons()
         this.showLogo()
         this.switchBG()
-        currentMusic = assets.get('intro')
+
+        // Play intro music
+        if (userHasInteracted && isSoundOn) {
+            // User has already interacted, can play immediately
+            playMusic(assets.get('intro'), 'play')
+        } else {
+            // First load - wait for user interaction (browsers block autoplay)
+            currentMusic = assets.get('intro')
+            const startMusicOnInteraction = () => {
+                userHasInteracted = true
+                if (isSoundOn && currentMusic && currentMusic.paused) {
+                    currentMusic.volume = 0.3
+                    currentMusic.play()
+                }
+                document.removeEventListener('click', startMusicOnInteraction)
+                document.removeEventListener('keydown', startMusicOnInteraction)
+                document.removeEventListener('touchstart', startMusicOnInteraction)
+            }
+            document.addEventListener('click', startMusicOnInteraction)
+            document.addEventListener('keydown', startMusicOnInteraction)
+            document.addEventListener('touchstart', startMusicOnInteraction)
+        }
     }
 
 
@@ -85,7 +109,8 @@ class StartScreenCLS extends Screen{
     
     resetButtons() {
         this.currentSelection = 0
-        
+        this.difficultyMode = false
+
         document.querySelector('#start_pve_btn').style.display = 'block'
         document.querySelector('#info_btn').style.display = 'block'
         if (isMobile) {
@@ -96,7 +121,7 @@ class StartScreenCLS extends Screen{
             document.querySelector('#start_pvp_btn').style.display = 'block'
             document.querySelector('#start_pve_btn').value = "•" + this.selections[0] + "•"
         }
-        
+
         document.querySelector('#start_pvp_btn').value = " " + this.selections[1] + " "
         document.querySelector('#info_btn').value = " " + this.selections[2] + " "
     }
@@ -141,6 +166,27 @@ class StartScreenCLS extends Screen{
     }
 
     keyFunc(key) {
+        // Handle difficulty selection mode
+        if (this.difficultyMode) {
+            if (key === "Enter" || key === " ") {
+                playSound(this.selectSound)
+                this.selectDifficulty()
+            }
+            else if (key === "Escape") {
+                this.difficultyMode = false
+                this.resetButtons()
+            }
+            else if (key === "ArrowUp" || key === "w") {
+                this.difficultySelection = (this.difficultySelection - 1 + 3) % 3
+                this.setDifficultySelection()
+            }
+            else if (key === "ArrowDown" || key === "s") {
+                this.difficultySelection = (this.difficultySelection + 1) % 3
+                this.setDifficultySelection()
+            }
+            return
+        }
+
         if (key === "Enter" || key === " ") {
             playSound(this.selectSound)
             this.invokeSelection()
@@ -163,11 +209,10 @@ class StartScreenCLS extends Screen{
     }
 
     invokeSelection() {
-        
         if (this.currentSelection === 0) {
-            _doFuncNoSpam(fadeFunc, charSelect)
+            // 1P vs PC - go to difficulty selection
             gameMode = 'pve'
-            this.delete()
+            this.showDifficultySelection()
         }
         else if (this.currentSelection === 1) {
             _doFuncNoSpam(fadeFunc, charSelect)
@@ -179,21 +224,72 @@ class StartScreenCLS extends Screen{
         }
     }
 
+    showDifficultySelection() {
+        this.difficultyMode = true
+        this.difficultySelection = 1  // Default to Normal
+        this.difficultyOptions = [' Easy ', ' Normal ', ' Hard ']
+        document.querySelector('#start_pve_btn').value = " " + this.difficultyOptions[0] + " "
+        document.querySelector('#start_pvp_btn').value = "•" + this.difficultyOptions[1] + "•"
+        document.querySelector('#info_btn').value = " " + this.difficultyOptions[2] + " "
+    }
+
+    setDifficultySelection() {
+        _doFuncNoSpam(playSound, this.beepSound, 10)
+        for (let i = 0; i < this.difficultyOptions.length; i++) {
+            const isSelected = (i === this.difficultySelection)
+            const prefix = isSelected ? "•" : " "
+            const suffix = isSelected ? "•" : " "
+            if (i === 0) document.querySelector('#start_pve_btn').value = prefix + this.difficultyOptions[i] + suffix
+            else if (i === 1) document.querySelector('#start_pvp_btn').value = prefix + this.difficultyOptions[i] + suffix
+            else if (i === 2) document.querySelector('#info_btn').value = prefix + this.difficultyOptions[i] + suffix
+        }
+    }
+
+    selectDifficulty() {
+        const difficulties = ['easy', 'medium', 'hard']
+        aiDifficulty = difficulties[this.difficultySelection]
+        enemyAIBrain.init()
+        _doFuncNoSpam(fadeFunc, charSelect)
+        this.delete()
+    }
+
     // Function to handle touch events
     handleTouch(event) {
         // Prevent the default behavior to avoid unwanted interactions
         event.preventDefault();
 
-        // Your code to handle the touch event goes here
+        // Handle difficulty selection mode on touch
+        if (this.difficultyMode) {
+            if (event.target.id === 'start_pve_btn') {
+                aiDifficulty = 'easy'
+                enemyAIBrain.init()
+                _doFuncNoSpam(fadeFunc, charSelect)
+                this.delete()
+            }
+            else if (event.target.id === 'start_pvp_btn') {
+                aiDifficulty = 'medium'
+                enemyAIBrain.init()
+                _doFuncNoSpam(fadeFunc, charSelect)
+                this.delete()
+            }
+            else if (event.target.id === 'info_btn') {
+                aiDifficulty = 'hard'
+                enemyAIBrain.init()
+                _doFuncNoSpam(fadeFunc, charSelect)
+                this.delete()
+            }
+            return
+        }
+
+        // Regular menu touch handling
         if (event.target.id === 'start_pvp_btn') {
             _doFuncNoSpam(fadeFunc, charSelect)
             gameMode = 'pvp'
             this.delete()
         }
         else if (event.target.id === 'start_pve_btn') {
-            _doFuncNoSpam(fadeFunc, charSelect)
             gameMode = 'pve'
-            this.delete()
+            this.showDifficultySelection()
         }
         else {
             this.showInstructions()
@@ -262,7 +358,7 @@ class CharSelectCLS extends Screen{
                 this.names.push(new BaseSprite({position: {x: this.charStartPos+ 280, y: 440}, imagesSrc: "", key:`${this.fighters[i].keyName}`, scale: 2, framesMax: 1}))
                 this.power.push(new BaseSprite({position: {x: this.charStartPos + 280, y: 460}, imagesSrc: "", key:`${this.fighters[i].keyPower}_bw`, scale: 2, framesMax: 1}))
                 this.hp.push(new BaseSprite({position: {x: this.charStartPos + 280, y: 480}, imagesSrc: "", key:`${this.fighters[i].keyHP}_bw`, scale: 2, framesMax: 1}))
-                this.characters.push(new BaseSprite({position: {x: this.charStartPos, y: 100}, imagesSrc: "", key:`${this.fighters[i].keyIdle}_bw`, scale: 2.5, framesMax: this.fighters[i].idle_frames}))
+                this.characters.push(new BaseSprite({position: {x: this.charStartPos, y: 100}, imagesSrc: "", key:`${this.fighters[i].keyIdle}_bw`, scale: 2.5, framesMax: this.fighters[i].idle_frames, framsHold: 12}))
                 this.charStartPos += this.charOffset
             }
         }
@@ -532,6 +628,10 @@ class GameScreenCLS extends Screen{
         resetHealth()
         this.decreaseTimer()
         this.manaRaise()
+        // Initialize AI for PvE mode
+        if (gameMode === 'pve' && typeof enemyAIBrain !== 'undefined') {
+            enemyAIBrain.init()
+        }
         if (isSoundOn) {
             playMusic(assets.get('ken_theme'), 'play')
         }
@@ -789,6 +889,10 @@ class GameScreenCLS extends Screen{
         this.enemy.isDead = false
         this.player.isDead = false
         enemyAIOn = true
+        // Reset AI state for new round
+        if (gameMode === 'pve' && typeof enemyAIBrain !== 'undefined') {
+            enemyAIBrain.init()
+        }
         if (isSoundOn)
             playMusic(assets.get('guile_theme'), 'play')
     }
@@ -800,6 +904,12 @@ class GameOverScreenCLS extends Screen{
     }
 
     init() {
+        // Stop the fight music
+        if (currentMusic) {
+            currentMusic.pause()
+            currentMusic.currentTime = 0
+        }
+
         document.querySelector('#displayText').style.display = 'flex'
         document.querySelector('#displayText').innerHTML = 'Game Over'
         document.querySelector('#healthBars').style.display = 'none'
@@ -810,7 +920,7 @@ class GameOverScreenCLS extends Screen{
         this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
         this.handleTouchStart = this.handleTouchStart.bind(this);
         document.addEventListener('touchstart', this.handleTouchStart);
-        
+
         setTimeout(() => {
             document.querySelector('#start_pve_btn').style.display = 'block'
             document.querySelector('#start_pve_btn').value = 'Press any key to continue...'
