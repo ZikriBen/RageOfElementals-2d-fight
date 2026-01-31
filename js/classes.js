@@ -231,8 +231,19 @@ class Fighter extends ComplexSprite {
             width: attackBox.width,
             height: attackBox.height
         }
-        
+
         this.facingOffset = 0
+        this.jumpCount = 0
+        this.maxJumps = 2  // Allow double jump
+    }
+
+    jump(jumpForce = -10) {
+        if (this.animationName === "death") return false
+        if (this.jumpCount >= this.maxJumps) return false
+
+        this.velocity.y = jumpForce
+        this.jumpCount++
+        return true
     }
 
     attack() {
@@ -390,9 +401,17 @@ class Fighter extends ComplexSprite {
             this.position.x = canvas.width - this.width
         }
 
+        // Upper boundary - prevent going above the screen
+        if (this.position.y < 0) {
+            this.position.y = 0
+            this.velocity.y = 0
+        }
+
+        // Ground detection
         if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
             this.velocity.y = 0
             this.position.y = 330
+            this.jumpCount = 0  // Reset jump count when landing
         }
         else {
             this.velocity.y += this.gravity * timeScale

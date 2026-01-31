@@ -608,8 +608,7 @@ class GameScreenCLS extends Screen{
                     this.player.turn('a', 'd', 'left')
                     break
                 case 'w':
-                    if (this.player.animationName !== "death") 
-                        this.player.velocity.y = -10
+                    this.player.jump(-10)
                     break
                 case 'e':
                     this.player.defend()
@@ -660,8 +659,7 @@ class GameScreenCLS extends Screen{
                     this.enemy.turn('ArrowLeft', 'ArrowRight', 'left')
                     break
                 case 'ArrowUp':
-                    if (this.enemy.animationName !== "death")
-                        this.enemy.velocity.y = -18
+                    this.enemy.jump(-18)
                     break
                 case '0':
                     if (this.enemy.animationName === "death")

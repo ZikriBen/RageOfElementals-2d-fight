@@ -385,7 +385,7 @@ function enemyAI() {
         } else {
             if (Math.random() < 0.04) {
                 if (player.velocity.y > 0) {
-                    enemy.velocity.y = -10;
+                    enemy.jump(-10);
                     enemy.switchSprite('jump');
                 }
             }
